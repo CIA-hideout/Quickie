@@ -1,30 +1,30 @@
-#include "LTriangle.h"
+#include "LSquare.h"
 
-LTriangle::LTriangle() : VertexShape() {
-
+LSquare::LSquare() : VertexShape() {
 }
 
 
-LTriangle::~LTriangle() {
-
+LSquare::~LSquare() {
 }
 
-void LTriangle::init(Game* gamePtr) {
-	
+void LSquare::init(Game* gamePtr) {
+
 	LVertex v_[] = {
-		//{ 2.5f, -2.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
-		//{ 0.0f, 2.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
-		//{ -2.5f, -2.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
-
-		{ 1.0f, -1.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
-		{ 1.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
+		{ 1.0f, -1.0f, 1.0f, D3DCOLOR_XRGB(0, 255, 0), },
+		{ 1.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 0, 255), },
+		{ -1.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
 		{ -1.0f, -1.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
+	};
+
+	short indices[] = {
+		0, 1, 2,
+		0, 2, 3
 	};
 
 	graphics = gamePtr->getGraphics();
 
 	graphics->get3Ddevice()->CreateVertexBuffer(
-		3 * sizeof(LVertex),
+		4 * sizeof(LVertex),
 		0,
 		CUSTOMFVF,
 		D3DPOOL_MANAGED,
@@ -38,10 +38,22 @@ void LTriangle::init(Game* gamePtr) {
 	memcpy(pVoid, v_, sizeof(v_));
 	vertexBuffer->Unlock();
 
+	graphics->get3Ddevice()->CreateIndexBuffer(
+		6 * sizeof(short),
+		0,
+		D3DFMT_INDEX16,
+		D3DPOOL_MANAGED,
+		&indexBuffer,
+		NULL
+		);
+
+	indexBuffer->Lock(0, 0, (void**)&pVoid, 0);
+	memcpy(pVoid, indices, sizeof(indices));
+	indexBuffer->Unlock();
+
 }
 
-void LTriangle::draw(float deltaTime) {
-
+void LSquare::draw(float deltaTime) {
 	D3DXMATRIX matRotate;
 
 	static float index = 0.0f;
@@ -73,9 +85,10 @@ void LTriangle::draw(float deltaTime) {
 	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &matProjection);
 	graphics->get3Ddevice()->SetStreamSource(0, vertexBuffer, 0, sizeof(LVertex));
 	// graphics->get3Ddevice()->DrawPrimitive(D3DPT_LINELIST, 0, 1);
-	graphics->get3Ddevice()->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
+	graphics->get3Ddevice()->SetIndices(indexBuffer);
+	graphics->get3Ddevice()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
 }
 
-void LTriangle::update(float deltaTime) {
+void LSquare::update(float deltaTime) {
 
 }

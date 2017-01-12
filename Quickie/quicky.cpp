@@ -1,6 +1,7 @@
 #include "quicky.h"
 
 LTriangle* lt = new LTriangle();
+LSquare* ls = new LSquare();
 
 quicky::quicky() {
 
@@ -20,10 +21,12 @@ void quicky::initialize(HWND hWnd) {
 	Game::initialize(hWnd);
 
 	lt->init(this);
+	ls->init(this);
 }
 
 void quicky::update() {
 	lt->update(deltaTime);
+	ls->update(deltaTime);
 }
 
 void quicky::ai() {
@@ -40,7 +43,8 @@ void quicky::render() {
 	graphics->get3Ddevice()->BeginScene();
 	graphics->get3Ddevice()->SetFVF(CUSTOMFVF);
 
-	lt->draw();
+	// lt->draw(deltaTime);
+	ls->draw(deltaTime);
 
 	graphics->get3Ddevice()->EndScene();
 	graphics->get3Ddevice()->Present(NULL, NULL, NULL, NULL);

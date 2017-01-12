@@ -2,17 +2,13 @@
 
 #include "VertexShape.h"
 
-class LTriangle : public VertexShape {
-
-private:
-
+class LSquare : public VertexShape{
 public:
-
-	LTriangle();
-	~LTriangle();
+	LSquare();
+	~LSquare();
 
 	void init(Game*);
 	void draw(float);
 	void update(float);
-
 };
+

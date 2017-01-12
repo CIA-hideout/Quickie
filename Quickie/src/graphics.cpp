@@ -88,27 +88,6 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 	if (FAILED(result))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error creating Direct3D sprite"));
 
-	LVertex vertices[] = {
-		{ 2.5f, -2.0f, 1.0f, D3DCOLOR_XRGB(0, 0, 255), },
-		{ 0.0f, 2.0f, 1.0f, D3DCOLOR_XRGB(0, 255, 0), },
-		{ -2.5f, -2.0f, 1.0f, D3DCOLOR_XRGB(255, 0, 0), },
-	};
-
-	result = device3d->CreateVertexBuffer(
-		3 * sizeof(LVertex),
-		0,
-		CUSTOMFVF,
-		D3DPOOL_MANAGED,
-		&pVertexBuffer,
-		NULL
-		);
-
-	VOID* pVoid;
-
-	pVertexBuffer->Lock(0, 0, (void**)&pVoid, 0);
-	memcpy(pVoid, vertices, sizeof(vertices));
-	pVertexBuffer->Unlock();
-
 	device3d->SetRenderState(D3DRS_LIGHTING, FALSE);    // turn off the 3D lighting
 
 }

@@ -95,6 +95,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\LSquare.cpp" />
+    <ClCompile Include="src\game_functions.cpp" />
     <ClCompile Include="src\LTriangle.cpp" />
     <ClCompile Include="quicky.cpp" />
     <ClCompile Include="src\entity.cpp" />
@@ -104,8 +106,10 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\textureManager.cpp" />
     <ClCompile Include="src\winmain.cpp" />
+    <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\LSquare.h" />
     <ClInclude Include="src\LTriangle.h" />
     <ClInclude Include="quicky.h" />
     <ClInclude Include="src\constants.h" />
@@ -116,6 +120,7 @@
     <ClInclude Include="src\image.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\textureManager.h" />
+    <ClInclude Include="src\VertexShape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
