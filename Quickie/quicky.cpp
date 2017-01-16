@@ -1,13 +1,14 @@
 #include "quicky.h"
 
-LSquare* ls = new LSquare();
-Obstacle* o1 = new Obstacle(D3DXVECTOR3(4, -4, 10), D3DXVECTOR3(10, 1, 1), D3DXVECTOR3(1, 1, 1));
-Obstacle* o2 = new Obstacle(D3DXVECTOR3(-4, -4, 10), D3DXVECTOR3(10, 1, 1), D3DXVECTOR3(1, 1, 1));
-Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, 0, 10), D3DXVECTOR3(10, 1, 1), D3DXVECTOR3(1, 1, 1));
-Obstacle* o4 = new Obstacle(D3DXVECTOR3(4, 4, 10), D3DXVECTOR3(10, 1, 1), D3DXVECTOR3(1, 1, 1));
-Obstacle* o5 = new Obstacle(D3DXVECTOR3(-4, 4, 10), D3DXVECTOR3(10, 1, 1), D3DXVECTOR3(1, 1, 1));
-Obstacle* o6 = new Obstacle(D3DXVECTOR3(8, 0, 10), D3DXVECTOR3(7, 1, 1), D3DXVECTOR3(1, 1, 1));
-Obstacle* o7 = new Obstacle(D3DXVECTOR3(-8, 0, 10), D3DXVECTOR3(7, 1, 1), D3DXVECTOR3(1, 1, 1));
+Obstacle* o1 = new Obstacle(D3DXVECTOR3(5, -8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 0));
+Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, -8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 0));
+Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, 0, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 0));
+Obstacle* o5 = new Obstacle(D3DXVECTOR3(-5, 8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 255, 0));
+Obstacle* o6 = new Obstacle(D3DXVECTOR3(10, 0, 10), D3DXVECTOR3(7, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 0, 255));
+Obstacle* o7 = new Obstacle(D3DXVECTOR3(-10, 0, 10), D3DXVECTOR3(7, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
+
+Obstacle* sqr = new Obstacle(D3DXVECTOR3(0, 10, 8), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 
 quicky::quicky() {
 
@@ -34,6 +35,8 @@ void quicky::initialize(HWND hWnd) {
 	o5->init(this);
 	o6->init(this);
 	o7->init(this);
+
+	sqr->init(this);
 }
 
 void quicky::update() {
@@ -72,6 +75,8 @@ void quicky::render() {
 	o5->draw();
 	o6->draw();
 	o7->draw();
+
+	sqr->draw();
 	// teapot->DrawSubset(0);
 
 }

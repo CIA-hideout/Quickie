@@ -8,7 +8,7 @@ private:
 
 public:
 	Obstacle() = default;
-	Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale);
+	Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);
 	~Obstacle();
 
 	void init(Game*);

@@ -1,11 +1,13 @@
 #include "Obstacle.h"
 
+int minMaxRand(int min, int max);
 
-Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale) : VertexShape() {
+Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
 	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
+	memcpy(this->color, color, sizeof(D3DXVECTOR3));
 
 }
 
@@ -22,21 +24,21 @@ void Obstacle::init(Game* gamePtr) {
 	meshPtr->LockVertexBuffer(0, (void**)&v_);
 
 	// 0
-	v_[0] = { pos.x - dimension.x / 2, pos.y - dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[0] = { pos.x - dimension.x / 2, pos.y - dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 1
-	v_[1] = { pos.x - dimension.x / 2, pos.y + dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[1] = { pos.x - dimension.x / 2, pos.y + dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 2
-	v_[2] = { pos.x + dimension.x / 2, pos.y + dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[2] = { pos.x + dimension.x / 2, pos.y + dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 3
-	v_[3] = { pos.x + dimension.x / 2, pos.y - dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[3] = { pos.x + dimension.x / 2, pos.y - dimension.y / 2, pos.z - dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 4
-	v_[4] = { pos.x - dimension.x / 2, pos.y - dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[4] = { pos.x - dimension.x / 2, pos.y - dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 5
-	v_[5] = { pos.x - dimension.x / 2, pos.y + dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[5] = { pos.x - dimension.x / 2, pos.y + dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 6
-	v_[6] = { pos.x + dimension.x / 2, pos.y + dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[6] = { pos.x + dimension.x / 2, pos.y + dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 	// 7
-	v_[7] = { pos.x + dimension.x / 2, pos.y - dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB(255, 255, 255) };
+	v_[7] = { pos.x + dimension.x / 2, pos.y - dimension.y / 2, pos.z + dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 
 	meshPtr->UnlockVertexBuffer();
 
@@ -70,7 +72,7 @@ void Obstacle::draw() {
 
 	static float rotation = 0.0f;
 
-	rotation += 0.01f;
+	rotation += 0.1f;
 
 	LPDIRECT3DVERTEXBUFFER9 vBuffer;
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
@@ -82,6 +84,8 @@ void Obstacle::draw() {
 	D3DXMATRIX matTemp;
 	D3DXMATRIX matRot;
 	D3DXMATRIX matWorld;
+
+	pos.y -= 0.1f;
 
 	D3DXMatrixTranslation(&matWorld, pos.x, pos.y, pos.z);
 	D3DXMatrixIdentity(&matRot);
@@ -105,5 +109,14 @@ void Obstacle::draw() {
 }
 
 void Obstacle::update(float deltaTime) {
+	
+	if (pos.y <= -25) {
+		pos.y = 20 + minMaxRand(0, 2);
+		pos.x = minMaxRand(-15, 15);
+	}
 
+}
+
+int minMaxRand(int min, int max) {
+	return rand() % (max - min + 1) + min;
 }

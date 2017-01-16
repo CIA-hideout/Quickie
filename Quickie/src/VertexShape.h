@@ -18,6 +18,8 @@ protected:
 	D3DXVECTOR3				dimension;
 	D3DXVECTOR3				scale;
 
+	D3DXVECTOR3				color;
+
 public:
 
 	VertexShape();
