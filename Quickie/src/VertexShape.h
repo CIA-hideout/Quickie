@@ -12,16 +12,20 @@ protected:
 	Graphics*				graphics;
 	int						vertexCount;
 
+	ID3DXMesh*				meshPtr;
+
+	D3DXVECTOR3				pos;
+	D3DXVECTOR3				dimension;
+	D3DXVECTOR3				scale;
+
 public:
 
 	VertexShape();
-	~VertexShape();
+	virtual ~VertexShape();
 
-	void init(Game*);
-	void draw(float);
-	void update(float);
-
-	// TODO: detect colision and transform based on collisions
+	virtual void init(Game*);
+	virtual void draw();
+	virtual void update(float);
 
 };
 

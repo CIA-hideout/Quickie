@@ -8,7 +8,7 @@ public:
 	~LSquare();
 
 	void init(Game*);
-	void draw(float);
+	void draw();
 	void update(float);
 };
 

@@ -4,6 +4,7 @@
 #include "src/entity.h"
 #include "src/LTriangle.h"
 #include "src/LSquare.h"
+#include "src/Obstacle.h"
 
 extern void game_init();
 extern void game_preload();
@@ -27,4 +28,12 @@ public:
 	void render();
 	void releaseAll();
 	void resetAll();
+
+	void updateMouse();
+	void updateKeyboard();
+	void keyPress(int key);
+	void keyRelease(int key);
+	void mouseButton(int key);
+	void mouseButtonRelease(int key);
+	void mouseMove(int x, int y);
 };

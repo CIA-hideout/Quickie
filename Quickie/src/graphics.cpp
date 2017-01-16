@@ -89,6 +89,18 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error creating Direct3D sprite"));
 
 	device3d->SetRenderState(D3DRS_LIGHTING, FALSE);    // turn off the 3D lighting
+	device3d->SetRenderState(D3DRS_ZENABLE, TRUE);
+
+	viewPort.Height = h;
+	viewPort.Width = w;
+	viewPort.MaxZ = 1.0f;
+	viewPort.MinZ = 0.0f;
+	viewPort.X = 0;
+	viewPort.Y = 0;
+
+	device3d->SetViewport(&viewPort);
+
+	camera = new Camera(CAMERA_TYPE_FREE);
 
 }
 
@@ -111,6 +123,8 @@ void Graphics::initD3Dpp()
 		d3dpp.hDeviceWindow = hwnd;
 		d3dpp.Windowed = (!fullscreen);
 		d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+		d3dpp.EnableAutoDepthStencil = TRUE;
+		d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 	}
 	catch (...)
 	{
@@ -354,4 +368,5 @@ void Graphics::changeDisplayMode(graphicsNS::DISPLAY_MODE mode)
 			GAME_HEIGHT + (GAME_HEIGHT - clientRect.bottom), // Bottom
 			TRUE);                                       // Repaint the window
 	}
+
 }

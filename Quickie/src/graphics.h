@@ -11,6 +11,7 @@
 #include <d3dx9.h>
 #include "constants.h"
 #include "gameError.h"
+#include "Camera.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <timeapi.h>
@@ -66,6 +67,33 @@ struct LVertex {
 	DWORD					color;
 };
 
+struct BoundingBox {
+
+	BoundingBox() {
+
+		min.x = FLT_MAX;
+		min.y = FLT_MAX;
+		min.z = FLT_MAX;
+
+		max.x = -FLT_MAX;
+		max.y = -FLT_MAX;
+		max.z = -FLT_MAX;
+
+	}
+
+	bool isPointInside(D3DXVECTOR3& v_) {
+
+		if (v_.x >= min.x && v_.y >= min.y && v_.z >= min.z && v_.x <= max.x && v_.y <= max.y && v_.z <= max.z)
+			return true;
+		return false;
+
+	}
+
+	D3DXVECTOR3	min;
+	D3DXVECTOR3	max;
+
+};
+
 struct SpriteData {
     int						width;			
     int						height;			
@@ -96,10 +124,15 @@ private:
     int						height;
     COLOR_ARGB				backColor;
 
+public:
 
-    void initD3Dpp();
+	Camera*					camera;
 
 public:
+
+	D3DVIEWPORT9			viewPort;
+
+    void initD3Dpp();
 
 	LPDIRECT3DVERTEXBUFFER9	pVertexBuffer;
 

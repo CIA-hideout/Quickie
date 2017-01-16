@@ -5,7 +5,6 @@
 //=============================================================================
 Game::Game()
 {
-	input = new Input();        // initialize keyboard input immediately
 	// additional initialization is handled in later call to input->initialize()
 	paused = false;             // game is not paused
 	graphics = NULL;
@@ -26,61 +25,6 @@ Game::~Game()
 //=============================================================================
 LRESULT Game::messageHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (initialized)     // do not process messages if not initialized
-	{
-		switch (msg)
-		{
-		case WM_DESTROY:
-		PostQuitMessage(0);        //tell Windows to kill this program
-		return 0;
-		case WM_KEYDOWN: case WM_SYSKEYDOWN:    // key down
-		input->keyDown(wParam);
-		return 0;
-		case WM_KEYUP: case WM_SYSKEYUP:        // key up
-		input->keyUp(wParam);
-		return 0;
-		case WM_CHAR:                           // character entered
-		input->keyIn(wParam);
-		return 0;
-		case WM_MOUSEMOVE:                      // mouse moved
-		input->mouseIn(lParam);
-		return 0;
-		case WM_INPUT:                          // raw mouse data in
-		input->mouseRawIn(lParam);
-		return 0;
-		case WM_LBUTTONDOWN:                    // left mouse button down
-		input->setMouseLButton(true);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_LBUTTONUP:                      // left mouse button up
-		input->setMouseLButton(false);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_MBUTTONDOWN:                    // middle mouse button down
-		input->setMouseMButton(true);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_MBUTTONUP:                      // middle mouse button up
-		input->setMouseMButton(false);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_RBUTTONDOWN:                    // right mouse button down
-		input->setMouseRButton(true);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_RBUTTONUP:                      // right mouse button up
-		input->setMouseRButton(false);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_XBUTTONDOWN: case WM_XBUTTONUP: // mouse X button down/up
-		input->setMouseXButton(wParam);
-		input->mouseIn(lParam);             // mouse position
-		return 0;
-		case WM_DEVICECHANGE:                   // check for controller insert
-		input->checkControllers();
-		return 0;
-		}
-	}
 	return DefWindowProc(hwnd, msg, wParam, lParam);    // let Windows handle it
 }
 
@@ -92,13 +36,12 @@ void Game::initialize(HWND hw)
 {
 	hwnd = hw;                                  // save window handle
 
+	input = new Input(hw);
+
 	// initialize graphics
 	graphics = new Graphics();
 	// throws GameError
 	graphics->initialize(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
-
-	// initialize input, do not capture mouse
-	input->initialize(hwnd, false);             // throws GameError
 
 	// attempt to set up high resolution timer
 	if (QueryPerformanceFrequency(&timerFreq) == false)
@@ -107,24 +50,41 @@ void Game::initialize(HWND hw)
 	QueryPerformanceCounter(&timeStart);        // get starting time
 
 	initialized = true;
+
+	D3DXCreateTeapot(graphics->get3Ddevice(), &teapot, 0);
+
+	// projection matrix
+	D3DXMATRIX proj;
+	D3DXMatrixPerspectiveFovLH(&proj, D3DX_PI * 0.5f, graphics->viewPort.Width / graphics->viewPort.Height, 1.0f, 1000.0f);
+	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &proj);
+	
+	// world matrix. reference point 0, 0, 0
+	D3DXMATRIX worldMat;
+	D3DXMatrixIdentity(&worldMat);
+	D3DXMatrixTranslation(&worldMat, 0, 0, 0);
+	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
+
+	graphics->get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
 //=============================================================================
 // Render game items
 //=============================================================================
 void Game::renderGame() {
-	//start rendering
-	//if (SUCCEEDED(graphics->beginScene()))
-	//{
-		render();           // call render() in derived object
 
-		//stop rendering
-	//	graphics->endScene();
-	//}
-	//handleLostGraphicsDevice();
+	graphics->get3Ddevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+	graphics->get3Ddevice()->BeginScene();
+	graphics->get3Ddevice()->SetFVF(CUSTOMFVF);
 
-	//display the back buffer on the screen
-	//graphics->showBackbuffer();
+	render();           // call render() in derived object
+
+	graphics->get3Ddevice()->EndScene();
+	graphics->get3Ddevice()->Present(NULL, NULL, NULL, NULL);
+
+	D3DXMATRIX viewMat;
+
+	graphics->camera->getViewMatrix(&viewMat);
+	graphics->get3Ddevice()->SetTransform(D3DTS_VIEW, &viewMat);
 }
 
 //=============================================================================
@@ -187,10 +147,7 @@ void Game::run(HWND hwnd) {
 	ai();                       // artificial intelligence
 	collisions();               // handle collisions
 
-	renderGame();                   // draw all game items
-	input->readControllers();       // read state of controllers
-
-	input->clear(inputNS::KEYS_PRESSED);
+	renderGame();
 }
 
 void Game::releaseAll() {
@@ -207,4 +164,12 @@ void Game::deleteAll() {
 	SAFE_DELETE(graphics);
 	SAFE_DELETE(input);
 	initialized = false;
+}
+
+void Game::updateMouse() {
+
+}
+
+void Game::updateKeyboard() {
+
 }

@@ -10,10 +10,10 @@ LSquare::~LSquare() {
 void LSquare::init(Game* gamePtr) {
 
 	LVertex v_[] = {
-		{ 1.0f, -1.0f, 1.0f, D3DCOLOR_XRGB(0, 255, 0), },
-		{ 1.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 0, 255), },
-		{ -1.0f, 1.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
-		{ -1.0f, -1.0f, 1.0f, D3DCOLOR_XRGB(255, 255, 255), },
+		{ -1.0f, -1.0f, 20.0f, D3DCOLOR_XRGB(255, 255, 255), },
+		{ -1.0f, 1.0f, 20.0f, D3DCOLOR_XRGB(255, 255, 255), },
+		{ 1.0f, 1.0f, 20.0f, D3DCOLOR_XRGB(255, 255, 255), },
+		{ 1.0f, -1.0f, 20.0f, D3DCOLOR_XRGB(255, 255, 255), },
 	};
 
 	short indices[] = {
@@ -53,40 +53,14 @@ void LSquare::init(Game* gamePtr) {
 
 }
 
-void LSquare::draw(float deltaTime) {
-	D3DXMATRIX matRotate;
+void LSquare::draw() {
 
-	static float index = 0.0f;
-	index += 0.1f * deltaTime;
-
-	printf("%.2f\n", index);
-
-	D3DXMatrixRotationZ(&matRotate, index);
-	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &matRotate);
-
-	D3DXMATRIX matView;
-
-	D3DXMatrixLookAtLH(&matView,
-		&D3DXVECTOR3(0.0f, 0.0f, 10.0f),
-		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
-	graphics->get3Ddevice()->SetTransform(D3DTS_VIEW, &matView);
-
-	D3DXMATRIX matProjection;
-
-	D3DXMatrixPerspectiveFovLH(
-		&matProjection,
-		PI / 4,
-		(FLOAT)1200 / (FLOAT)1000,
-		1.0f,
-		1000.0f);
-
-	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &matProjection);
 	graphics->get3Ddevice()->SetStreamSource(0, vertexBuffer, 0, sizeof(LVertex));
-	// graphics->get3Ddevice()->DrawPrimitive(D3DPT_LINELIST, 0, 1);
 	graphics->get3Ddevice()->SetIndices(indexBuffer);
+	graphics->get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	graphics->get3Ddevice()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+	graphics->get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
 }
 
 void LSquare::update(float deltaTime) {

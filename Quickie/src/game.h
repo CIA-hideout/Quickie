@@ -4,8 +4,8 @@
 #include <Mmsystem.h>
 #include <vector>
 
-#include "graphics.h"
 #include "constants.h"
+#include "graphics.h"
 #include "gameError.h"
 #include "input.h"
 #include "textureManager.h"
@@ -29,6 +29,9 @@ protected:
 	bool			initialized;
 
 public:
+
+	ID3DXMesh*		teapot;
+	LPD3DXBUFFER*	ppAdjacency;
 
 	Game();
 	virtual ~Game();
@@ -62,4 +65,19 @@ public:
 	virtual void collisions() = 0;
 
 	virtual void render() = 0;
+
+	virtual void updateMouse() = 0;
+
+	virtual void updateKeyboard() = 0;
+
+	virtual void keyPress(int key) = 0;
+
+	virtual void keyRelease(int key) = 0;
+
+	virtual void mouseButton(int key) = 0;
+
+	virtual void mouseButtonRelease(int key) = 0;
+
+	virtual void mouseMove(int x, int y) = 0;
+
 };
