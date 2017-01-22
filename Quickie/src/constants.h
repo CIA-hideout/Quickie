@@ -33,8 +33,8 @@
 const char CLASS_NAME[] = "Pixl";
 const char GAME_TITLE[] = "Pixl";
 const bool FULLSCREEN = false;              // windowed or fullscreen
-const UINT GAME_WIDTH = 1000;               // width of game in pixels
-const UINT GAME_HEIGHT = 1000;               // height of game in pixels
+const UINT GAME_WIDTH = 1280;               // width of game in pixels
+const UINT GAME_HEIGHT = 720;               // height of game in pixels
 
 // game
 const float FRAME_RATE = 200.0f;                // the target frame rate (frames/sec)

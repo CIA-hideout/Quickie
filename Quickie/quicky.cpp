@@ -1,7 +1,10 @@
 #include "quicky.h"
 
-Obstacle o3 = Obstacle(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(10, 1, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+]Obstacle o3 = Obstacle(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(10, 1, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
+
+Obstacle* o8 = new Obstacle(D3DXVECTOR3(0, 10, 8));
+
 
 quicky::quicky() {
 
@@ -14,6 +17,7 @@ quicky::~quicky() {
 void quicky::initialize(HWND hWnd) {
 
 	AllocConsole();
+
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
@@ -27,6 +31,7 @@ void quicky::initialize(HWND hWnd) {
 
 	sqr->init(this);
 
+	o8->init(this);
 }
 
 void quicky::update() {
@@ -40,6 +45,8 @@ void quicky::update() {
 	}
 
 	sqr->rotation.y += 0.01;
+
+	o8->update(deltaTime);
 
 }
 
@@ -63,10 +70,12 @@ void quicky::render() {
 	sqr->draw(worldMat);
 	o3.draw(worldMat);
 
+	o8->draw();
+
 }
 
 void quicky::releaseAll() {
-
+	FreeConsole();
 }
 
 void quicky::resetAll() {

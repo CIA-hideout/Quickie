@@ -1,4 +1,5 @@
 #include "Obstacle.h"
+#include <algorithm>
 
 int minMaxRand(int min, int max);
 
@@ -27,6 +28,20 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	velocity.y = 0;
 	velocity.z = 0;
 
+}
+
+Obstacle::Obstacle(D3DXVECTOR3& pos) : VertexShape()
+{
+	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3& dimension = setDimension();
+	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3& scale = D3DXVECTOR3(1, 1, 1);
+	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3& color = setRandomColor();
+	memcpy(this->color, color, sizeof(D3DXVECTOR3));
 }
 
 Obstacle::~Obstacle() {
@@ -112,9 +127,48 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 }
 
 void Obstacle::update(float deltaTime) {
+	if (pos.y <= -25) {
+		pos.y = 20 + minMaxRand(0, 2);
+		pos.x = minMaxRand(-15, 15);
+
+		color = setRandomColor();
+	}
 
 }
 
 int minMaxRand(int min, int max) {
 	return rand() % (max - min + 1) + min;
+}
+
+D3DXVECTOR3 Obstacle::setRandomColor()
+{
+	std::srand(unsigned(std::time(nullptr)));
+
+	// array is not dynamic use vector instead
+	std::vector<D3DXVECTOR3> color;
+	color.push_back(COLOR_RED);
+	color.push_back(COLOR_YELLOW);
+	color.push_back(COLOR_PURPLE);
+	color.push_back(COLOR_GREEN);
+	color.push_back(COLOR_BLUE);
+	color.push_back(COLOR_WHITE);
+
+	std::random_shuffle(color.begin(), color.end()); // randomise vector content
+
+
+	return color.front();	//use first value of randomise array
+}
+
+D3DXVECTOR3 Obstacle::setDimension()
+{
+	std::srand(unsigned(std::time(nullptr)));
+
+	std::vector<D3DXVECTOR3> dimensions;
+	dimensions.push_back(DIMENSTION_SMALL);
+	dimensions.push_back(DIMENSTION_MEDIUM);
+	dimensions.push_back(DIMENSTION_MEDIUM);
+	// medium size to appear more frequently
+
+	std::random_shuffle(dimensions.begin(), dimensions.end()); //ramdomise vector
+	return dimensions.front(); // use first value of random vector
 }
