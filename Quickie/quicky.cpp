@@ -8,6 +8,8 @@ Obstacle o9 = Obstacle (SPAWN_CENTER);
 Obstacle o1 = Obstacle (SPAWN_RIGHT);
 std::vector<Obstacle> obs;
 
+TextureManager test1;
+
 quicky::quicky() {
 	obs.push_back(o8);
 	obs.push_back(o9);
@@ -26,8 +28,6 @@ void quicky::initialize(HWND hWnd) {
 	sqr->collisionType = CT_AABB;
 
 	//o3.init(this);
-	sqr->init(this);
-
 	//o1.init(this);
 	//o8.init(this);
 	//o9.init(this);
@@ -41,11 +41,20 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
+
+	f = new FontHandler();
+
+	if(!test1.initialize(graphics, "src\\test.png"))
+	{
+		throw(GameError(gameErrorNS::FATAL_ERROR, "ERROR INIT FONT"));
+	}
+
+	f->initialize(graphics, 32, 32, 16, &test1);
 }
 
 void quicky::update() {
 
-	
+
 	//o3.update(deltaTime);
 	sqr->update(deltaTime);
 
@@ -61,8 +70,8 @@ void quicky::update() {
 	//o9.update(deltaTime);
 
 	//o3.pos.y -= 0.01f;
-	
-	
+
+
 }
 
 void quicky::ai() {
@@ -85,7 +94,7 @@ void quicky::collisions() {
 	for (std::vector<Obstacle>::iterator i = obs.begin(); i != obs.end(); ++i)
 	{
 		Obstacle temp = Obstacle(*i);
-		
+
 		if (sqr->collidesWith(temp)) {
 			sqr->velocity.y = 0;
 			if (sqr->pos.y > temp.pos.y) {
@@ -100,7 +109,7 @@ void quicky::collisions() {
 		printf("%.2f\n", sqr->pos.y);
 		counter++;
 	}
-	
+
 	//printf("%.2f\n", sqr->pos.y);
 
 	/*
@@ -131,21 +140,24 @@ void quicky::collisions() {
 		}
 	}
 	*/
-	
-	
+
+
 }
 
 void quicky::render() {
-	
+
 	sqr->draw(worldMat);
 	//o3.draw(worldMat);
-	
+
 	for (std::vector<Obstacle>::iterator i = obs.begin(); i != obs.end(); i++)
 		i->draw(worldMat);
 
 	//o1.draw(worldMat);
 	//o8.draw(worldMat);
 	//o9.draw(worldMat);
+
+	f->print(GAME_WIDTH / 2, GAME_HEIGHT / 2, "HELOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+
 }
 
 void quicky::releaseAll() {
@@ -197,8 +209,8 @@ void quicky::updateKeyboard() {
 }
 
 void quicky::keyPress(int key) {
-	
-	
+
+
 	if (key == DIK_LEFT) {
 		sqr->pos.x -= 10 * deltaTime;
 	}
@@ -212,7 +224,7 @@ void quicky::keyPress(int key) {
 		sqr->canJump = false;
 		sqr->onPlatform = nullptr;
 	}
-	
+
 }
 
 void quicky::keyRelease(int key) {
