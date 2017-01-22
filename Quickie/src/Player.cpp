@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player() : VertexShape() {
+Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));

@@ -1,4 +1,5 @@
 #include "Obstacle.h"
+#include <algorithm>
 
 int minMaxRand(int min, int max);
 
@@ -27,6 +28,38 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	velocity.y = 0;
 	velocity.z = 0;
 
+}
+
+Obstacle::Obstacle(D3DXVECTOR3& pos) : VertexShape()
+{
+	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3& dimension = setDimension();
+	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3& scale = D3DXVECTOR3(1, 1, 1);
+	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3& color = getRandomColor();
+	memcpy(this->color, color, sizeof(D3DXVECTOR3));
+
+	min.x = 0;
+	min.y = 0;
+	min.z = 0;
+
+	min.x = 0;
+	min.y = 0;
+	min.z = 0;
+
+	rotation.x = 0;
+	rotation.y = 0;
+	rotation.z = 0;
+
+	collisionType = COLLISION_TYPE_BOUNDING_BOX;
+
+	velocity.x = 0;
+	velocity.y = 0;
+	velocity.z = 0;
 }
 
 Obstacle::~Obstacle() {
@@ -112,9 +145,69 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 }
 
 void Obstacle::update(float deltaTime) {
+	
+	pos.y -= 0.1f; // go down
+	
+	if (pos.y <= -25) {
+		pos.y = 20 + minMaxRand(0, 2);
+		pos.x = minMaxRand(-15, 15);
+
+		color = getRandomColor();
+		setColor(color);
+	}
 
 }
 
 int minMaxRand(int min, int max) {
 	return rand() % (max - min + 1) + min;
+}
+
+D3DXVECTOR3 Obstacle::getRandomColor()
+{
+	std::srand(unsigned(std::time(nullptr)));
+
+	// array is not dynamic use vector instead
+	std::vector<D3DXVECTOR3> color;
+	color.push_back(COLOR_RED);
+	color.push_back(COLOR_YELLOW);
+	color.push_back(COLOR_PURPLE);
+	color.push_back(COLOR_GREEN);
+	color.push_back(COLOR_BLUE);
+	color.push_back(COLOR_WHITE);
+
+	std::random_shuffle(color.begin(), color.end()); // randomise vector content
+
+
+	return color.front();	//use first value of randomise array
+}
+
+void Obstacle::setColor(D3DXVECTOR3 newColor)
+{
+	LVertex* v;
+	meshPtr->LockVertexBuffer(0, (void**)&v);
+
+	for (int i = 0; i < vertexCount; i++)
+	{
+		v->color = D3DCOLOR_RGBA( (int) newColor.x, (int)newColor.y, 
+			(int) newColor.z, 255);
+
+		v++;
+	}
+
+	meshPtr->UnlockIndexBuffer();
+
+}
+
+D3DXVECTOR3 Obstacle::setDimension()
+{
+	std::srand(unsigned(std::time(nullptr)));
+
+	std::vector<D3DXVECTOR3> dimensions;
+	dimensions.push_back(DIMENSTION_SMALL);
+	dimensions.push_back(DIMENSTION_MEDIUM);
+	dimensions.push_back(DIMENSTION_MEDIUM);
+	// medium size to appear more frequently
+
+	std::random_shuffle(dimensions.begin(), dimensions.end()); //ramdomise vector
+	return dimensions.front(); // use first value of random vector
 }
