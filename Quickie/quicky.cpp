@@ -1,6 +1,6 @@
 #include "quicky.h"
 
-]Obstacle o3 = Obstacle(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(10, 1, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle o3 = Obstacle(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(10, 1, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 
 Obstacle* o8 = new Obstacle(D3DXVECTOR3(0, 10, 8));
@@ -70,7 +70,7 @@ void quicky::render() {
 	sqr->draw(worldMat);
 	o3.draw(worldMat);
 
-	o8->draw();
+	o8->draw(worldMat);
 
 }
 

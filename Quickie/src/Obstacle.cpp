@@ -40,8 +40,26 @@ Obstacle::Obstacle(D3DXVECTOR3& pos) : VertexShape()
 	D3DXVECTOR3& scale = D3DXVECTOR3(1, 1, 1);
 	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
 
-	D3DXVECTOR3& color = setRandomColor();
+	D3DXVECTOR3& color = getRandomColor();
 	memcpy(this->color, color, sizeof(D3DXVECTOR3));
+
+	min.x = 0;
+	min.y = 0;
+	min.z = 0;
+
+	min.x = 0;
+	min.y = 0;
+	min.z = 0;
+
+	rotation.x = 0;
+	rotation.y = 0;
+	rotation.z = 0;
+
+	collisionType = COLLISION_TYPE_BOUNDING_BOX;
+
+	velocity.x = 0;
+	velocity.y = 0;
+	velocity.z = 0;
 }
 
 Obstacle::~Obstacle() {
@@ -127,11 +145,15 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 }
 
 void Obstacle::update(float deltaTime) {
+	
+	pos.y -= 0.1f; // go down
+	
 	if (pos.y <= -25) {
 		pos.y = 20 + minMaxRand(0, 2);
 		pos.x = minMaxRand(-15, 15);
 
-		color = setRandomColor();
+		color = getRandomColor();
+		setColor(color);
 	}
 
 }
@@ -140,7 +162,7 @@ int minMaxRand(int min, int max) {
 	return rand() % (max - min + 1) + min;
 }
 
-D3DXVECTOR3 Obstacle::setRandomColor()
+D3DXVECTOR3 Obstacle::getRandomColor()
 {
 	std::srand(unsigned(std::time(nullptr)));
 
@@ -157,6 +179,23 @@ D3DXVECTOR3 Obstacle::setRandomColor()
 
 
 	return color.front();	//use first value of randomise array
+}
+
+void Obstacle::setColor(D3DXVECTOR3 newColor)
+{
+	LVertex* v;
+	meshPtr->LockVertexBuffer(0, (void**)&v);
+
+	for (int i = 0; i < vertexCount; i++)
+	{
+		v->color = D3DCOLOR_RGBA( (int) newColor.x, (int)newColor.y, 
+			(int) newColor.z, 255);
+
+		v++;
+	}
+
+	meshPtr->UnlockIndexBuffer();
+
 }
 
 D3DXVECTOR3 Obstacle::setDimension()

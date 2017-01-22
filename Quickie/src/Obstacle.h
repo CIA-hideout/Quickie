@@ -27,6 +27,7 @@ public:
 	void init(Game*);
 	void draw(D3DXMATRIX&);
 	void update(float);
-	D3DXVECTOR3 setRandomColor();
+	void setColor(D3DXVECTOR3);
+	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 setDimension();
 };
