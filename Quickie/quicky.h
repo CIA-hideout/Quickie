@@ -5,6 +5,7 @@
 #include "src/LTriangle.h"
 #include "src/LSquare.h"
 #include "src/Obstacle.h"
+#include "src/Player.h"
 
 extern void game_init();
 extern void game_preload();

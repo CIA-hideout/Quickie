@@ -57,9 +57,7 @@ void LSquare::draw() {
 
 	graphics->get3Ddevice()->SetStreamSource(0, vertexBuffer, 0, sizeof(LVertex));
 	graphics->get3Ddevice()->SetIndices(indexBuffer);
-	graphics->get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	graphics->get3Ddevice()->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
-	graphics->get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 }
 

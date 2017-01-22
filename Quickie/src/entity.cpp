@@ -1,4 +1,5 @@
 #include "entity.h"
+#include "VertexShape.h"
 
 //=============================================================================
 // constructor
@@ -76,7 +77,7 @@ void Entity::ai(float deltaTime, Entity &ent)
 // Post: returns true if collision, false otherwise
 //       sets collisionVector if collision
 //=============================================================================
-bool Entity::collidesWith(Entity &ent, VECTOR2 &collisionVector)
+bool Entity::pointInside(Entity &ent, VECTOR2 &collisionVector)
 { 
     // if either entity is not active then no collision may occcur
     if (!active || !ent.getActive())    

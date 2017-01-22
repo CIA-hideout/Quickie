@@ -3,6 +3,7 @@
 #include <dinput.h>
 #include <Windows.h>
 #include <Windowsx.h>
+#include <stdio.h>
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")

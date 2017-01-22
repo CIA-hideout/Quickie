@@ -189,7 +189,7 @@ public:
 	virtual bool outsideRect(RECT rect);
 
 	// Does this entity collide with ent?
-	virtual bool collidesWith(Entity &ent, VECTOR2 &collisionVector);
+	virtual bool pointInside(Entity &ent, VECTOR2 &collisionVector);
 
 	// Damage this Entity with weapon.
 	virtual void damage(int weapon);

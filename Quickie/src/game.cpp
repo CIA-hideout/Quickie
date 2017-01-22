@@ -9,6 +9,7 @@ Game::Game()
 	paused = false;             // game is not paused
 	graphics = NULL;
 	initialized = false;
+	D3DXMatrixIdentity(&worldMat);
 }
 
 //=============================================================================
@@ -36,8 +37,6 @@ void Game::initialize(HWND hw)
 {
 	hwnd = hw;                                  // save window handle
 
-	input = new Input(hw);
-
 	// initialize graphics
 	graphics = new Graphics();
 	// throws GameError
@@ -51,20 +50,16 @@ void Game::initialize(HWND hw)
 
 	initialized = true;
 
-	D3DXCreateTeapot(graphics->get3Ddevice(), &teapot, 0);
-
 	// projection matrix
 	D3DXMATRIX proj;
-	D3DXMatrixPerspectiveFovLH(&proj, D3DX_PI * 0.5f, graphics->viewPort.Width / graphics->viewPort.Height, 1.0f, 1000.0f);
-	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &proj);
-	
-	// world matrix. reference point 0, 0, 0
-	D3DXMATRIX worldMat;
-	D3DXMatrixIdentity(&worldMat);
-	D3DXMatrixTranslation(&worldMat, 0, 0, 0);
-	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
 
-	graphics->get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	// to calculate screen border given z coord,
+	// tan(fov/2) * z
+
+	D3DXMatrixPerspectiveFovLH(&proj, FOV, graphics->viewPort.Width / graphics->viewPort.Height, 1.0f, 1000.0f);
+	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &proj);
+
+	input = new Input(hw);
 }
 
 //=============================================================================
@@ -76,7 +71,7 @@ void Game::renderGame() {
 	graphics->get3Ddevice()->BeginScene();
 	graphics->get3Ddevice()->SetFVF(CUSTOMFVF);
 
-	render();           // call render() in derived object
+	render();
 
 	graphics->get3Ddevice()->EndScene();
 	graphics->get3Ddevice()->Present(NULL, NULL, NULL, NULL);
@@ -144,6 +139,7 @@ void Game::run(HWND hwnd) {
 	timeStart = timeEnd;
 
 	update();                   // update all game items
+	input->update();
 	ai();                       // artificial intelligence
 	collisions();               // handle collisions
 

@@ -1,14 +1,7 @@
 #include "quicky.h"
 
-Obstacle* o1 = new Obstacle(D3DXVECTOR3(5, -8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 0));
-Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, -8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 0));
-Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, 0, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 0));
-Obstacle* o5 = new Obstacle(D3DXVECTOR3(-5, 8, 10), D3DXVECTOR3(10, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 255, 0));
-Obstacle* o6 = new Obstacle(D3DXVECTOR3(10, 0, 10), D3DXVECTOR3(7, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 0, 255));
-Obstacle* o7 = new Obstacle(D3DXVECTOR3(-10, 0, 10), D3DXVECTOR3(7, 1, 2.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
-
-Obstacle* sqr = new Obstacle(D3DXVECTOR3(0, 10, 8), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
+Obstacle o3 = Obstacle(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(10, 1, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 
 quicky::quicky() {
 
@@ -27,32 +20,27 @@ void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
 
-	// ls->init(this);
-	o1->init(this);
-	o2->init(this);
-	o3->init(this);
-	o4->init(this);
-	o5->init(this);
-	o6->init(this);
-	o7->init(this);
+	o3.collisionType = COLLISION_TYPE_BOUNDING_BOX;
+	sqr->collisionType = COLLISION_TYPE_BOUNDING_BOX;
+
+	o3.init(this);
 
 	sqr->init(this);
+
 }
 
 void quicky::update() {
 
-	// ls->update(deltaTime);
-	o1->update(deltaTime);
-	o2->update(deltaTime);
-	o3->update(deltaTime);
-	o4->update(deltaTime);
-	o5->update(deltaTime);
-	o6->update(deltaTime);
-	o7->update(deltaTime);
+	o3.update(deltaTime);
+	sqr->update(deltaTime);
 
-	input->update();
-	updateMouse();
-	updateKeyboard();
+	if (sqr->onPlatform == false) {
+		sqr->velocity.y += deltaTime * -9.81 / 200;
+		sqr->pos += sqr->velocity;
+	}
+
+	sqr->rotation.y += 0.01;
+
 }
 
 void quicky::ai() {
@@ -60,24 +48,20 @@ void quicky::ai() {
 }
 
 void quicky::collisions() {
+	printf("%.2f, %.2f | %.2f\n", sqr->pos.y, sqr->max.y, o3.pos.y);
+	if (sqr->collidesWith(o3)) {
+		// printf("%.2f, %.2f | %.2f\n", sqr->pos.y, sqr->max.y, o3.pos.y);
+		sqr->velocity.y = 0;
+		sqr->pos.y = o3.max.y + (sqr->max.y - sqr->min.y) / 2;
+		sqr->onPlatform = true;
+	}
 
 }
 
 void quicky::render() {
 
-	static float someCount = 0.0f;
-
-	// 20 units away from the origin
-	o1->draw();
-	o2->draw();
-	o3->draw();
-	o4->draw();
-	o5->draw();
-	o6->draw();
-	o7->draw();
-
-	sqr->draw();
-	// teapot->DrawSubset(0);
+	sqr->draw(worldMat);
+	o3.draw(worldMat);
 
 }
 

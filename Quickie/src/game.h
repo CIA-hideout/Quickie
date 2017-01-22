@@ -11,6 +11,10 @@
 #include "textureManager.h"
 #include "image.h"
 
+#include <DxErr.h>
+
+#pragma comment(lib, "dxerr.lib")
+
 class Game {
 protected:
 	// common game properties
@@ -27,10 +31,12 @@ protected:
 	DWORD			sleepTime;       
 	bool			paused;          
 	bool			initialized;
+	float			fov;
 
 public:
 
-	ID3DXMesh*		teapot;
+	D3DXMATRIX		worldMat;
+
 	LPD3DXBUFFER*	ppAdjacency;
 
 	Game();

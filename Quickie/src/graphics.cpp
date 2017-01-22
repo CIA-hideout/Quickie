@@ -102,6 +102,8 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 
 	camera = new Camera(CAMERA_TYPE_FREE);
 
+	get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
 }
 
 //=============================================================================

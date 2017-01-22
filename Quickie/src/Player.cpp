@@ -1,8 +1,7 @@
-#include "Obstacle.h"
+#include "Player.h"
 
-int minMaxRand(int min, int max);
 
-Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
+Player::Player() : VertexShape() {
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -29,12 +28,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 }
 
-Obstacle::~Obstacle() {
-
-}
-
-void Obstacle::init(Game* gamePtr) {
-
+void Player::init(Game* gamePtr) {
 	this->graphics = gamePtr->getGraphics();
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
 
@@ -88,7 +82,7 @@ void Obstacle::init(Game* gamePtr) {
 
 }
 
-void Obstacle::draw(D3DXMATRIX& worldMat) {
+void Player::draw(D3DXMATRIX& worldMat) {
 
 	D3DXMATRIX matRot;
 	D3DXMATRIX matTemp;
@@ -111,10 +105,9 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 
 }
 
-void Obstacle::update(float deltaTime) {
+void Player::update(float deltaTime) {
 
 }
 
-int minMaxRand(int min, int max) {
-	return rand() % (max - min + 1) + min;
+Player::~Player() {
 }
