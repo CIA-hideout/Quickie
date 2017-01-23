@@ -67,7 +67,7 @@ void VertexShape::computeBoundingBox() {
 
 void VertexShape::computeBoundingSphere() {
 
-	if (collisionType != COLLISION_TYPE_SPHERE)
+	if (collisionType != CT_S)
 		return;
 
 	BYTE* v = 0;

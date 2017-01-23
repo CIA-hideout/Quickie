@@ -8,13 +8,17 @@ Input::Input(HWND hWnd) {
 
 	di->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
 	keyboard->SetDataFormat(&c_dfDIKeyboard);
-	keyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-	keyboard->Acquire();
+	keyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+	HRESULT hr = keyboard->Acquire();
 
 	di->CreateDevice(GUID_SysMouse, &mouse, NULL);
 	mouse->SetDataFormat(&c_dfDIMouse);
-	mouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-	mouse->Acquire();
+	mouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+	HRESULT hr_ = mouse->Acquire();
+
+	for (int i = DIK_ESCAPE; i <= DIK_MEDIASELECT; i++) {
+		keys.insert(std::pair<int, bool>(i, false));
+	}
 
 }
 

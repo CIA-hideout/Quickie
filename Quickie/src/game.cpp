@@ -53,9 +53,6 @@ void Game::initialize(HWND hw)
 	// projection matrix
 	D3DXMATRIX proj;
 
-	// to calculate screen border given z coord,
-	// tan(fov/2) * z
-
 	D3DXMatrixPerspectiveFovLH(&proj, FOV, graphics->viewPort.Width / graphics->viewPort.Height, 1.0f, 1000.0f);
 	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &proj);
 
@@ -140,6 +137,8 @@ void Game::run(HWND hwnd) {
 
 	update();                   // update all game items
 	input->update();
+	updateKeyboard();
+	updateMouse();
 	ai();                       // artificial intelligence
 	collisions();               // handle collisions
 

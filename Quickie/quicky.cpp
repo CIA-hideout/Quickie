@@ -13,19 +13,21 @@ quicky::~quicky() {
 
 void quicky::initialize(HWND hWnd) {
 
-	AllocConsole();
-	freopen("conin$", "r", stdin);
-	freopen("conout$", "w", stdout);
-	freopen("conout$", "w", stderr);
-
 	Game::initialize(hWnd);
 
-	o3.collisionType = COLLISION_TYPE_BOUNDING_BOX;
-	sqr->collisionType = COLLISION_TYPE_BOUNDING_BOX;
+	o3.collisionType = CT_AABB;
+	sqr->collisionType = CT_AABB;
 
 	o3.init(this);
 
 	sqr->init(this);
+
+	this->input = new Input(this->hwnd);
+
+	AllocConsole();
+	freopen("conin$", "r", stdin);
+	freopen("conout$", "w", stdout);
+	freopen("conout$", "w", stderr);
 
 }
 
@@ -34,12 +36,12 @@ void quicky::update() {
 	o3.update(deltaTime);
 	sqr->update(deltaTime);
 
-	if (sqr->onPlatform == false) {
+	if (sqr->onPlatform == nullptr) {
 		sqr->velocity.y += deltaTime * -9.81 / 200;
 		sqr->pos += sqr->velocity;
 	}
 
-	sqr->rotation.y += 0.01;
+	o3.pos.y -= 0.01f;
 
 }
 
@@ -48,12 +50,15 @@ void quicky::ai() {
 }
 
 void quicky::collisions() {
-	printf("%.2f, %.2f | %.2f\n", sqr->pos.y, sqr->max.y, o3.pos.y);
+
+	// printf("%.2f, %.2f | %.2f\n", sqr->pos.y, sqr->max.y, o3.pos.y);
 	if (sqr->collidesWith(o3)) {
-		// printf("%.2f, %.2f | %.2f\n", sqr->pos.y, sqr->max.y, o3.pos.y);
 		sqr->velocity.y = 0;
-		sqr->pos.y = o3.max.y + (sqr->max.y - sqr->min.y) / 2;
-		sqr->onPlatform = true;
+		if (sqr->pos.y > o3.pos.y) {
+			sqr->pos.y = o3.max.y + (sqr->max.y - sqr->min.y) / 2;
+			sqr->onPlatform = &o3;
+			sqr->canJump = true;
+		}
 	}
 
 }
@@ -78,6 +83,8 @@ void quicky::updateMouse() {
 	static int oldPosY = 0;
 	int deltax = input->GetDeltaX();
 	int deltay = input->GetDeltaY();
+
+	printf("%.2f, %.2f\n", deltax, deltay);
 
 	//check mouse buttons
 	for (int n = 0; n < 4; n++)
@@ -112,6 +119,19 @@ void quicky::updateKeyboard() {
 }
 
 void quicky::keyPress(int key) {
+	if (key == DIK_LEFT) {
+		sqr->pos.x -= 10 * deltaTime;
+	}
+
+	if (key == DIK_RIGHT) {
+		sqr->pos.x += 10 * deltaTime;
+	}
+
+	if (key == DIK_UP && sqr->canJump == true) {
+		sqr->velocity.y += 10 * deltaTime;
+		sqr->canJump = false;
+		sqr->onPlatform = nullptr;
+	}
 
 }
 
@@ -128,5 +148,5 @@ void quicky::mouseButtonRelease(int key) {
 }
 
 void quicky::mouseMove(int x, int y) {
-
+	// printf("%.2f, %.2f\n", x, y);
 }

@@ -4,8 +4,8 @@
 #include "game.h"
 
 enum CollisionType {
-	COLLISION_TYPE_BOUNDING_BOX,
-	COLLISION_TYPE_SPHERE
+	CT_AABB,
+	CT_S
 };
 
 class VertexShape {

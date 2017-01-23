@@ -21,11 +21,13 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	rotation.y = 0;
 	rotation.z = 0;
 
-	collisionType = COLLISION_TYPE_BOUNDING_BOX;
+	collisionType = CT_AABB;
 
 	velocity.x = 0;
 	velocity.y = 0;
 	velocity.z = 0;
+
+	
 
 }
 

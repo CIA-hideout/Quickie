@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player() : VertexShape() {
+Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -20,11 +20,14 @@ Player::Player() : VertexShape() {
 	rotation.y = 0;
 	rotation.z = 0;
 
-	collisionType = COLLISION_TYPE_BOUNDING_BOX;
+	collisionType = CT_AABB;
 
 	velocity.x = 0;
 	velocity.y = 0;
 	velocity.z = 0;
+
+	onPlatform = nullptr;
+	canJump = true;
 
 }
 
@@ -106,6 +109,16 @@ void Player::draw(D3DXMATRIX& worldMat) {
 }
 
 void Player::update(float deltaTime) {
+
+	if (onPlatform == nullptr) {
+		velocity.y += -9.81 * deltaTime / 200;
+	}
+	else {
+		pos.y = onPlatform->max.y + (max.y - min.y) / 2;
+	}
+
+	pos.x += velocity.x * deltaTime;
+
 
 }
 

@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <Windowsx.h>
 #include <stdio.h>
+#include <map>
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -21,6 +22,8 @@ private:
 	IDirectInputDevice8*	mouse;
 
 public:
+
+	std::map<int, bool>		keys;
 
 	Input(HWND hWnd);
 	virtual ~Input();

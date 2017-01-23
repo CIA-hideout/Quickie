@@ -1,11 +1,13 @@
 #pragma once
 
 #include "VertexShape.h"
+#include "Obstacle.h"
 
 class Player : public VertexShape {
 public:
 
-	bool onPlatform;
+	Obstacle*	onPlatform;
+	bool		canJump;
 
 	Player() = default;
 	~Player();
