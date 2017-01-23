@@ -8,6 +8,23 @@
 #include <string>
 #include <vector>
 
+#include <d3d9.h>
+#include <d3dx9.h>
+
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
+
+// color RGB for D3DXVECTOR3
+#define COLOR_RED D3DXVECTOR3(255, 0, 0)
+#define COLOR_YELLOW D3DXVECTOR3(255, 255, 0)
+#define COLOR_PURPLE D3DXVECTOR3(255, 0, 255)
+#define COLOR_GREEN D3DXVECTOR3(0, 255, 0)
+#define COLOR_BLUE D3DXVECTOR3(0, 0, 255)
+#define COLOR_WHITE D3DXVECTOR3(255, 255, 255)
+#define DIMENSTION_SMALL D3DXVECTOR3(7, 1, 2.5)
+#define DIMENSTION_MEDIUM D3DXVECTOR3(10, 1, 2.5)
+
+
 //-----------------------------------------------
 // Useful macros
 //-----------------------------------------------
@@ -31,8 +48,9 @@
 const char CLASS_NAME[] = "Pixl";
 const char GAME_TITLE[] = "Pixl";
 const bool FULLSCREEN = false;              // windowed or fullscreen
-const UINT GAME_WIDTH = 1000;               // width of game in pixels
-const UINT GAME_HEIGHT = 1000;               // height of game in pixels
+const UINT GAME_WIDTH = 1280;               // width of game in pixels
+const UINT GAME_HEIGHT = 720;               // height of game in pixels
+const float ASPECT_RATIO = (float)GAME_WIDTH / GAME_HEIGHT;
 
 // game
 const float FRAME_RATE = 200.0f;                // the target frame rate (frames/sec)

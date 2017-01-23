@@ -3,11 +3,17 @@
 #include "VertexShape.h"
 #include "Obstacle.h"
 
+enum CooldownType {
+	COOLDOWN_BLINK,
+	COOLDOWN_TELEPORT
+};
+
 class Player : public VertexShape {
 public:
 
 	Obstacle*	onPlatform;
-	bool		canJump;
+	bool							canJump;
+	std::map<CooldownType, bool>	cooldown;
 
 	Player() = default;
 	~Player();
