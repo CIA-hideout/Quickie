@@ -1,20 +1,17 @@
 #include "src/FontHandler.h"
+#include <dinput.h>
 
-FontHandler::FontHandler() {
-	
-	memset(&this->widths, 0, sizeof(widths));
-	
-	spriteData.width = 32;
-	spriteData.height = 32;
-	spriteData.x = 0;
-	spriteData.y = 0;
-	spriteData.rect.right = spriteData.width;
-	spriteData.rect.bottom = spriteData.height;
-	spriteData.scale = 0.5;
-	startFrame = 0;
-	endFrame = 255;
-	currentFrame = 0;
+FontHandler::FontHandler() 
+{
+	graphics = nullptr;
+	font = nullptr;
+	font_rect = nullptr;
 
+	height = 0;
+	width = 0;
+	weight = 0;
+	italics = false;
+	fontName = "Arial";
 }
 
 FontHandler::~FontHandler()
@@ -22,49 +19,112 @@ FontHandler::~FontHandler()
 }
 
 
-bool FontHandler::initialize(Graphics* g, int width, int height, int ncols, TextureManager* tM)
+bool FontHandler::initialize(Graphics* g)
 {
-	return (Image::initialize(g, width, height, ncols, tM));
-}
-
-void FontHandler::draw()
-{
-	Image::draw();
-}
-
-void FontHandler::print(int x, int y, std::string text)
-{
-	auto fx = float(x);
-	auto fy = float(y);
-	
-	for (size_t i = 0; i < text.length(); ++i) {
-
-		auto frame = int(text[i] - '!' + 1);
-		setCurrentFrame(frame);
-		setX(fx);
-		setY(fy);
-		draw();		// repeatedly draw each letter 
-		if (widths[frame] == 0)
-			widths[frame] = getWidth();
-		fx += widths[frame] * getScale();
-
+	try{
+		graphics = g;                               // the graphics object
 	}
+	catch (...) { return false; }
+	return true;
 }
 
-int FontHandler::getTotalWidth(std::string text)
+bool FontHandler::createFont()
 {
-	float fx = 0;
-	
-	for (size_t i = 0; i < text.length(); i++)
+	try
 	{
-		int frame = int(text[i] - '!' + 1);
-		if (isdigit(text[i]))
-			frame += 32;
+		D3DXCreateFont(graphics->get3Ddevice(),     //D3D Device
 
-		fx += widths[frame] * getScale();
+			height,               //Font height
+
+			width,                //Font width
+
+			weight,        //Font Weight
+
+			1,                //MipLevels
+
+			italics,            //Italic
+			
+			DEFAULT_CHARSET,  //CharSet
+
+			OUT_DEFAULT_PRECIS, //OutputPrecision
+
+			ANTIALIASED_QUALITY, //Quality
+
+			DEFAULT_PITCH | FF_DONTCARE,//PitchAndFamily
+
+			fontName.c_str(),          //pFacename,
+
+			&font);         //ppFont
+
+		SetRect(font_rect, 0, 0, 10, 10);
 	}
-	 
-		 return int(fx);
+	catch (...)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
+{
+	height = h;
+	width = wid;
+	weight = wei;
+	italics = i;
+	fontName = fN;
+
+	try
+	{
+		D3DXCreateFont(graphics->get3Ddevice(),     //D3D Device
+
+			h,               //Font height
+
+			wid,                //Font width
+
+			wei,        //Font Weight
+
+			1,                //MipLevels
+
+			i,            //Italic
+
+			DEFAULT_CHARSET,  //CharSet
+
+			OUT_DEFAULT_PRECIS, //OutputPrecision
+
+			ANTIALIASED_QUALITY, //Quality
+
+			DEFAULT_PITCH | FF_DONTCARE,//PitchAndFamily
+
+			fN.c_str(),          //pFacename,
+
+			&font);         //ppFont
+	}
+	catch (...)
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+void FontHandler::print(std::string s)
+{
+	/*auto fx = float(x);
+	auto fy = float(y);*/
+	SetRect(font_rect, 0, 0, 10, 15);
+
+	font->DrawText(nullptr,        //pSprite
+
+		s.c_str(),  //pString
+
+		-1,          //Count
+
+		font_rect,  //pRect
+
+		DT_LEFT | DT_NOCLIP,//Format,
+
+		0xffffffff); //Color
 }
 
 

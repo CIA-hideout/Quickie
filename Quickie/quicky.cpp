@@ -8,8 +8,6 @@ Obstacle o9 = Obstacle (SPAWN_CENTER);
 Obstacle o1 = Obstacle (SPAWN_RIGHT);
 std::vector<Obstacle> obs;
 
-TextureManager test1;
-
 quicky::quicky() {
 	obs.push_back(o8);
 	obs.push_back(o9);
@@ -42,14 +40,27 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	f = new FontHandler();
+	Game::initialize(hWnd);
 
-	if(!test1.initialize(graphics, "src\\test.png"))
-	{
-		throw(GameError(gameErrorNS::FATAL_ERROR, "ERROR INIT FONT"));
-	}
+	// ls->init(this);
+	o1->init(this);
+	o2->init(this);
+	o3->init(this);
+	o4->init(this);
+	o5->init(this);
+	o6->init(this);
+	o7->init(this);
 
-	f->initialize(graphics, 32, 32, 16, &test1);
+	sqr->init(this);
+>>>>>>> Implement basic font support
+
+	font = new FontHandler();
+
+	if(!font->initialize(graphics))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
+
+	if(!font->createFont(20, 20, 500, false, "Arial"))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
 }
 
 void quicky::update() {
@@ -156,8 +167,7 @@ void quicky::render() {
 	//o8.draw(worldMat);
 	//o9.draw(worldMat);
 
-	f->print(GAME_WIDTH / 2, GAME_HEIGHT / 2, "HELOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-
+	font->print("HELLO WURLD");
 }
 
 void quicky::releaseAll() {

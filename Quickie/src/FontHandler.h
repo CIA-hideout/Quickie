@@ -2,24 +2,33 @@
 #ifndef _FONTHANDLER_H_
 #define _FONTHANDLER_H_
 
-#include <map>
-#include "image.h"
+#include "graphics.h"
 
-class FontHandler : public Image {
-	int						widths[256];
-	Graphics*				g;
-	//FontHandlerNS::Fonts	currentFont;
+class FontHandler{
+	Graphics*	graphics;
+	ID3DXFont*	font;
+	RECT*		font_rect;
+
+	// current font's values
+	int height;
+	UINT width, weight;
+	bool italics;
+	std::string fontName;
 
 public:
 	FontHandler();
 	~FontHandler();
 
-	bool initialize(Graphics* g, int width, int height, int ncols, TextureManager* tM);
-	void draw();
-	void print(int x, int y, std::string text);		// prints the text on screen give the coordinates
+	bool initialize(Graphics* graphics);
+	bool createFont();
+	bool createFont(int height, UINT width, UINT weight, bool i, std::string fN);
+	void print(std::string sentence);						// prints the text on screen given the coordinates
 
 	int getTotalWidth(std::string text);
 	//void setCurrentFont(FontHandlerNS::Fonts font);
+
+	//void setHeight(int height) { height = height; }
+	//void setWidth(int width) { width = width; }
 };
 
 #endif
