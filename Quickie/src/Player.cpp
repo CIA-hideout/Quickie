@@ -117,7 +117,7 @@ void Player::update(float deltaTime) {
 	}
 
 	pos.x += velocity.x * deltaTime;
-	respawn();
+	// respawn();
 	
 }
 
