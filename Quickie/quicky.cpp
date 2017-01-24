@@ -81,8 +81,8 @@ void quicky::collisions() {
 		}
 	}
 	*/
-	
-	for (std::vector<Obstacle>::iterator i = obs.begin(); i != obs.end(); i++)
+	int counter = 0;
+	for (std::vector<Obstacle>::iterator i = obs.begin(); i != obs.end(); ++i)
 	{
 		Obstacle temp = Obstacle(*i);
 		
@@ -90,12 +90,14 @@ void quicky::collisions() {
 			sqr->velocity.y = 0;
 			if (sqr->pos.y > temp.pos.y) {
 				sqr->pos.y = temp.max.y + (sqr->max.y - sqr->min.y) / 2;
-				sqr->onPlatform = &temp;
+				sqr->onPlatform = &obs.at(counter);
 				sqr->canJump = true;
 				printf("MAX: %.2f, POS: %.2f\n", temp.max.y, temp.pos.y);
+				printf("Player: %.2f\n", sqr->pos.y);
 			}
 		}
 		//printf("%.2f\n", sqr->pos.y);
+		counter++;
 	}
 	
 	
