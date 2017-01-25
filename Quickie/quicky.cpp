@@ -26,8 +26,6 @@ void quicky::initialize(HWND hWnd) {
 	sqr->collisionType = CT_AABB;
 
 	//o3.init(this);
-	sqr->init(this);
-
 	//o1.init(this);
 	//o8.init(this);
 	//o9.init(this);
@@ -41,11 +39,33 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
+
+	Game::initialize(hWnd);
+
+	// ls->init(this);
+	o1->init(this);
+	o2->init(this);
+	o3->init(this);
+	o4->init(this);
+	o5->init(this);
+	o6->init(this);
+	o7->init(this);
+
+	sqr->init(this);
+>>>>>>> Implement basic font support
+
+	font = new FontHandler();
+
+	if(!font->initialize(graphics))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
+
+	if(!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
 }
 
 void quicky::update() {
 
-	
+
 	//o3.update(deltaTime);
 	sqr->update(deltaTime);
 
@@ -61,8 +81,8 @@ void quicky::update() {
 	//o9.update(deltaTime);
 
 	//o3.pos.y -= 0.01f;
-	
-	
+
+
 }
 
 void quicky::ai() {
@@ -85,7 +105,7 @@ void quicky::collisions() {
 	for (std::vector<Obstacle>::iterator i = obs.begin(); i != obs.end(); ++i)
 	{
 		Obstacle temp = Obstacle(*i);
-		
+
 		if (sqr->collidesWith(temp)) {
 			sqr->velocity.y = 0;
 			if (sqr->pos.y > temp.pos.y) {
@@ -100,7 +120,7 @@ void quicky::collisions() {
 		printf("%.2f\n", sqr->pos.y);
 		counter++;
 	}
-	
+
 	//printf("%.2f\n", sqr->pos.y);
 
 	/*
@@ -131,21 +151,23 @@ void quicky::collisions() {
 		}
 	}
 	*/
-	
-	
+
+
 }
 
 void quicky::render() {
-	
+
 	sqr->draw(worldMat);
 	//o3.draw(worldMat);
-	
+
 	for (std::vector<Obstacle>::iterator i = obs.begin(); i != obs.end(); i++)
 		i->draw(worldMat);
 
 	//o1.draw(worldMat);
 	//o8.draw(worldMat);
 	//o9.draw(worldMat);
+
+	font->print(500, 500, "AIR AMERICANA");
 }
 
 void quicky::releaseAll() {
@@ -197,8 +219,8 @@ void quicky::updateKeyboard() {
 }
 
 void quicky::keyPress(int key) {
-	
-	
+
+
 	if (key == DIK_LEFT) {
 		sqr->pos.x -= 10 * deltaTime;
 	}
@@ -212,7 +234,7 @@ void quicky::keyPress(int key) {
 		sqr->canJump = false;
 		sqr->onPlatform = nullptr;
 	}
-	
+
 }
 
 void quicky::keyRelease(int key) {

@@ -95,6 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FontHandler.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FontHandler.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\Input.h" />
