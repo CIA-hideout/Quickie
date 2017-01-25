@@ -3,9 +3,9 @@
 //Obstacle o3 = Obstacle(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(10, 1, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 
-Obstacle o8 = Obstacle(SPAWN_LEFT);
-Obstacle o9 = Obstacle(SPAWN_CENTER);
-Obstacle o1 = Obstacle(SPAWN_RIGHT);
+Obstacle o8 = Obstacle (SPAWN_LEFT);
+Obstacle o9 = Obstacle (SPAWN_CENTER);
+Obstacle o1 = Obstacle (SPAWN_RIGHT);
 std::vector<Obstacle> obs;
 
 quicky::quicky() {
@@ -96,11 +96,12 @@ void quicky::collisions() {
 				printf("Player: %.2f\n", sqr->pos.y);
 			}
 		}
-		//printf("%.2f\n", sqr->pos.y);
+		sqr->onPlatform = nullptr;
+		printf("%.2f\n", sqr->pos.y);
 		counter++;
 	}
 	
-	
+	//printf("%.2f\n", sqr->pos.y);
 
 	/*
 	if (sqr->collidesWith(o1)) {
