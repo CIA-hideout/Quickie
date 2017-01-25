@@ -22,8 +22,9 @@ public:
 	bool initialize(Graphics* graphics);
 	bool createFont();
 	bool createFont(int height, UINT width, UINT weight, bool i, std::string fN);
-	void print(std::string sentence);						// prints the text on screen given the coordinates
+	void print(int x, int y, std::string sentence);						// prints the text on screen given the coordinates
 
+	RECT* getFontRect(){ return font_rect; }
 	int getTotalWidth(std::string text);
 	//void setCurrentFont(FontHandlerNS::Fonts font);
 

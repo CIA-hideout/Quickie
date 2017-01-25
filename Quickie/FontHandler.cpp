@@ -5,7 +5,7 @@ FontHandler::FontHandler()
 {
 	graphics = nullptr;
 	font = nullptr;
-	font_rect = nullptr;
+	font_rect = new RECT();
 
 	height = 0;
 	width = 0;
@@ -32,31 +32,29 @@ bool FontHandler::createFont()
 {
 	try
 	{
-		D3DXCreateFont(graphics->get3Ddevice(),     //D3D Device
+		D3DXCreateFont(graphics->get3Ddevice(),			//D3D Device
 
-			height,               //Font height
+			height,										//Font height
 
-			width,                //Font width
+			width,										//Font width
 
-			weight,        //Font Weight
+			weight,										//Font Weight
 
-			1,                //MipLevels
+			1,											//MipLevels
 
-			italics,            //Italic
+			italics,									//Italic
 			
-			DEFAULT_CHARSET,  //CharSet
+			DEFAULT_CHARSET,							//CharSet
 
-			OUT_DEFAULT_PRECIS, //OutputPrecision
+			OUT_DEFAULT_PRECIS,							//OutputPrecision
 
-			ANTIALIASED_QUALITY, //Quality
+			ANTIALIASED_QUALITY,						//Quality
 
-			DEFAULT_PITCH | FF_DONTCARE,//PitchAndFamily
+			DEFAULT_PITCH | FF_DONTCARE,				//PitchAndFamily
 
-			fontName.c_str(),          //pFacename,
+			fontName.c_str(),							//pointer to Facename
 
-			&font);         //ppFont
-
-		SetRect(font_rect, 0, 0, 10, 10);
+			&font);										//ppFont
 	}
 	catch (...)
 	{
@@ -78,27 +76,27 @@ bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 	{
 		D3DXCreateFont(graphics->get3Ddevice(),     //D3D Device
 
-			h,               //Font height
+			h,										//Font height
 
-			wid,                //Font width
+			wid,									//Font width
 
-			wei,        //Font Weight
+			wei,									//Font Weight
 
-			1,                //MipLevels
+			1,										//MipLevels
 
-			i,            //Italic
+			i,										//Italic
 
-			DEFAULT_CHARSET,  //CharSet
+			DEFAULT_CHARSET,						//CharSet
 
-			OUT_DEFAULT_PRECIS, //OutputPrecision
+			OUT_DEFAULT_PRECIS,						//OutputPrecision
 
-			ANTIALIASED_QUALITY, //Quality
+			ANTIALIASED_QUALITY,					//Quality
 
-			DEFAULT_PITCH | FF_DONTCARE,//PitchAndFamily
+			DEFAULT_PITCH | FF_DONTCARE,			//PitchAndFamily
 
-			fN.c_str(),          //pFacename,
+			fN.c_str(),								//pFacename
 
-			&font);         //ppFont
+			&font);									//ppFont
 	}
 	catch (...)
 	{
@@ -108,23 +106,21 @@ bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 	return true;
 }
 
-void FontHandler::print(std::string s)
+void FontHandler::print(int x, int y, std::string s)
 {
-	/*auto fx = float(x);
-	auto fy = float(y);*/
-	SetRect(font_rect, 0, 0, 10, 15);
+	SetRect(font_rect, x, y, x, y);			// left, top, right, bottom
 
-	font->DrawText(nullptr,        //pSprite
+	font->DrawText(nullptr,			//pointer to Sprite
 
-		s.c_str(),  //pString
+		s.c_str(),					//pointer to String
 
-		-1,          //Count
+		-1,							//Count
 
-		font_rect,  //pRect
+		font_rect,					//pointer to Rect
 
-		DT_LEFT | DT_NOCLIP,//Format,
+		DT_LEFT | DT_NOCLIP,		//Format
 
-		0xffffffff); //Color
+		0xffffffff);				//Color
 }
 
 

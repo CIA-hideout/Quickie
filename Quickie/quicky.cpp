@@ -59,7 +59,7 @@ void quicky::initialize(HWND hWnd) {
 	if(!font->initialize(graphics))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
 
-	if(!font->createFont(20, 20, 500, false, "Arial"))
+	if(!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
 }
 
@@ -167,7 +167,7 @@ void quicky::render() {
 	//o8.draw(worldMat);
 	//o9.draw(worldMat);
 
-	font->print("HELLO WURLD");
+	font->print(500, 500, "AIR AMERICANA");
 }
 
 void quicky::releaseAll() {
