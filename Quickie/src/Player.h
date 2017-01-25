@@ -23,5 +23,6 @@ public:
 	void init(Game*);
 	void draw(D3DXMATRIX&);
 	void update(float);
+	void respawn();
 };
 

@@ -21,8 +21,10 @@
 #define COLOR_GREEN D3DXVECTOR3(0, 255, 0)
 #define COLOR_BLUE D3DXVECTOR3(0, 0, 255)
 #define COLOR_WHITE D3DXVECTOR3(255, 255, 255)
-#define DIMENSTION_SMALL D3DXVECTOR3(7, 1, 2.5)
-#define DIMENSTION_MEDIUM D3DXVECTOR3(10, 1, 2.5)
+
+// define size of obstacles
+#define DIMENSION_SMALL D3DXVECTOR3(7, 1, 2.5)
+#define DIMENSION_MEDIUM D3DXVECTOR3(10, 1, 2.5)
 
 
 //-----------------------------------------------
@@ -68,3 +70,8 @@ const UCHAR SHIP_ROTATE_RIGHT = VK_RIGHT;
 const UCHAR SHIP_ADD_V = VK_UP;
 const UCHAR SHIP_SUBTRACT_V = VK_DOWN;
 const UCHAR SPACEBAR = 0x20;
+
+// for spawning objects on screen
+const int SPAWN_LEFT[] = {-15, -5 };	// -15 < pos.x < -5
+const int SPAWN_CENTER[] = {-5, 5};		// - 5 < pos.x <  5 
+const int SPAWN_RIGHT[] = {5, 15};		//   5 < pos.x < 15
