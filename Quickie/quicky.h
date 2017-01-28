@@ -6,6 +6,8 @@
 #include "src/LSquare.h"
 #include "src/Obstacle.h"
 #include "src/Player.h"
+#include "src/FontHandler.h"
+#include "src/graphics.h"
 
 extern void game_init();
 extern void game_preload();
@@ -14,6 +16,8 @@ extern void game_render_sprite(float);
 extern void game_update(float);
 
 class quicky : public Game {
+
+	FontHandler* font;
 
 public:
 
