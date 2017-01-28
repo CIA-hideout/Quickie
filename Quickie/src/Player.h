@@ -12,9 +12,6 @@ enum CooldownType {
 class Player : public VertexShape {
 public:
 
-	bool							canJump;
-
-	bool							canTeleport;
 	std::map<CooldownType, float>	cooldown;
 
 	Player() = default;

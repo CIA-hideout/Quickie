@@ -29,8 +29,6 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
 
-	canJump = true;
-
 }
 
 void Player::init(Game* gamePtr) {
@@ -123,18 +121,6 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 }
 
-void Player::moveX(float& pX) {
-
-}
-
-void Player::moveY(float& pX) {
-
-}
-
-void Player::moveZ(float& pX) {
-
-}
-
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 	bool collides;
@@ -142,17 +128,11 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	for (int i = 0; i < vS.size(); i++) {
 		if (vS[i]->id != id) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
-				// collide on x-axis
-				printf("collides\n");
-				if (velocity.x > 0) {
-					// going to the right side / collision on left
-					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.05;
-					velocity.x = 0;
-				}
-				else if (velocity.x < 0) {
-					pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.05;
-					velocity.x = 0;
-				}
+				if (velocity.x > 0)
+					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
+				else if (velocity.x < 0)
+					pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
+				velocity.x = 0;
 			}
 		}
 	}
@@ -161,16 +141,11 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	for (int i = 0; i < vS.size(); i++) {
 		if (vS[i]->id != id) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
-				printf("collides\n");
-				if (velocity.y > 0) {
-					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.05;
-					velocity.y = 0;
-				}
-				else if (velocity.y < 0) {
-					canJump = true;
-					pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.05;
-					velocity.y = 0;
-				}
+				if (velocity.y > 0)
+					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
+				else if (velocity.y < 0)
+					pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
+				velocity.y = 0;
 			}
 		}
 	}
