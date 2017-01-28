@@ -10,7 +10,7 @@ Player* sqr = new Player(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(1.5, 1.5, 1.5), D3DX
 
 std::vector<VertexShape*> obs;
 
-Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
+// Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 
 Obstacle o8 = Obstacle (SPAWN_LEFT);
 Obstacle o9 = Obstacle (SPAWN_CENTER);
@@ -40,10 +40,10 @@ void quicky::initialize(HWND hWnd) {
 	o4->init(this);
 	sqr->init(this);
 
-  sqr->collisionType = CT_AABB;
+	sqr->collisionType = CT_AABB;
 
-	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
-		i->init(this);
+	//for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
+		//i->init(this);
 
 
 	this->input = new Input(this->hwnd);
@@ -55,11 +55,11 @@ void quicky::initialize(HWND hWnd) {
 
   cManager = new CollisionManager();
 	
-	obs2.push_back(o1);
-	obs2.push_back(o2);
-	obs2.push_back(o3);
-	obs2.push_back(o4);
-	obs2.push_back(sqr);
+	obs.push_back(o1);
+	obs.push_back(o2);
+	obs.push_back(o3);
+	obs.push_back(o4);
+	obs.push_back(sqr);
 
 	//Implement basic font support
 	font = new FontHandler();
@@ -80,8 +80,8 @@ void quicky::update() {
 
 	sqr->update(deltaTime, obs);
   
-	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
-		i->update(deltaTime);
+	//for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
+		//i->update(deltaTime);
 
 
 }
@@ -122,8 +122,8 @@ void quicky::render() {
 	o4->draw(worldMat);
 
 
-	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
-		i->draw(worldMat);
+	//for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
+		//i->draw(worldMat);
 
 
 	font->print(500, 500, "AIR AMERICANA");
