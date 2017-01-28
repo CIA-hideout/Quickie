@@ -112,7 +112,7 @@ class Graphics
 private:
 
     LP_3D					direct3d;
-    LP_3DDEVICE				device3d;
+	LP_3DDEVICE				device3d;
     LP_SPRITE				sprite;
     D3DPRESENT_PARAMETERS	d3dpp;
     D3DDISPLAYMODE			pMode;
@@ -127,8 +127,6 @@ private:
 public:
 
 	Camera*					camera;
-
-public:
 
 	D3DVIEWPORT9			viewPort;
 

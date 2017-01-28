@@ -10,8 +10,17 @@ Player* sqr = new Player(D3DXVECTOR3(0, 0, 20), D3DXVECTOR3(1.5, 1.5, 1.5), D3DX
 
 std::vector<VertexShape*> obs;
 
-quicky::quicky() {
+Player* sqr = new Player(D3DXVECTOR3(0, 5, 20), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 
+Obstacle o8 = Obstacle (SPAWN_LEFT);
+Obstacle o9 = Obstacle (SPAWN_CENTER);
+Obstacle o10 = Obstacle (SPAWN_RIGHT);
+std::vector<Obstacle> obs_test;
+
+quicky::quicky() {
+	obs_test.push_back(o8);
+	obs_test.push_back(o9);
+	obs_test.push_back(o10);
 }
 
 quicky::~quicky() {
@@ -31,6 +40,12 @@ void quicky::initialize(HWND hWnd) {
 	o4->init(this);
 	sqr->init(this);
 
+  sqr->collisionType = CT_AABB;
+
+	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
+		i->init(this);
+
+
 	this->input = new Input(this->hwnd);
 
 	AllocConsole();
@@ -38,14 +53,22 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	cManager = new CollisionManager();
+  cManager = new CollisionManager();
 	
-	obs.push_back(o1);
-	obs.push_back(o2);
-	obs.push_back(o3);
-	obs.push_back(o4);
-	obs.push_back(sqr);
+	obs2.push_back(o1);
+	obs2.push_back(o2);
+	obs2.push_back(o3);
+	obs2.push_back(o4);
+	obs2.push_back(sqr);
 
+	//Implement basic font support
+	font = new FontHandler();
+
+	if(!font->initialize(graphics))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
+
+	if(!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
 }
 
 void quicky::update() {
@@ -56,6 +79,10 @@ void quicky::update() {
 	o4->update(deltaTime);
 
 	sqr->update(deltaTime, obs);
+  
+	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
+		i->update(deltaTime);
+
 
 }
 
@@ -64,7 +91,26 @@ void quicky::ai() {
 }
 
 void quicky::collisions() {
+/*
+	int counter = 0;
+	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); ++i)
+	{
+		Obstacle temp = Obstacle(*i);
 
+		if (sqr->collidesWith(temp)) {
+			sqr->velocity.y = 0;
+			if (sqr->pos.y > temp.pos.y) {
+				sqr->pos.y = temp.max.y + (sqr->max.y - sqr->min.y) / 2;
+				sqr->onPlatform = &obs_test.at(counter);
+				sqr->canJump = true;
+				printf("MAX: %.2f, POS: %.2f\n", temp.max.y, temp.pos.y);
+				printf("Player: %.2f\n", sqr->pos.y);
+			}
+		}
+		//printf("%.2f\n", sqr->pos.y);
+		counter++;
+	}
+  */
 }
 
 void quicky::render() {
@@ -75,6 +121,12 @@ void quicky::render() {
 	o3->draw(worldMat);
 	o4->draw(worldMat);
 
+
+	for (std::vector<Obstacle>::iterator i = obs_test.begin(); i != obs_test.end(); i++)
+		i->draw(worldMat);
+
+
+	font->print(500, 500, "AIR AMERICANA");
 }
 
 void quicky::releaseAll() {
@@ -92,6 +144,7 @@ void quicky::updateMouse() {
 	int deltay = input->GetDeltaY();
 
 	// printf("%.2f, %.2f\n", deltax, deltay);
+
 
 	//check mouse buttons
 	for (int n = 0; n < 4; n++)
@@ -183,5 +236,5 @@ void quicky::mouseButtonRelease(int key) {
 }
 
 void quicky::mouseMove(int x, int y) {
-
+  
 }

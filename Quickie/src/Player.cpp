@@ -1,6 +1,5 @@
 #include "Player.h"
 
-
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
@@ -175,8 +174,21 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 			}
 		}
 	}
-
 }
 
 Player::~Player() {
+}
+
+void Player::respawn() {
+	if (pos.y <= -25) {
+		pos.y = 20;
+	}
+
+	if (pos.x < -20) {
+		pos.x = 20;
+	}
+
+	if (pos.x > 20){
+		pos.x = -20;
+	}
 }

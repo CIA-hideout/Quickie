@@ -1,5 +1,7 @@
 #pragma once
-
+#ifndef _IMAGE_H                // Prevent multiple definitions if this 
+#define _IMAGE_H                // file is included in more than one place
+#define WIN32_LEAN_AND_MEAN
 
 
 #include "textureManager.h"
@@ -171,3 +173,5 @@ class Image
     // Update the animation. deltaTime is used to regulate the speed.
     virtual void update(float deltaTime);
 };
+
+#endif

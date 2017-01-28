@@ -29,6 +29,6 @@ public:
 	void moveY(float&);
 	void moveZ(float&);
 	void move(std::vector<VertexShape*>& vS, float);
-
+	void respawn();
 };
 

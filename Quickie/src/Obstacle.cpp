@@ -1,9 +1,9 @@
 #include "Obstacle.h"
 #include <algorithm>
+#include <random>
 
-int minMaxRand(int min, int max);
-
-Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
+Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() 
+{
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -23,19 +23,27 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
-	objectType = OT_OBS;
+  objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;
-	velocity.z = 0;
-
 }
 
-Obstacle::Obstacle(D3DXVECTOR3& pos) : VertexShape()
+// Create a new obstructor with almost RANDOM variables
+Obstacle::Obstacle(const int location[]) : VertexShape()
 {
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	
+	spawnMinX = location[0];
+	spawnMaxX = location[1];
+	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);	// randomly generate on X axis
+	std::uniform_int_distribution<int> randomY(-5, 5);					// randomly generate near center when game begins
+
+	D3DXVECTOR3& pos = D3DXVECTOR3(randomX(rng), randomY(rng), 20);
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 
-	D3DXVECTOR3& dimension = setDimension();
+	D3DXVECTOR3& dimension = getRandomDimension();
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
 
 	D3DXVECTOR3& scale = D3DXVECTOR3(1, 1, 1);
@@ -57,7 +65,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos) : VertexShape()
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
-	objectType = OT_OBS;
+  objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;
@@ -68,7 +76,8 @@ Obstacle::~Obstacle() {
 
 }
 
-void Obstacle::init(Game* gamePtr) {
+void Obstacle::init(Game* gamePtr)
+{
 
 	this->graphics = gamePtr->getGraphics();
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
@@ -123,7 +132,8 @@ void Obstacle::init(Game* gamePtr) {
 
 }
 
-void Obstacle::draw(D3DXMATRIX& worldMat) {
+void Obstacle::draw(D3DXMATRIX& worldMat) 
+{
 
 	D3DXMATRIX matRot;
 	D3DXMATRIX matTemp;
@@ -146,27 +156,35 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 
 }
 
-void Obstacle::update(float deltaTime) {
-	
-	// pos.y -= 0.1f; // go down
-	
-	//if (pos.y <= -25) {
-	//	pos.y = 20 + minMaxRand(0, 2);
-	//	pos.x = minMaxRand(-15, 15);
+void Obstacle::update(float deltaTime) 
+{
+  /*
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);
+	std::uniform_int_distribution<int> randomY(0, 5);
 
-	//	color = getRandomColor();
-	//	setColor(color);
-	//}
+	timer += deltaTime;
 
+	if (timer > 10)
+	 pos.y -= 0.01f; // go down
+
+	
+	if (pos.y <= -25) {
+		pos.y = 20 + randomY(rng);
+		pos.x = randomX(rng);
+
+		color = getRandomColor();
+		setColor(color);
+		printf("%2f, %2f\n", pos.x, pos.y);
+	}
+*/
 }
 
-int minMaxRand(int min, int max) {
-	return rand() % (max - min + 1) + min;
-}
-
+// Randomly generate a color and returns the value
 D3DXVECTOR3 Obstacle::getRandomColor()
 {
-	std::srand(unsigned(std::time(nullptr)));
+	//std::srand(unsigned(std::time(nullptr)));
 
 	// array is not dynamic use vector instead
 	std::vector<D3DXVECTOR3> color;
@@ -177,12 +195,14 @@ D3DXVECTOR3 Obstacle::getRandomColor()
 	color.push_back(COLOR_BLUE);
 	color.push_back(COLOR_WHITE);
 
-	std::random_shuffle(color.begin(), color.end()); // randomise vector content
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::shuffle(color.begin(), color.end(), rng); // randomise vector content
 
-
-	return color.front();	//use first value of randomise array
+  	return color.front();	//use first value of randomise array
 }
 
+// set the obstructor to the given color
 void Obstacle::setColor(D3DXVECTOR3 newColor)
 {
 	LVertex* v;
@@ -198,16 +218,18 @@ void Obstacle::setColor(D3DXVECTOR3 newColor)
 
 }
 
-D3DXVECTOR3 Obstacle::setDimension()
+// generate a random size for the obstructor and returns the size
+D3DXVECTOR3 Obstacle::getRandomDimension()
 {
-	std::srand(unsigned(std::time(nullptr)));
-
 	std::vector<D3DXVECTOR3> dimensions;
-	dimensions.push_back(DIMENSTION_SMALL);
-	dimensions.push_back(DIMENSTION_MEDIUM);
-	dimensions.push_back(DIMENSTION_MEDIUM);
+	dimensions.push_back(DIMENSION_SMALL);
+	dimensions.push_back(DIMENSION_MEDIUM);
+	dimensions.push_back(DIMENSION_MEDIUM);
 	// medium size to appear more frequently
 
-	std::random_shuffle(dimensions.begin(), dimensions.end()); //ramdomise vector
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::shuffle(dimensions.begin(), dimensions.end(), rng); //ramdomise vector
+	
 	return dimensions.front(); // use first value of random vector
 }
