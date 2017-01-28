@@ -5,7 +5,14 @@
 
 enum CollisionType {
 	CT_AABB,
-	CT_S
+	CT_OOBB,
+	CT_S,
+	CT_N
+};
+
+enum ObjectType {
+	OT_PLY,
+	OT_OBS
 };
 
 class VertexShape {
@@ -37,6 +44,9 @@ public:
 	float					mass;
 
 	CollisionType			collisionType;
+	ObjectType				objectType;
+
+	int						id;
 
 public:
 

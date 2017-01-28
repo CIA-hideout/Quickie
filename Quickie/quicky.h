@@ -1,11 +1,11 @@
 #pragma once
 
 #include "src/game.h"
-#include "src/entity.h"
 #include "src/LTriangle.h"
 #include "src/LSquare.h"
 #include "src/Obstacle.h"
 #include "src/Player.h"
+#include "src/CollisionManager.h"
 
 extern void game_init();
 extern void game_preload();
@@ -17,6 +17,9 @@ class quicky : public Game {
 
 public:
 
+	CollisionManager*			cManager;
+	std::vector<VertexShape*>	vEntities;
+
 	quicky();
 
 	virtual ~quicky();
@@ -25,7 +28,6 @@ public:
 	void update();
 	void ai();
 	void collisions();
-	void collisions(Entity* entity);
 	void render();
 	void releaseAll();
 	void resetAll();

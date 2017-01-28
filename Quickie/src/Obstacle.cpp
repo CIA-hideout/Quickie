@@ -23,12 +23,11 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
+	objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;
 	velocity.z = 0;
-
-	
 
 }
 
@@ -58,6 +57,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos) : VertexShape()
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
+	objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;

@@ -2,7 +2,8 @@
 
 
 VertexShape::VertexShape() {
-
+	static int id_ = 0;
+	this->id = id_++;
 }
 
 VertexShape::~VertexShape() {
@@ -42,6 +43,7 @@ void VertexShape::computeBoundingBox() {
 	min.x = 999; min.y = 999; min.z = 999;
 
 	for (int i = 0; i < vertexCount; i++) {
+
 		D3DXMatrixTranslation(&mat, pos.x + v->x, pos.y + v->y, pos.z + v->z);
 
 		if (max.x < mat(3, 0))
