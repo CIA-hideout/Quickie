@@ -23,6 +23,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
+  objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;
@@ -64,6 +65,7 @@ Obstacle::Obstacle(const int location[]) : VertexShape()
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
+  objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;
@@ -156,6 +158,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 void Obstacle::update(float deltaTime) 
 {
+  /*
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);
@@ -175,7 +178,7 @@ void Obstacle::update(float deltaTime)
 		setColor(color);
 		printf("%2f, %2f\n", pos.x, pos.y);
 	}
-
+*/
 }
 
 // Randomly generate a color and returns the value

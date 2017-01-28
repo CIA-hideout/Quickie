@@ -2,6 +2,7 @@
 
 #include "VertexShape.h"
 #include "Obstacle.h"
+#include "CollisionManager.h"
 
 enum CooldownType {
 	COOLDOWN_BLINK,
@@ -11,9 +12,10 @@ enum CooldownType {
 class Player : public VertexShape {
 public:
 
-	Obstacle*	onPlatform;
 	bool							canJump;
-	std::map<CooldownType, bool>	cooldown;
+
+	bool							canTeleport;
+	std::map<CooldownType, float>	cooldown;
 
 	Player() = default;
 	~Player();
@@ -22,7 +24,11 @@ public:
 
 	void init(Game*);
 	void draw(D3DXMATRIX&);
-	void update(float);
+	void update(float, std::vector<VertexShape*>&);
+	void moveX(float&);
+	void moveY(float&);
+	void moveZ(float&);
+	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
 };
 

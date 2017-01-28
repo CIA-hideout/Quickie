@@ -20,12 +20,15 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
+	objectType = OT_PLY;
 
 	velocity.x = 0;
 	velocity.y = 0;
 	velocity.z = 0;
 
-	onPlatform = nullptr;
+	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
+	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
+
 	canJump = true;
 
 }
@@ -38,21 +41,21 @@ void Player::init(Game* gamePtr) {
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
 
 	// 0
-	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 1						 
-	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 2						 
-	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 3						 
-	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 4						 
-	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 5						 
-	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 6						 
-	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 7						 
-	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 1						 												    
+	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 2						 												    
+	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 3						 												    
+	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 4						 												    
+	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 5						 												    
+	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 6						 												    
+	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 7						 												    
+	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 
 	meshPtr->UnlockVertexBuffer();
 
@@ -107,18 +110,70 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 }
 
-void Player::update(float deltaTime) {
+void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
-	if (onPlatform == nullptr) {
-		velocity.y += -9.81 * deltaTime / 200;
-	}
-	else {
-		pos.y = onPlatform->max.y + (max.y - min.y) / 2;
+	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
+		if (i->second > 0.0f)
+			i->second -= deltaTime;
 	}
 
-	pos.x += velocity.x * deltaTime;
-	respawn();
-	
+	velocity.x *= 0.75;
+	velocity.y *= 0.75;
+	move(vS, deltaTime);
+
+}
+
+void Player::moveX(float& pX) {
+
+}
+
+void Player::moveY(float& pX) {
+
+}
+
+void Player::moveZ(float& pX) {
+
+}
+
+void Player::move(std::vector<VertexShape*>& vS, float dt) {
+
+	bool collides;
+	this->pos.x += velocity.x;
+	for (int i = 0; i < vS.size(); i++) {
+		if (vS[i]->id != id) {
+			if (CollisionManager::collideAABB(this, vS[i])) {
+				// collide on x-axis
+				printf("collides\n");
+				if (velocity.x > 0) {
+					// going to the right side / collision on left
+					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.05;
+					velocity.x = 0;
+				}
+				else if (velocity.x < 0) {
+					pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.05;
+					velocity.x = 0;
+				}
+			}
+		}
+	}
+
+	this->pos.y += velocity.y;
+	for (int i = 0; i < vS.size(); i++) {
+		if (vS[i]->id != id) {
+			if (CollisionManager::collideAABB(this, vS[i])) {
+				printf("collides\n");
+				if (velocity.y > 0) {
+					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.05;
+					velocity.y = 0;
+				}
+				else if (velocity.y < 0) {
+					canJump = true;
+					pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.05;
+					velocity.y = 0;
+				}
+			}
+		}
+	}
 }
 
 Player::~Player() {
