@@ -1,23 +1,17 @@
 #include "quicky.h"
 
-Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+//Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+//Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+//Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle o8 = Obstacle(SPAWN_LEFT);
-Obstacle o9 = Obstacle(SPAWN_CENTER);
-Obstacle o10 = Obstacle(SPAWN_RIGHT);
 
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
 std::vector<VertexShape*> obs;
-std::vector<Obstacle> obs_test;
 
 quicky::quicky() {
-	obs_test.push_back(o8);
-	obs_test.push_back(o9);
-	obs_test.push_back(o10);
+
 }
 
 quicky::~quicky() {
@@ -28,9 +22,9 @@ void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
 
-	o1->init(this);
-	o2->init(this);
-	o3->init(this);
+	//o1->init(this);
+	//o2->init(this);
+	//o3->init(this);
 	o4->init(this);
 	sqr1->init(this);
 	sqr2->init(this);
@@ -42,9 +36,9 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	obs.push_back(o1);
-	obs.push_back(o2);
-	obs.push_back(o3);
+	//obs.push_back(o1);
+	//obs.push_back(o2);
+	//obs.push_back(o3);
 	obs.push_back(o4);
 
 	//Implement basic font support
@@ -65,6 +59,8 @@ void quicky::update() {
 
 	sqr1->update(deltaTime, obs);
 	sqr2->update(deltaTime, obs);
+
+	printf("%.2f, %.2f, %.2f\n", sqr1->pos.x, sqr1->pos.y, sqr1->pos.z);
 
 }
 
@@ -166,7 +162,9 @@ void quicky::keyPress(int key) {
 		sqr2->velocity.y -= deltaTime * 10;
 	}
 	if (key == DIK_SPACE) {
-		sqr1->blink(obs);
+		if (sqr1->cooldown.at(COOLDOWN_BLINK) <= 0) {
+			sqr1->blink(obs);
+		}
 	}
 
 }

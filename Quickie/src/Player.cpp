@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "QLine.h"
 
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
@@ -173,7 +174,8 @@ void Player::blink(std::vector<VertexShape*>& vS) {
 
 	// TODO: handle input for rotation
 
-	QLine* l = new QLine(this, D3DX_PI / 4);
+	QLine* l = new QLine(this, 0);
+	l->init(vS);
 
 }
 

@@ -2,7 +2,6 @@
 
 #include "graphics.h"
 #include "game.h"
-#include "CollisionManager.h"
 
 enum CollisionType {
 	CT_AABB,

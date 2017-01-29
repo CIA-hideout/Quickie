@@ -1,5 +1,6 @@
 #pragma once
 
+#include "VertexShape.h"
 #include "CollisionManager.h"
 
 class QLine : public VertexShape {

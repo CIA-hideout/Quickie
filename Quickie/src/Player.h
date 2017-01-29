@@ -1,5 +1,6 @@
 #pragma once
 
+#include "VertexShape.h"
 #include "CollisionManager.h"
 
 enum CooldownType {
@@ -29,4 +30,3 @@ public:
 	void blink(std::vector<VertexShape*>&);
 	void teleport();
 };
-

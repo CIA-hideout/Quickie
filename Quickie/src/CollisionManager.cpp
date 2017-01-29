@@ -1,5 +1,13 @@
 ﻿#include "CollisionManager.h"
 
+#define C_CT_AABB_AABB(v1, v2)	(v1->collisionType == CT_AABB && v2->collisionType == CT_AABB)
+#define C_CT_OOBB_OOBB(v1, v2)	(v1->collisionType == CT_OOBB && v2->collisionType == CT_OOBB)
+#define C_CT_S_S(v1, v2)		(v1->collisionType == CT_S && v2->collisionType == CT_S)
+
+#define P_DIST_3(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2) + pow((float)p1.z - p1.z, 2))
+#define P_DIST_2(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2))
+
+#define CROSS_2(v1, v2)			v1.x * v2.y - v1.y * v2.x
 
 
 CollisionManager::CollisionManager() {
@@ -17,16 +25,10 @@ bool CollisionManager::collideAABB(VertexShape* v1, VertexShape* v2) {
 
 	bool collides = false;
 
-	if (v1->max.x < v2->min.x || v1->min.x > v2->max.x || v1->max.y < v2->min.y || v1->min.y > v2->max.y || v1->max.z < v2->min.z || v1->min.z > v2->max.z) {
-		printf("no collide\n");
+	if (v1->max.x < v2->min.x || v1->min.x > v2->max.x || v1->max.y < v2->min.y || v1->min.y > v2->max.y || v1->max.z < v2->min.z || v1->min.z > v2->max.z)
 		return collides;
-	}
-
-	// collision happened
-	else {
-		printf("collides");
+	else
 		return true;
-	}
 }
 
 bool CollisionManager::collideOOBB(VertexShape* v1, VertexShape* v2, D3DXVECTOR3& cV) {
@@ -91,17 +93,20 @@ bool CollisionManager::lineSegmentIntersect(D3DXVECTOR3& pOut, D3DXVECTOR3& pSta
 	t_ = ((c.x * s.y - c.y * s.x) - (a.x * s.y - a.y * s.x)) / (r.x * s.y - r.y * s.x);
 	u_ = ((a.x * r.y - a.y * r.x) - (c.x * r.y - c.y * r.x)) / (s.x * r.y - s.y * r.x);
 
-	if (0 < t_ < 1 && 0 < u_ < 1) {
-		pOut = b + t_ * r;
+	//t_ = (CROSS_2((c - a), r)) / CROSS_2(s, r);
+	//u_ = (CROSS_2((a - c), s)) / CROSS_2(r, s);
+
+	if (0 < t_ && t_ < 1 && 0 < u_ && u_ < 1) {
+		pOut = c + u_ * s;
 		return true;
 	}
 
-	return false;
+ 	return false;
 }
 
 bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm, D3DXVECTOR3& pStart, D3DXVECTOR3& pEnd, VertexShape* vS) {
 
-	int							closest = 0;
+	int							closest = -1;
 	float						dx, dy, tempVar, cDist = 999;
 	D3DXVECTOR3					currPoint, rayStart, rayEnd, tStart, tEnd, intersection;
 	D3DXVECTOR3					v;
@@ -110,6 +115,9 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 	if (vS->collisionType == CT_AABB) {
 		CollisionManager::computeAABB(vS);
 	}
+
+	rayStart = pStart;
+	rayEnd = pEnd;
 
 	// [0] top
 	// min.x, max.y	->	max.x, max.y
@@ -180,6 +188,10 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 			cDist = tempVar;
 			closest = i;
 		}
+	}
+
+	if (closest == -1) {
+		return false;
 	}
 
 	dx = rayStart.x - posV[closest].x;
