@@ -79,7 +79,7 @@ Obstacle::~Obstacle() {
 void Obstacle::init(Game* gamePtr)
 {
 
-	this->graphics = gamePtr->getGraphics();
+	this->game = gamePtr;
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
 
 	vertices = 0;
@@ -142,8 +142,8 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
 	meshPtr->GetVertexBuffer(&vBuffer);
 	meshPtr->GetIndexBuffer(&iBuffer);
-	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-	graphics->get3Ddevice()->SetIndices(iBuffer);
+	this->game->getGraphics()->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+	this->game->getGraphics()->get3Ddevice()->SetIndices(iBuffer);
 
 	D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 
@@ -151,7 +151,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 	matTemp = matRot * worldMat;
 
-	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
+	this->game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
 	meshPtr->DrawSubset(0);
 
 }

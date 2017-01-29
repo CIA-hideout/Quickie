@@ -2,6 +2,7 @@
 
 #include "graphics.h"
 #include "game.h"
+#include "CollisionManager.h"
 
 enum CollisionType {
 	CT_AABB,
@@ -12,7 +13,8 @@ enum CollisionType {
 
 enum ObjectType {
 	OT_PLY,
-	OT_OBS
+	OT_OBS,
+	OT_QL
 };
 
 class VertexShape {
@@ -21,7 +23,7 @@ public:
 
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
-	Graphics*				graphics;
+	Game*					game;
 	int						vertexCount;
 
 	ID3DXMesh*				meshPtr;

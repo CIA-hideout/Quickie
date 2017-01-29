@@ -101,13 +101,12 @@
     <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\LSquare.cpp" />
     <ClCompile Include="src\game_functions.cpp" />
-    <ClCompile Include="src\LTriangle.cpp" />
     <ClCompile Include="quicky.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\image.cpp" />
+    <ClCompile Include="src\QLine.cpp" />
     <ClCompile Include="src\textureManager.cpp" />
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
@@ -119,14 +118,13 @@
     <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\LSquare.h" />
-    <ClInclude Include="src\LTriangle.h" />
     <ClInclude Include="quicky.h" />
     <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\gameError.h" />
     <ClInclude Include="src\graphics.h" />
     <ClInclude Include="src\image.h" />
+    <ClInclude Include="src\QLine.h" />
     <ClInclude Include="src\textureManager.h" />
     <ClInclude Include="src\VertexShape.h" />
   </ItemGroup>

@@ -1,11 +1,6 @@
 ﻿#include "CollisionManager.h"
 
-#define C_CT_AABB_AABB(v1, v2)	(v1->collisionType == CT_AABB && v2->collisionType == CT_AABB)
-#define C_CT_OOBB_OOBB(v1, v2)	(v1->collisionType == CT_OOBB && v2->collisionType == CT_OOBB)
-#define C_CT_S_S(v1, v2)		(v1->collisionType == CT_S && v2->collisionType == CT_S)
 
-#define P_DIST_3(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2) + pow((float)p1.z - p1.z, 2));
-#define P_DIST_2(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2));
 
 CollisionManager::CollisionManager() {
 
@@ -97,12 +92,113 @@ bool CollisionManager::lineSegmentIntersect(D3DXVECTOR3& pOut, D3DXVECTOR3& pSta
 	u_ = ((a.x * r.y - a.y * r.x) - (c.x * r.y - c.y * r.x)) / (s.x * r.y - s.y * r.x);
 
 	if (0 < t_ < 1 && 0 < u_ < 1) {
-
-		// point of intersection
 		pOut = b + t_ * r;
 		return true;
-
 	}
 
 	return false;
+}
+
+bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm, D3DXVECTOR3& pStart, D3DXVECTOR3& pEnd, VertexShape* vS) {
+
+	int							closest = 0;
+	float						dx, dy, tempVar, cDist = 999;
+	D3DXVECTOR3					currPoint, rayStart, rayEnd, tStart, tEnd, intersection;
+	D3DXVECTOR3					v;
+	std::vector<D3DXVECTOR3>	posV;
+
+	if (vS->collisionType == CT_AABB) {
+		CollisionManager::computeAABB(vS);
+	}
+
+	// [0] top
+	// min.x, max.y	->	max.x, max.y
+
+	tStart.x = vS->min.x;
+	tStart.y = vS->max.y;
+
+	tEnd.x = vS->max.x;
+	tEnd.y = vS->max.y;
+
+	if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
+	}
+
+	// [1] botom
+	// min.x, min.y	->	max.x, min.y
+
+	tStart.x = vS->min.x;
+	tStart.y = vS->min.y;
+
+	tEnd.x = vS->max.x;
+	tEnd.y = vS->min.y;
+
+	if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
+	}
+
+	// [2] left
+	// min.x, max.y	->	min.x, min.y
+
+	tStart.x = vS->min.x;
+	tStart.y = vS->max.y;
+
+	tEnd.x = vS->min.x;
+	tEnd.y = vS->min.y;
+
+	if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
+	}
+
+	// [3] right
+	// max.x, max.y	->	max.x, min.y
+
+	tStart.x = vS->max.x;
+	tStart.y = vS->max.y;
+
+	tEnd.x = vS->max.x;
+	tEnd.y = vS->min.y;
+
+	if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
+	}
+
+	// the point of intersection will be the one closest to pStart
+	// pNorm stores the normal vector
+
+	for (int i = 0; i < posV.size(); i++) {
+		tempVar = P_DIST_2(posV[i], pStart);
+		if (tempVar < cDist) {
+			cDist = tempVar;
+			closest = i;
+		}
+	}
+
+	dx = rayStart.x - posV[closest].x;
+	dy = rayStart.y - posV[closest].y;
+
+	pNorm.x = -dy;
+	pNorm.y = dx;
+	pNorm.z = dy;
+	pNorm.w = -dx;
+
+	pOut = posV[closest];
+	return true;
+
+}
+
+float CollisionManager::pDist2(const D3DXVECTOR3& p1, const D3DXVECTOR3& p2) {
+	return sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2));
+}
+
+float CollisionManager::pDist3(const D3DXVECTOR3& p1, const D3DXVECTOR3& p2) {
+	return sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2) + pow((float)p1.z - p1.z, 2));
 }

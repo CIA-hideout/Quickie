@@ -2,6 +2,9 @@
 
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
+	static int playerCount = 0;
+	playerId = playerCount++;
+
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
 	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
@@ -32,7 +35,8 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 }
 
 void Player::init(Game* gamePtr) {
-	this->graphics = gamePtr->getGraphics();
+
+	this->game = gamePtr;
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
 
 	vertices = 0;
@@ -94,8 +98,8 @@ void Player::draw(D3DXMATRIX& worldMat) {
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
 	meshPtr->GetVertexBuffer(&vBuffer);
 	meshPtr->GetIndexBuffer(&iBuffer);
-	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-	graphics->get3Ddevice()->SetIndices(iBuffer);
+	this->game->getGraphics()->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+	this->game->getGraphics()->get3Ddevice()->SetIndices(iBuffer);
 
 	D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 
@@ -103,7 +107,7 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 	matTemp = matRot * worldMat;
 
-	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
+	this->game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
 	meshPtr->DrawSubset(0);
 
 }
@@ -151,9 +155,6 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	}
 }
 
-Player::~Player() {
-}
-
 void Player::respawn() {
 	if (pos.y <= -25) {
 		pos.y = 20;
@@ -166,4 +167,15 @@ void Player::respawn() {
 	if (pos.x > 20){
 		pos.x = -20;
 	}
+}
+
+void Player::blink(std::vector<VertexShape*>& vS) {
+
+	// TODO: handle input for rotation
+
+	QLine* l = new QLine(this, D3DX_PI / 4);
+
+}
+
+Player::~Player() {
 }

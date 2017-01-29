@@ -1,13 +1,9 @@
 #pragma once
 
 #include "src/game.h"
-#include "src/LTriangle.h"
-#include "src/LSquare.h"
-#include "src/Obstacle.h"
-#include "src/Player.h"
 #include "src/CollisionManager.h"
 #include "src/FontHandler.h"
-#include "src/graphics.h"
+#include <math.h>
 
 extern void game_init();
 extern void game_preload();

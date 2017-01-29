@@ -1,7 +1,5 @@
 #pragma once
 
-#include "VertexShape.h"
-#include "Obstacle.h"
 #include "CollisionManager.h"
 
 enum CooldownType {
@@ -13,6 +11,7 @@ class Player : public VertexShape {
 public:
 
 	std::map<CooldownType, float>	cooldown;
+	int								playerId;
 
 	Player() = default;
 	~Player();
@@ -27,5 +26,7 @@ public:
 	void moveZ(float&);
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
+	void blink(std::vector<VertexShape*>&);
+	void teleport();
 };
 

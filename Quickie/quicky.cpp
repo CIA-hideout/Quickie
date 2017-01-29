@@ -1,5 +1,4 @@
 #include "quicky.h"
-#include <math.h>
 
 Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
@@ -165,6 +164,9 @@ void quicky::keyPress(int key) {
 
 	if (key == DIK_S) {
 		sqr2->velocity.y -= deltaTime * 10;
+	}
+	if (key == DIK_SPACE) {
+		sqr1->blink(obs);
 	}
 
 }
