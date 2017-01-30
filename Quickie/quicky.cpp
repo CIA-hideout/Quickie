@@ -78,7 +78,7 @@ void quicky::render() {
 	sqr1->draw(worldMat);
 	sqr2->draw(worldMat);
 
-	// font->print(500, 500, "AIR AMERICANA");
+	font->print(500, 500, "AIR AMERICANA");
 }
 
 void quicky::releaseAll() {
