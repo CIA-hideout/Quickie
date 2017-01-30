@@ -156,29 +156,8 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 }
 
-void Obstacle::update(float deltaTime) 
-{
-  /*
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);
-	std::uniform_int_distribution<int> randomY(0, 5);
+void Obstacle::update(float deltaTime) {
 
-	timer += deltaTime;
-
-	if (timer > 10)
-	 pos.y -= 0.01f; // go down
-
-	
-	if (pos.y <= -25) {
-		pos.y = 20 + randomY(rng);
-		pos.x = randomX(rng);
-
-		color = getRandomColor();
-		setColor(color);
-		printf("%2f, %2f\n", pos.x, pos.y);
-	}
-*/
 }
 
 // Randomly generate a color and returns the value

@@ -50,11 +50,9 @@ void Game::initialize(HWND hw)
 
 	initialized = true;
 
-	// projection matrix
-	D3DXMATRIX proj;
+	graphics->camera = new Camera(CAMERA_TYPE_FREE, FOV, graphics->viewPort.Width / graphics->viewPort.Height);
 
-	D3DXMatrixPerspectiveFovLH(&proj, FOV, graphics->viewPort.Width / graphics->viewPort.Height, 1.0f, 1000.0f);
-	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &proj);
+	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &graphics->camera->projection);
 
 	input = new Input(hw);
 }

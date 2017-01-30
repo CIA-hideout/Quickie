@@ -9,7 +9,6 @@
 #include "gameError.h"
 #include "input.h"
 #include "textureManager.h"
-#include "image.h"
 
 #include <DxErr.h>
 

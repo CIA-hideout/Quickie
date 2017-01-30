@@ -3,7 +3,7 @@
 //Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 //Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 //Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(10, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
@@ -59,8 +59,6 @@ void quicky::update() {
 
 	sqr1->update(deltaTime, obs);
 	sqr2->update(deltaTime, obs);
-
-	printf("%.2f, %.2f, %.2f\n", sqr1->pos.x, sqr1->pos.y, sqr1->pos.z);
 
 }
 

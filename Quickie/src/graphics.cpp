@@ -99,9 +99,6 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 	viewPort.Y = 0;
 
 	device3d->SetViewport(&viewPort);
-
-	camera = new Camera(CAMERA_TYPE_FREE);
-
 	get3Ddevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 }

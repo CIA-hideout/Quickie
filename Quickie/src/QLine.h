@@ -23,7 +23,9 @@ public:
 	D3DXVECTOR3				startPoint;
 
 	void init(std::vector<VertexShape*>&);
-
+	void update(float, std::vector<VertexShape*>&);
+	void draw(D3DXMATRIX&);
+	
 };
 
 

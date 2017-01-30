@@ -13,7 +13,7 @@ class Camera {
 public:
 
 	Camera();
-	Camera(CameraType ct_);
+	Camera(CameraType ct, float, float);
 	~Camera();
 
 	void strafe(float);
@@ -37,7 +37,9 @@ public:
 	D3DXVECTOR3	up;
 	D3DXVECTOR3	look;
 	D3DXVECTOR3	pos;
+	float fov, width, height;
 
+	D3DXMATRIX	projection;
 
 };
 

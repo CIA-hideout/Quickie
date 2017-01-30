@@ -4,12 +4,16 @@
 Camera::Camera() {
 }
 
-Camera::Camera(CameraType cameraType_) {
-	cameraType = cameraType_;
+Camera::Camera(CameraType cT, float fov, float aR) {
+
+	cameraType = cT;
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	look = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+
+	D3DXMatrixPerspectiveFovLH(&projection, fov, aR, 1.0f, 1000.0f);
+
 }
 
 
@@ -20,23 +24,23 @@ void Camera::getViewMatrix(D3DXMATRIX* v_) {
 	D3DXMatrixLookAtLH(v_, &pos, &look, &up);
 }
 
-void Camera::pitch(float angle_) {
+void Camera::pitch(float angle) {
 
 	D3DXMATRIX T;
-	D3DXMatrixRotationAxis(&T, &right, angle_);
+	D3DXMatrixRotationAxis(&T, &right, angle);
 
 	// rotate _up and _look around _right vector
 	D3DXVec3TransformCoord(&up, &up, &T);
 	D3DXVec3TransformCoord(&look, &look, &T);
 }
 
-void Camera::roll(float angle_) {
+void Camera::roll(float angle) {
 
 	// only roll for aircraft type
 	if (cameraType == CAMERA_TYPE_FREE)
 	{
 		D3DXMATRIX T;
-		D3DXMatrixRotationAxis(&T, &look, angle_);
+		D3DXMatrixRotationAxis(&T, &look, angle);
 
 		// rotate _up and _right around _look vector
 		D3DXVec3TransformCoord(&right, &right, &T);
@@ -45,41 +49,41 @@ void Camera::roll(float angle_) {
 
 }
 
-void Camera::yaw(float angle_) {
+void Camera::yaw(float angle) {
 
 	D3DXMATRIX T;
 
 	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		D3DXMatrixRotationY(&T, angle_);
+		D3DXMatrixRotationY(&T, angle);
 	}
 	else if (cameraType == CAMERA_TYPE_FREE) {
-		D3DXMatrixRotationAxis(&T, &up, angle_);
+		D3DXMatrixRotationAxis(&T, &up, angle);
 	}
 	D3DXVec3TransformCoord(&right, &right, &T);
 	D3DXVec3TransformCoord(&look, &look, &T);
 
 }
 
-void Camera::walk(float units_) {
+void Camera::walk(float u) {
 	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		pos += D3DXVECTOR3(look.x, 0.0f, look.z) * units_;
+		pos += D3DXVECTOR3(look.x, 0.0f, look.z) * u;
 	}
 	else if (cameraType == CAMERA_TYPE_FREE) {
-		pos += look * units_;
+		pos += look * u;
 	}
 }
 
-void Camera::strafe(float units_) {
+void Camera::strafe(float u) {
 	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		pos += D3DXVECTOR3(right.x, 0.0f, right.z) * units_;
+		pos += D3DXVECTOR3(right.x, 0.0f, right.z) * u;
 	}
 	else if (cameraType == CAMERA_TYPE_FREE) {
-		pos += right * units_;
+		pos += right * u;
 	}
 }
 
-void Camera::fly(float units_) {
+void Camera::fly(float u) {
 	if (cameraType == CAMERA_TYPE_FREE) {
-		pos += up * units_;
+		pos += up * u;
 	}
 }

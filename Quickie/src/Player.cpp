@@ -174,7 +174,7 @@ void Player::blink(std::vector<VertexShape*>& vS) {
 
 	// TODO: handle input for rotation
 
-	QLine* l = new QLine(this, 0);
+	QLine* l = new QLine(this, D3DX_PI / 4);
 	l->init(vS);
 
 }
