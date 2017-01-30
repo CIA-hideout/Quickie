@@ -103,7 +103,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	// font->print(500, 500, "AIR AMERICANA");
+	font->print(500, 500, "AIR AMERICANA");
 }
 
 void quicky::releaseAll() {
