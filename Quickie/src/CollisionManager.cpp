@@ -20,15 +20,18 @@ CollisionManager::~CollisionManager() {
 
 bool CollisionManager::collideAABB(VertexShape* v1, VertexShape* v2) {
 
-	computeAABB(v1);
-	computeAABB(v2);
+	if (v1->collisionType == CT_AABB && v2->collisionType == CT_AABB) {
+		computeAABB(v1);
+		computeAABB(v2);
 
-	bool collides = false;
+		bool collides = false;
 
-	if (v1->max.x < v2->min.x || v1->min.x > v2->max.x || v1->max.y < v2->min.y || v1->min.y > v2->max.y || v1->max.z < v2->min.z || v1->min.z > v2->max.z)
-		return collides;
-	else
-		return true;
+		if (v1->max.x < v2->min.x || v1->min.x > v2->max.x || v1->max.y < v2->min.y || v1->min.y > v2->max.y || v1->max.z < v2->min.z || v1->min.z > v2->max.z)
+			return collides;
+		else
+			return true;
+	}
+	return false;
 }
 
 bool CollisionManager::collideOOBB(VertexShape* v1, VertexShape* v2, D3DXVECTOR3& cV) {
@@ -98,7 +101,7 @@ bool CollisionManager::lineSegmentIntersect(D3DXVECTOR3& pOut, D3DXVECTOR3& pSta
 		return true;
 	}
 
- 	return false;
+	return false;
 }
 
 bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm, D3DXVECTOR3& pStart, D3DXVECTOR3& pEnd, VertexShape* vS) {

@@ -173,9 +173,10 @@ void Player::respawn() {
 void Player::blink(std::vector<VertexShape*>& vS) {
 
 	// TODO: handle input for rotation
-
-	QLine* l = new QLine(this, D3DX_PI / 4);
-	l->init(vS);
+	velocity *= 0;
+	QLine* l = new QLine(this, 5 * D3DX_PI / 4);
+	// deal with blinking into stuff
+	l->init(vS, game);
 
 }
 
