@@ -13,7 +13,7 @@ class Camera {
 public:
 
 	Camera();
-	Camera(CameraType ct, float, float);
+	Camera(CameraType ct, float fov, D3DVIEWPORT9& viewPort);
 	~Camera();
 
 	void strafe(float);
@@ -32,12 +32,16 @@ public:
 	void getUp(D3DXVECTOR3&);
 	void getLock(D3DXVECTOR3&);
 
+	bool pointOnScreen(D3DXVECTOR3&, D3DXVECTOR3&, D3DXMATRIX&);
+
 	CameraType	cameraType;
 	D3DXVECTOR3	right;
 	D3DXVECTOR3	up;
 	D3DXVECTOR3	look;
 	D3DXVECTOR3	pos;
 	float fov, width, height;
+
+	D3DVIEWPORT9 vp;
 
 	D3DXMATRIX	projection;
 

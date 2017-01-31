@@ -50,7 +50,7 @@ void Game::initialize(HWND hw)
 
 	initialized = true;
 
-	graphics->camera = new Camera(CAMERA_TYPE_FREE, FOV, graphics->viewPort.Width / graphics->viewPort.Height);
+	graphics->camera = new Camera(CAMERA_TYPE_FREE, FOV, graphics->viewPort);
 
 	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &graphics->camera->projection);
 

@@ -4,7 +4,7 @@
 Camera::Camera() {
 }
 
-Camera::Camera(CameraType cT, float fov, float aR) {
+Camera::Camera(CameraType cT, float fov, D3DVIEWPORT9& viewPort) {
 
 	cameraType = cT;
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -12,7 +12,9 @@ Camera::Camera(CameraType cT, float fov, float aR) {
 	up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 
-	D3DXMatrixPerspectiveFovLH(&projection, fov, aR, 1.0f, 1000.0f);
+	vp = viewPort;
+
+	D3DXMatrixPerspectiveFovLH(&projection, fov, vp.Width / vp.Height, 1.0f, 1000.0f);
 
 }
 
@@ -86,4 +88,20 @@ void Camera::fly(float u) {
 	if (cameraType == CAMERA_TYPE_FREE) {
 		pos += up * u;
 	}
+}
+
+bool Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos, D3DXMATRIX& w) {
+
+	D3DXMATRIX v;
+
+	getViewMatrix(&v);
+	
+	D3DXMatrixTranslation(&w, 0, 0, 0);
+	D3DXVec3Project(&pOut, &pos, &vp, &projection, &v, &w);
+
+	if (pOut.x > vp.Width || pOut.x < 0 || pOut.y > vp.Height || pOut < 0) {
+		return false;
+	}
+	return true;
+
 }
