@@ -1,20 +1,32 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
-#include "graphics.h"
 #include "FontHandler.h"
+#include <stack>
+
+enum Scene
+{
+	MENU,					// main menu;		when is it displayed
+	GAME,					// hud;				during gameplay
+	INSTRUCTIONS,			// instructions;	during 1st gameplay only
+	CONTROLS,				// instructions;	in the menu
+	HIGHSCORE				// leaderboard;		in the menu
+};
 
 class GUI
 {
-	FontHandler font;
+	std::stack<Scene>*		sceneStack;
+	FontHandler*			font;
 
+	void renderMenu();
 public:
 	GUI();
 	~GUI();
 
-	bool initialize(FontHandler font);
-	void menu();
-	void option(int i);
+	bool initialize(FontHandler* f);
+	void render();
+	void setCurrentScene(Scene s){ sceneStack->push(s); };
+	void revertScene(){ sceneStack->pop(); };
 
 };
 #endif

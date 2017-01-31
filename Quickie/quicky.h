@@ -4,10 +4,12 @@
 #include "src/CollisionManager.h"
 #include "src/FontHandler.h"
 #include <math.h>
+#include "src/GUI.h"
 
 class quicky : public Game {
 
-	FontHandler* font;
+	FontHandler*	font;
+	GUI*			gui;
 
 public:
 
