@@ -1,9 +1,9 @@
 #include "quicky.h"
 
-//Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-//Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 2.5), D3DXVECTOR3(1.5, 10, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-//Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -5, 20 - 2.5), D3DXVECTOR3(10, 1.5, 5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(10, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 5, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -5, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
@@ -22,9 +22,9 @@ void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
 
-	//o1->init(this);
-	//o2->init(this);
-	//o3->init(this);
+	o1->init(this);
+	o2->init(this);
+	o3->init(this);
 	o4->init(this);
 	sqr1->init(this);
 	sqr2->init(this);
@@ -36,9 +36,9 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	//obs.push_back(o1);
-	//obs.push_back(o2);
-	//obs.push_back(o3);
+	obs.push_back(o1);
+	obs.push_back(o2);
+	obs.push_back(o3);
 	obs.push_back(o4);
 
 	//Implement basic font support

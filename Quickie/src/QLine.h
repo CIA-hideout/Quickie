@@ -12,7 +12,7 @@ public:
 	float						rotation_;
 	int							id;
 	Player*						parent;
-	
+
 	std::vector<D3DXVECTOR3>	vertexPoint;
 
 	QLine() = default;
@@ -22,10 +22,10 @@ public:
 
 	D3DXVECTOR3				startPoint;
 
-	void init(std::vector<VertexShape*>&);
+	void init(std::vector<VertexShape*>&, Game*);
 	void update(float, std::vector<VertexShape*>&);
 	void draw(D3DXMATRIX&);
-	
+
 };
 
 

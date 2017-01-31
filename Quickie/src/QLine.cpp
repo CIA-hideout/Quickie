@@ -15,11 +15,6 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 
 	CollisionType CT_OOBB;
 
-	LVertex lV = LVertex();
-	lV.x = startPoint.x;
-	lV.y = startPoint.y;
-	lV.z = startPoint.z;
-
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -29,7 +24,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 }
 
-void QLine::init(std::vector<VertexShape*>& vS) {
+void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 	static int bounceCount = 0;
 	// we do not allow the ray to hit the same object more than once per bounce
@@ -129,19 +124,14 @@ void QLine::init(std::vector<VertexShape*>& vS) {
 			else if (dx < 0) {
 				rotation_ = PI + atan(dy / dx);
 			}
-			printf("rotation: %.2f\n", rotation_);
 
 			// >>> [1] end
 
 			// change the start point here
 			rayStart.x = fIntersect.x;
 			rayStart.y = fIntersect.y;
-
-			printf("ray is now at: %.2f, %.2f", rayStart.x, rayStart.y);
 			bounceCount++;
 		}
-
-
 	}
 
 	bounceCount = 0;
@@ -149,9 +139,81 @@ void QLine::init(std::vector<VertexShape*>& vS) {
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
+	for (int i = 0; i < vertexPoint.size(); i++) {
+		printf("vertices: %.2f\t%.2f\t%.2f\n", vertexPoint[i].x, vertexPoint[i].y, vertexPoint[i].z);
+	}
+
+	// create all the vertices
+
+	this->game = gamePtr;
+
+	vertexCount = vertexPoint.size();
+
+	// no need for meshes here. lines can be rendered with primitive indices
+	vertices = 0;
+
+	gamePtr->getGraphics()->get3Ddevice()->CreateVertexBuffer(
+		sizeof(LVertex)* vertexCount,
+		D3DUSAGE_WRITEONLY,
+		CUSTOMFVF,
+		D3DPOOL_MANAGED,
+		&vertexBuffer,
+		0
+		);
+	
+	gamePtr->getGraphics()->get3Ddevice()->CreateIndexBuffer(
+		(vertexCount * 2 - 2) * sizeof(WORD),
+		D3DUSAGE_WRITEONLY,
+		D3DFMT_INDEX16,
+		D3DPOOL_MANAGED,
+		&indexBuffer,
+		0
+		);
+
+	LVertex* vertices;
+	vertexBuffer->Lock(0, 0, (void**)&vertices, 0);
+
+	for (int i = 0; i < vertexCount; i++) {
+		LVertex v_;
+		v_.x = vertexPoint[i].x - startPoint.x;
+		v_.y = vertexPoint[i].y - startPoint.y;
+		v_.z = 0;
+		v_.color = D3DCOLOR_ARGB(255, 255, 255, 255);
+		vertices[i] = v_;
+	}
+	for (int i = 0; i < vertexCount; i++) {
+		printf("[%d]%.2f\t%.2f\t%.2f\n", i + 1, vertices[i].x, vertices[i].y, vertices[i].z);
+	}
+
+	vertexBuffer->Unlock();
+
+	WORD* indices = 0;
+	indexBuffer->Lock(0, 0, (void**)&indices, 0);
+
+	for (int i = 0; i < vertexCount * 2 - 2; i++) {
+		indices[i] = (i + 1) / 2;
+	}
+	for (int i = 0; i < vertexCount * 2 - 2; i++) {
+		printf("%d\n", indices[i]);
+	}
+
+	indexBuffer->Unlock();
+
+	vS.push_back(this);
+
 }
 
 void QLine::draw(D3DXMATRIX& worldMat) {
+
+	D3DXMATRIX matTranslation;
+	D3DXMatrixTranslation(&matTranslation, startPoint.x, startPoint.y, parent->pos.z);
+
+	game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTranslation);
+
+	game->getGraphics()->get3Ddevice()->SetStreamSource(0, vertexBuffer, 0, sizeof(LVertex));
+	game->getGraphics()->get3Ddevice()->SetIndices(indexBuffer);
+	game->getGraphics()->get3Ddevice()->SetFVF(CUSTOMFVF);
+	game->getGraphics()->get3Ddevice()->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, vertexCount, 0, vertexCount - 1);
 
 }
 
