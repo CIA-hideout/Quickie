@@ -22,17 +22,17 @@ class Game {
 protected:
 	// common game properties
 
-	Graphics		*graphics;      
-	Input			*input;          
-	HWND			hwnd;            
-	HRESULT			hr;              
-	LARGE_INTEGER	timeStart; 
-	LARGE_INTEGER	timeEnd;   
-	LARGE_INTEGER	timerFreq; 
-	float			deltaTime;       
-	float			fps;             
-	DWORD			sleepTime;       
-	bool			paused;          
+	Graphics		*graphics;
+	Input			*input;
+	HWND			hwnd;
+	HRESULT			hr;
+	LARGE_INTEGER	timeStart;
+	LARGE_INTEGER	timeEnd;
+	LARGE_INTEGER	timerFreq;
+	float			deltaTime;
+	float			fps;
+	DWORD			sleepTime;
+	bool			paused;
 	bool			initialized;
 	float			fov;
 
@@ -75,18 +75,10 @@ public:
 
 	virtual void render() = 0;
 
-	virtual void updateMouse() = 0;
-
 	virtual void updateKeyboard() = 0;
 
 	virtual void keyPress(int key) = 0;
 
 	virtual void keyRelease(int key) = 0;
-
-	virtual void mouseButton(int key) = 0;
-
-	virtual void mouseButtonRelease(int key) = 0;
-
-	virtual void mouseMove(int x, int y) = 0;
 
 };

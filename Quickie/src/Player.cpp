@@ -33,12 +33,12 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
 
-	controls.insert(std::pair<Control, int>(CONTROL_UP, NULL));
-	controls.insert(std::pair<Control, int>(CONTROL_DOWN, NULL));
-	controls.insert(std::pair<Control, int>(CONTROL_LEFT, NULL));
-	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, NULL));
-	controls.insert(std::pair<Control, int>(CONTROL_BL, NULL));
-	controls.insert(std::pair<Control, int>(CONTROL_TP, NULL));
+	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_LEFT, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_BL, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_TP, 0.1f));
 
 }
 
@@ -135,6 +135,23 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		velocity.x += deltaTime * 10 / ASPECT_RATIO;
 	}
 
+	// blink and tele direction
+
+	if (game->getInput()->getKeyState(controls.at(CONTROL_BL))) {
+		if (cooldown.at(COOLDOWN_BLINK) <= 0) {
+			cooldown.at(COOLDOWN_BLINK) = 1.0f;
+			// blink based on v;
+			float r_;
+
+			if (velocity.x >= 0)
+				r_ = atan(velocity.y / velocity.x);
+			else if (velocity.x < 0)
+				r_ = D3DX_PI + atan(velocity.y / velocity.x);
+
+			blink(vS, r_);
+		}
+	}
+
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
 			i->second -= deltaTime;
@@ -190,11 +207,11 @@ void Player::respawn() {
 	}
 }
 
-void Player::blink(std::vector<VertexShape*>& vS) {
+void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	// TODO: handle input for rotation
 	velocity *= 0;
-	QLine* l = new QLine(this, 5 * D3DX_PI / 4);
+	QLine* l = new QLine(this, angle);
 	// deal with blinking into stuff
 	l->init(vS, game);
 

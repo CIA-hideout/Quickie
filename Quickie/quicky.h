@@ -5,12 +5,6 @@
 #include "src/FontHandler.h"
 #include <math.h>
 
-extern void game_init();
-extern void game_preload();
-extern void game_render_2d(float);
-extern void game_render_sprite(float);
-extern void game_update(float);
-
 class quicky : public Game {
 
 	FontHandler* font;
@@ -33,11 +27,7 @@ public:
 	void releaseAll();
 	void resetAll();
 
-	void updateMouse();
 	void updateKeyboard();
 	void keyPress(int key);
 	void keyRelease(int key);
-	void mouseButton(int key);
-	void mouseButtonRelease(int key);
-	void mouseMove(int x, int y);
 };

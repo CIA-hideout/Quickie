@@ -11,7 +11,7 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 
 	this->rotation_ = rotation_;
 
-	magnetude = 100;
+	magnetude = 15;
 
 	CollisionType CT_OOBB;
 
@@ -49,13 +49,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 	while (m_ > 0) {
 
-		if (bounceCount == 0) {
-
-		}
-		else {
-			printf("bounce [%d]\n", bounceCount);
-		}
-
 		rayEnd.x = rayStart.x + cos(rotation_) * m_;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
 		dist_ = cDist_ = 999;
@@ -92,7 +85,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 		}
 		else {
 			// this is required if and only if the ray intersects
-			printf("point of intersection: %.2f, %.2f\n", fIntersect.x, fIntersect.y);
 			vertexPoint.push_back(fIntersect);
 			m_ -= cDist_;
 
@@ -134,9 +126,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 			rayStart.x = fIntersect.x;
 			rayStart.y = fIntersect.y;
 			bounceCount++;
-
-			printf("vertices: %.2f, %.2f\n", fIntersect.x, fIntersect.y);
-			printf("projection: %.2f, %.2f\n", projPoint.x, projPoint.y);
 		}
 	}
 
@@ -182,11 +171,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 		v_.z = 0;
 		v_.color = D3DCOLOR_ARGB(255, 255, 255, 255);
 		vertices[i] = v_;
-	}
-	
-	printf("final vertices:\n");
-	for (int i = 0; i < vertexCount; i++) {
-		printf("[%d]%.2f, %.2f\n", i + 1, vertices[i].x, vertices[i].y);
 	}
 
 	vertexBuffer->Unlock();

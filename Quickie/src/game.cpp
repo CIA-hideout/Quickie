@@ -45,13 +45,9 @@ void Game::initialize(HWND hw)
 	// attempt to set up high resolution timer
 	if (QueryPerformanceFrequency(&timerFreq) == false)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing high resolution timer"));
-
 	QueryPerformanceCounter(&timeStart);        // get starting time
-
 	initialized = true;
-
 	graphics->camera = new Camera(CAMERA_TYPE_FREE, FOV, graphics->viewPort);
-
 	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &graphics->camera->projection);
 
 	input = new Input(hw);
@@ -134,9 +130,8 @@ void Game::run(HWND hwnd) {
 	timeStart = timeEnd;
 
 	update();                   // update all game items
-	input->update();
 	updateKeyboard();
-	updateMouse();
+	input->update();
 	ai();                       // artificial intelligence
 	collisions();               // handle collisions
 
@@ -159,10 +154,16 @@ void Game::deleteAll() {
 	initialized = false;
 }
 
-void Game::updateMouse() {
-
-}
-
 void Game::updateKeyboard() {
-
+	static char old_keys[256];
+	for (int n = 0; n < 255; n++) {
+		//check for key press
+		if (input->getKeyState(n) & 0x80) {
+			old_keys[n] = input->getKeyState(n);
+		}
+		//check for release
+		else if (old_keys[n] & 0x80) {
+			old_keys[n] = input->getKeyState(n);
+		}
+	}
 }

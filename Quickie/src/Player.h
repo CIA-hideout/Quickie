@@ -37,7 +37,7 @@ public:
 	void moveZ(float&);
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
-	void blink(std::vector<VertexShape*>&);
+	void blink(std::vector<VertexShape*>&, float);
 	void teleport();
 	void assignControl(rapidjson::Document&);
 

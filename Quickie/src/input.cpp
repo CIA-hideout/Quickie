@@ -11,13 +11,8 @@ Input::Input(HWND hWnd) {
 	keyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	HRESULT hr = keyboard->Acquire();
 
-	di->CreateDevice(GUID_SysMouse, &mouse, NULL);
-	mouse->SetDataFormat(&c_dfDIMouse);
-	mouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
-	HRESULT hr_ = mouse->Acquire();
-
-	for (int i = DIK_ESCAPE; i <= DIK_MEDIASELECT; i++) {
-		keys.insert(std::pair<int, bool>(i, false));
+	for (int i = 0; i < 256; i++) {
+		keyState[i] = false;
 	}
 
 }
@@ -26,21 +21,10 @@ Input::Input(HWND hWnd) {
 Input::~Input() {
 	di->Release();
 	keyboard->Release();
-	mouse->Release();
 }
 
 void Input::update() {
 	keyboard->Poll();
 	if (!SUCCEEDED(keyboard->GetDeviceState(256, (LPVOID)&keyState)))
 		keyboard->Acquire();
-	mouse->Poll();
-	if (!SUCCEEDED(mouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState)))
-		mouse->Acquire();
-
-	GetCursorPos(&position);
-	ScreenToClient(hWnd, &position);
-}
-
-bool Input::getMouseButton(char button) {
-	return mouseState.rgbButtons[button] & 0x80;
 }

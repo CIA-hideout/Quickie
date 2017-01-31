@@ -93,15 +93,13 @@ void Camera::fly(float u) {
 bool Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos, D3DXMATRIX& w) {
 
 	D3DXMATRIX v;
-
 	getViewMatrix(&v);
-	
 	D3DXMatrixTranslation(&w, 0, 0, 0);
 	D3DXVec3Project(&pOut, &pos, &vp, &projection, &v, &w);
 
-	if (pOut.x > vp.Width || pOut.x < 0 || pOut.y > vp.Height || pOut < 0) {
+	if (pOut.x > vp.Width || pOut.x < 0 || pOut.y > vp.Height || pOut.y < 0) {
 		return false;
 	}
 	return true;
 
-}
+}	

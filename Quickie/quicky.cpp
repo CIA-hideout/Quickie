@@ -20,8 +20,6 @@ void quicky::initialize(HWND hWnd) {
 	
 	Game::initialize(hWnd);
 
-	this->input = new Input(this->hwnd);
-
 	AllocConsole();
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
@@ -46,9 +44,9 @@ void quicky::initialize(HWND hWnd) {
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
 	char controlBuffer[512];
 	rapidjson::FileReadStream is(controlFile, controlBuffer, sizeof(controlBuffer));
-
 	controlDoc.ParseStream(is);
 	printf("%s\n", controlDoc["test_string"].GetString());
+	fclose(controlFile);
 
 	o1->init(this);
 	o2->init(this);
@@ -59,7 +57,6 @@ void quicky::initialize(HWND hWnd) {
 
 	sqr1->assignControl(controlDoc);
 	sqr2->assignControl(controlDoc);
-	fclose(controlFile);
 }
 
 void quicky::update() {
@@ -71,11 +68,10 @@ void quicky::update() {
 	sqr1->update(deltaTime, vEntities);
 	sqr2->update(deltaTime, vEntities);
 
-	D3DXVECTOR3 out_;
-
-	graphics->camera->pointOnScreen(out_, sqr1->pos, worldMat);
-
-	printf("%.2f, %.2f\n", out_.x, out_.y);
+	// D3DXVECTOR3 out_;
+	// bool onScreen = false;
+	// onScreen = graphics->camera->pointOnScreen(out_, sqr1->pos, worldMat);
+	// printf("%d, %.2f, %.2f\n", onScreen, out_.x, out_.y);
 
 }
 
@@ -92,6 +88,7 @@ void quicky::render() {
 	for (int i = 0; i < vEntities.size(); i++) {
 		vEntities[i]->draw(worldMat);
 	}
+
 	sqr1->draw(worldMat);
 	sqr2->draw(worldMat);
 
@@ -106,66 +103,14 @@ void quicky::resetAll() {
 
 }
 
-void quicky::updateMouse() {
-	static int oldPosX = 0;
-	static int oldPosY = 0;
-	int deltax = input->GetDeltaX();
-	int deltay = input->GetDeltaY();
-
-	//check mouse buttons
-	for (int n = 0; n < 4; n++)
-	{
-		if (input->getMouseButton(n))
-			mouseButton(n);
-	}
-
-	//check mouse position
-	if (input->GetPosX() != oldPosX || input->GetPosY() != oldPosY) {
-		mouseMove(input->GetPosX(), input->GetPosY());
-		oldPosX = input->GetPosX();
-		oldPosY = input->GetPosY();
-	}
-}
-
 void quicky::updateKeyboard() {
-	static char old_keys[256];
 
-	for (int n = 0; n < 255; n++) {
-		//check for key press
-		if (input->getKeyState(n) & 0x80) {
-			keyPress(n);
-			old_keys[n] = input->getKeyState(n);
-		}
-		//check for release
-		else if (old_keys[n] & 0x80) {
-			keyRelease(n);
-			old_keys[n] = input->getKeyState(n);
-		}
-	}
 }
 
 void quicky::keyPress(int key) {
 
-	if (key == DIK_SPACE) {
-		if (sqr1->cooldown.at(COOLDOWN_BLINK) <= 0) {
-			sqr1->blink(vEntities);
-		}
-	}
-
 }
 
 void quicky::keyRelease(int key) {
-
-}
-
-void quicky::mouseButton(int key) {
-
-}
-
-void quicky::mouseButtonRelease(int key) {
-
-}
-
-void quicky::mouseMove(int x, int y) {
 
 }
