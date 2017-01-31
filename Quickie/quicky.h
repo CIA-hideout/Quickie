@@ -21,6 +21,7 @@ public:
 
 	CollisionManager*			cManager;
 	std::vector<VertexShape*>	vEntities;
+	rapidjson::Document			controlDoc;
 
 	quicky();
 

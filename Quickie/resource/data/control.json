@@ -1,0 +1,22 @@
+{
+	"test_string": "JSON control file",
+	"control":
+		[
+			{
+				"up": 200,
+				"down": 208,
+				"left": 203,
+				"right": 205,
+				"bl": 149,
+				"tp": 53
+			}, 
+			{
+				"up": 17,
+				"down": 31,
+				"left": 30,
+				"right": 32,
+				"bl": 45,
+				"tp": 46
+			}
+		]
+}

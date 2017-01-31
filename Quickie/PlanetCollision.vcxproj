@@ -124,8 +124,46 @@
     <ClInclude Include="src\gameError.h" />
     <ClInclude Include="src\graphics.h" />
     <ClInclude Include="src\QLine.h" />
+    <ClInclude Include="src\rapidjson\allocators.h" />
+    <ClInclude Include="src\rapidjson\document.h" />
+    <ClInclude Include="src\rapidjson\encodedstream.h" />
+    <ClInclude Include="src\rapidjson\encodings.h" />
+    <ClInclude Include="src\rapidjson\error\en.h" />
+    <ClInclude Include="src\rapidjson\error\error.h" />
+    <ClInclude Include="src\rapidjson\filereadstream.h" />
+    <ClInclude Include="src\rapidjson\filewritestream.h" />
+    <ClInclude Include="src\rapidjson\fwd.h" />
+    <ClInclude Include="src\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="src\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="src\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="src\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="src\rapidjson\internal\itoa.h" />
+    <ClInclude Include="src\rapidjson\internal\meta.h" />
+    <ClInclude Include="src\rapidjson\internal\pow10.h" />
+    <ClInclude Include="src\rapidjson\internal\regex.h" />
+    <ClInclude Include="src\rapidjson\internal\stack.h" />
+    <ClInclude Include="src\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="src\rapidjson\internal\strtod.h" />
+    <ClInclude Include="src\rapidjson\internal\swap.h" />
+    <ClInclude Include="src\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="src\rapidjson\memorybuffer.h" />
+    <ClInclude Include="src\rapidjson\memorystream.h" />
+    <ClInclude Include="src\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="src\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="src\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="src\rapidjson\pointer.h" />
+    <ClInclude Include="src\rapidjson\prettywriter.h" />
+    <ClInclude Include="src\rapidjson\rapidjson.h" />
+    <ClInclude Include="src\rapidjson\reader.h" />
+    <ClInclude Include="src\rapidjson\schema.h" />
+    <ClInclude Include="src\rapidjson\stream.h" />
+    <ClInclude Include="src\rapidjson\stringbuffer.h" />
+    <ClInclude Include="src\rapidjson\writer.h" />
     <ClInclude Include="src\textureManager.h" />
     <ClInclude Include="src\VertexShape.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\data\control.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

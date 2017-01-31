@@ -33,6 +33,13 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
 
+	controls.insert(std::pair<Control, int>(CONTROL_UP, NULL));
+	controls.insert(std::pair<Control, int>(CONTROL_DOWN, NULL));
+	controls.insert(std::pair<Control, int>(CONTROL_LEFT, NULL));
+	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, NULL));
+	controls.insert(std::pair<Control, int>(CONTROL_BL, NULL));
+	controls.insert(std::pair<Control, int>(CONTROL_TP, NULL));
+
 }
 
 void Player::init(Game* gamePtr) {
@@ -115,6 +122,19 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
+	if (game->getInput()->getKeyState(controls.at(CONTROL_UP))) {
+		velocity.y += deltaTime * 10;
+	}
+	if (game->getInput()->getKeyState(controls.at(CONTROL_DOWN))) {
+		velocity.y -= deltaTime * 10;
+	}
+	if (game->getInput()->getKeyState(controls.at(CONTROL_LEFT))) {
+		velocity.x -= deltaTime * 10 / ASPECT_RATIO;
+	}
+	if (game->getInput()->getKeyState(controls.at(CONTROL_RIGHT))) {
+		velocity.x += deltaTime * 10 / ASPECT_RATIO;
+	}
+
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
 			i->second -= deltaTime;
@@ -177,6 +197,17 @@ void Player::blink(std::vector<VertexShape*>& vS) {
 	QLine* l = new QLine(this, 5 * D3DX_PI / 4);
 	// deal with blinking into stuff
 	l->init(vS, game);
+
+}
+
+void Player::assignControl(rapidjson::Document& doc) {
+
+	controls.at(CONTROL_UP) = doc["control"].GetArray()[playerId]["up"].GetInt();
+	controls.at(CONTROL_DOWN) = doc["control"].GetArray()[playerId]["down"].GetInt();
+	controls.at(CONTROL_LEFT) = doc["control"].GetArray()[playerId]["left"].GetInt();
+	controls.at(CONTROL_RIGHT) = doc["control"].GetArray()[playerId]["right"].GetInt();
+	controls.at(CONTROL_BL) = doc["control"].GetArray()[playerId]["bl"].GetInt();
+	controls.at(CONTROL_TP) = doc["control"].GetArray()[playerId]["tp"].GetInt();
 
 }
 
