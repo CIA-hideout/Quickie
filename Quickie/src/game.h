@@ -10,6 +10,10 @@
 #include "input.h"
 #include "textureManager.h"
 
+#include "rapidjson/filereadstream.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/document.h"
+
 #include <DxErr.h>
 
 #pragma comment(lib, "dxerr.lib")

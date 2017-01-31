@@ -2,6 +2,9 @@
 
 #include "graphics.h"
 #include "game.h"
+#include "rapidjson/filereadstream.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/document.h"
 
 enum CollisionType {
 	CT_AABB,
