@@ -1,5 +1,4 @@
 #include "FontHandler.h"
-#include <dinput.h>
 
 FontHandler::FontHandler() 
 {

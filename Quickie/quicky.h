@@ -4,6 +4,7 @@
 #include "src/CollisionManager.h"
 #include "src/FontHandler.h"
 #include <math.h>
+#include "src/GUI.h"
 
 extern void game_init();
 extern void game_preload();
@@ -13,7 +14,8 @@ extern void game_update(float);
 
 class quicky : public Game {
 
-	FontHandler* font;
+	FontHandler*	font;
+	GUI*			gui;
 
 public:
 
