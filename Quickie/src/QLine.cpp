@@ -11,7 +11,7 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 
 	this->rotation_ = rotation_;
 
-	magnetude = 10;
+	magnetude = 100;
 
 	CollisionType CT_OOBB;
 
@@ -27,15 +27,13 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 	static int bounceCount = 0;
-	// we do not allow the ray to hit the same object more than once per bounce
-	int latestID = -1;
 
 	// first trace out the path tha the line will take
 
 	parent->cooldown.at(COOLDOWN_BLINK) = 1.0f;
 
 	D3DXVECTOR3 intersect, fIntersect, rayStart, rayEnd, ts, te, projPoint;
-	D3DXVECTOR4 norm;
+	D3DXVECTOR4 norm, fNorm;
 
 	float r_, m_ = magnetude;
 	float dist_, cDist_;
@@ -43,7 +41,9 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 	rayStart.y = startPoint.y;
 	rayStart.z = 0;
 	rayEnd.z = 0;
-	int c_;
+	int c_, latestID, fLatestID;
+
+	fLatestID = latestID = -1;
 
 	vertexPoint.push_back(rayStart);
 
@@ -67,7 +67,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->objectType == OT_OBS) {
-				if (CollisionManager::rayObjectIntersect(intersect, norm, rayStart, rayEnd, vS[i]) && latestID != vS[i]->id) {
+				if (CollisionManager::rayObjectIntersect(intersect, norm, rayStart, rayEnd, vS[i]) && fLatestID != vS[i]->id) {
 					c_++;
 					// since rayObjectIntersect already returns the closest point, we can compare each point
 					// to see what gets hit first
@@ -76,11 +76,14 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 						cDist_ = dist_;
 						fIntersect = intersect;
 						latestID = vS[i]->id;
+						fNorm = norm;
 					}
 					// add a vertex into vertexPoint
 				}
 			}
 		}
+
+		fLatestID = latestID;
 
 		if (c_ < 1) {
 			// no collisioin detected. probably the end of blink
@@ -96,8 +99,8 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 			// >>> [0] end
 
 			// get rotation of the norm line segment
-			float dx = norm.x - norm.z;
-			float dy = norm.y - norm.w;
+			float dx = fNorm.x - fNorm.z;
+			float dy = fNorm.y - fNorm.w;
 			r_ = atan(dy / dx);
 
 			// >>> [1] reflecting off a line that has the rotation r_
@@ -131,6 +134,9 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 			rayStart.x = fIntersect.x;
 			rayStart.y = fIntersect.y;
 			bounceCount++;
+
+			printf("vertices: %.2f, %.2f\n", fIntersect.x, fIntersect.y);
+			printf("projection: %.2f, %.2f\n", projPoint.x, projPoint.y);
 		}
 	}
 
@@ -138,10 +144,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
-
-	for (int i = 0; i < vertexPoint.size(); i++) {
-		printf("vertices: %.2f\t%.2f\t%.2f\n", vertexPoint[i].x, vertexPoint[i].y, vertexPoint[i].z);
-	}
 
 	// create all the vertices
 
@@ -181,8 +183,10 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 		v_.color = D3DCOLOR_ARGB(255, 255, 255, 255);
 		vertices[i] = v_;
 	}
+	
+	printf("final vertices:\n");
 	for (int i = 0; i < vertexCount; i++) {
-		printf("[%d]%.2f\t%.2f\t%.2f\n", i + 1, vertices[i].x, vertices[i].y, vertices[i].z);
+		printf("[%d]%.2f, %.2f\n", i + 1, vertices[i].x, vertices[i].y);
 	}
 
 	vertexBuffer->Unlock();
@@ -192,9 +196,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 	for (int i = 0; i < vertexCount * 2 - 2; i++) {
 		indices[i] = (i + 1) / 2;
-	}
-	for (int i = 0; i < vertexCount * 2 - 2; i++) {
-		printf("%d\n", indices[i]);
 	}
 
 	indexBuffer->Unlock();
