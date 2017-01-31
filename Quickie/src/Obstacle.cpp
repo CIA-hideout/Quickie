@@ -158,7 +158,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 }
 
 void Obstacle::update(float deltaTime) {
-
+	//timer += deltaTime;
 }
 
 // Randomly generate a color and returns the value
@@ -189,13 +189,39 @@ void Obstacle::setColor(D3DXVECTOR3 newColor)
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	for (int i = 0; i < vertexCount; i++) {
-		v->color = D3DCOLOR_RGBA( (int) newColor.x, (int)newColor.y, 
-			(int) newColor.z, 255);
+		v->color = D3DCOLOR_RGBA( int (newColor.x), int (newColor.y), 
+			int (newColor.z), 255);
 		v++;
 	}
 
 	meshPtr->UnlockIndexBuffer();
+}
 
+// set Dimensions
+void Obstacle::setDimension(D3DXVECTOR3 newDimension)
+{
+	dimension = newDimension;
+
+	meshPtr->LockVertexBuffer(0, (void**)&vertices);
+
+	// 0
+	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 1						 
+	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 2						 
+	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 3						 
+	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 4						 
+	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 5						 
+	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 6						 
+	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 7						 
+	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+
+	meshPtr->UnlockVertexBuffer();
 }
 
 // generate a random size for the obstructor and returns the size

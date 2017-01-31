@@ -83,7 +83,7 @@ void quicky::update() {
 
 	// push all temp stuff into respective vectors
 
-	
+
 	D3DXVECTOR3 out1;
 	D3DXVECTOR2 out2;
 	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);

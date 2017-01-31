@@ -24,8 +24,8 @@
 #define COLOR_WHITE D3DXVECTOR3(255, 255, 255)
 
 // define size of obstacles
-#define DIMENSION_SMALL D3DXVECTOR3(7, 1, 2.5)
-#define DIMENSION_MEDIUM D3DXVECTOR3(10, 1, 2.5)
+#define DIMENSION_SMALL D3DXVECTOR3(7, 1, 19.5)
+#define DIMENSION_MEDIUM D3DXVECTOR3(10, 1, 19.5)
 
 
 //-----------------------------------------------
