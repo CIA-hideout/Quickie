@@ -32,22 +32,11 @@ void quicky::initialize(HWND hWnd) {
 	vEntities.push_back(o3);
 	vEntities.push_back(o4);
 
-
-	// Font initialization
-	font = new Font();
-
-	if (!font->initialize(graphics))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
-
-	if (!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
-
 	// GUI initialization
 	gui = new GUI();
 
-	if (!gui->initialize(font))
+	if (!gui->initialize(graphics))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
-
 
 	// parse player control
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");

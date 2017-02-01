@@ -14,7 +14,6 @@ extern void game_update(float);
 
 class quicky : public Game {
 
-	Font*	font;
 	GUI*			gui;
 
 public:

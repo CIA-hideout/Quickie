@@ -54,6 +54,8 @@ bool Font::createFont()
 			fontName.c_str(),							//pointer to Facename
 
 			&font);										//ppFont
+
+
 	}
 	catch (...)
 	{
@@ -107,19 +109,19 @@ bool Font::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 
 void Font::print(int x, int y, std::string s)
 {
-	SetRect(font_rect, x, y, x, y);			// left, top, right, bottom
+	SetRect(font_rect, x, y, x, y);			//	left, top, right, bottom
 
-	font->DrawText(nullptr,			//pointer to Sprite
+	font->DrawText(nullptr,					//	pointer to Sprite
 
-		s.c_str(),					//pointer to String
+		s.c_str(),							//	pointer to String
 
-		-1,							//Count
+		-1,									//	Count
 
-		font_rect,					//pointer to Rect
+		font_rect,							//	pointer to Rect
 
-		DT_LEFT | DT_NOCLIP,		//Format
+		DT_LEFT | DT_NOCLIP,				//	Format
 
-		0xffffffff);				//Color
+		0xffffffff);						//	Color
 }
 
 
