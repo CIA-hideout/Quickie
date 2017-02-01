@@ -1,10 +1,10 @@
 #pragma once
-#ifndef _FONTHANDLER_H_
-#define _FONTHANDLER_H_
+#ifndef _FONT_H_
+#define _FONT_H_
 
 #include "graphics.h"
 
-class FontHandler
+class Font
 {
 	Graphics*	graphics;
 	ID3DXFont*	font;
@@ -17,8 +17,8 @@ class FontHandler
 	std::string fontName;
 
 public:
-	FontHandler();
-	~FontHandler();
+	Font();
+	~Font();
 
 	bool initialize(Graphics* graphics);
 	bool createFont();

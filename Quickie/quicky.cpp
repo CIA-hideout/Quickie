@@ -34,7 +34,7 @@ void quicky::initialize(HWND hWnd) {
 
 
 	// Font initialization
-	font = new FontHandler();
+	font = new Font();
 
 	if (!font->initialize(graphics))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));

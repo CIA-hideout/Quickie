@@ -1,7 +1,7 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
-#include "FontHandler.h"
+#include "Font.h"
 #include <stack>
 
 enum Scene
@@ -16,17 +16,23 @@ enum Scene
 class GUI
 {
 	std::stack<Scene>*		sceneStack;
-	FontHandler*			font;
+	Font*			font;
 
 	void renderMenu();
 public:
 	GUI();
 	~GUI();
 
-	bool initialize(FontHandler* f);
+	bool initialize(Font* f);
 	void render();
 	void setCurrentScene(Scene s){ sceneStack->push(s); };
 	void revertScene(){ sceneStack->pop(); };
+
+	// GET
+	Font* getFont(){ return font; }
+
+	// SET
+	void setFont(Font* f){ font = f; }
 
 };
 #endif

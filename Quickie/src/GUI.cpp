@@ -8,7 +8,7 @@ GUI::GUI()
 
 GUI::~GUI(){}
 
-bool GUI::initialize(FontHandler* f)
+bool GUI::initialize(Font* f)
 {
 	try
 	{
@@ -32,12 +32,12 @@ void GUI::render()
 		break;
 
 	case GAME:
-
+		
 		break;
 	}
 }
 
 void GUI::renderMenu()
 {
-	font->print(50, 50, "yeah");
+	font->print(GAME_WIDTH / 2, GAME_HEIGHT / 4, "QUICKIE");
 }

@@ -96,7 +96,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CollisionManager.cpp" />
-    <ClCompile Include="src\FontHandler.cpp" />
+    <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
@@ -112,7 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />
-    <ClInclude Include="src\FontHandler.h" />
+    <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GUI.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
