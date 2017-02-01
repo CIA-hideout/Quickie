@@ -1,6 +1,6 @@
-#include "FontHandler.h"
+#include "Font.h"
 
-FontHandler::FontHandler() 
+Font::Font() 
 {
 	graphics = nullptr;
 	font = nullptr;
@@ -13,12 +13,12 @@ FontHandler::FontHandler()
 	fontName = "Arial";
 }
 
-FontHandler::~FontHandler()
+Font::~Font()
 {
 }
 
 
-bool FontHandler::initialize(Graphics* g)
+bool Font::initialize(Graphics* g)
 {
 	try{
 		graphics = g;                               // the graphics object
@@ -27,7 +27,7 @@ bool FontHandler::initialize(Graphics* g)
 	return true;
 }
 
-bool FontHandler::createFont()
+bool Font::createFont()
 {
 	try
 	{
@@ -63,7 +63,7 @@ bool FontHandler::createFont()
 	return true;
 }
 
-bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
+bool Font::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 {
 	height = h;
 	width = wid;
@@ -105,7 +105,7 @@ bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 	return true;
 }
 
-void FontHandler::print(int x, int y, std::string s)
+void Font::print(int x, int y, std::string s)
 {
 	SetRect(font_rect, x, y, x, y);			// left, top, right, bottom
 

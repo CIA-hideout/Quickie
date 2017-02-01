@@ -2,13 +2,13 @@
 
 #include "src/game.h"
 #include "src/CollisionManager.h"
-#include "src/FontHandler.h"
+#include "src/Font.h"
 #include <math.h>
 #include "src/GUI.h"
 
 class quicky : public Game {
 
-	FontHandler*	font;
+	Font*	font;
 	GUI*			gui;
 
 public:

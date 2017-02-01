@@ -34,8 +34,8 @@ void quicky::initialize(HWND hWnd) {
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
 
-	//Implement basic font support
-	font = new FontHandler();
+	// Font initialization
+	font = new Font();
 
 	if (!font->initialize(graphics))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
