@@ -1,8 +1,10 @@
 #ifndef _GUI_H_
 #define _GUI_H_
 
-#include "Font.h"
 #include <stack>
+#include <map>
+#include "Font.h"
+#include "graphics.h"
 
 enum Scene
 {
@@ -15,24 +17,28 @@ enum Scene
 
 class GUI
 {
-	std::stack<Scene>*		sceneStack;
-	Font*			font;
+	std::stack<Scene>*				sceneStack;
+	std::map<std::string, Font*>	fontMap;
+	Font*							currentFont;
+	Graphics*						graphics;
 
+	void initFonts();
 	void renderMenu();
+	void addFont(std::string, int h, UINT wid, UINT wei, bool i, std::string fN);
 public:
 	GUI();
 	~GUI();
 
-	bool initialize(Font* f);
+	bool initialize(Graphics* g);
 	void render();
 	void setCurrentScene(Scene s){ sceneStack->push(s); };
 	void revertScene(){ sceneStack->pop(); };
 
 	// GET
-	Font* getFont(){ return font; }
+	Font* getFont(){ return currentFont; }
 
 	// SET
-	void setFont(Font* f){ font = f; }
+	bool setFont(std::string s);
 
 };
 #endif

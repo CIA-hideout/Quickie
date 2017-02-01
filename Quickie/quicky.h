@@ -8,7 +8,6 @@
 
 class quicky : public Game {
 
-	Font*	font;
 	GUI*			gui;
 
 public:
