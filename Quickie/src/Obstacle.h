@@ -5,6 +5,7 @@
 class Obstacle : public VertexShape {
 
 private:
+	int obstacleId;
 	int spawnMinX;
 	int spawnMaxX;
 	float timer = 0;		// a timer to move/change direction
@@ -20,6 +21,9 @@ public:
 	void update(float);
 	void setColor(D3DXVECTOR3);
 	void setDimension(D3DXVECTOR3);
+	void setPosition(D3DXVECTOR3);
 	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 getRandomDimension();
+
+	//void assignPosition
 };

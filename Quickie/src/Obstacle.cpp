@@ -4,6 +4,8 @@
 
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() 
 {
+	static int obstacleCount = 0;
+	obstacleId = obstacleCount++;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -33,6 +35,9 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 // Create a new obstructor with almost RANDOM variables
 Obstacle::Obstacle(const int location[]) : VertexShape()
 {
+	static int obstacleCount = 0;
+	obstacleId = obstacleCount++;
+
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	
@@ -197,6 +202,14 @@ void Obstacle::setColor(D3DXVECTOR3 newColor)
 	meshPtr->UnlockIndexBuffer();
 }
 
+// set position of obstacle
+void Obstacle::setPosition(D3DXVECTOR3 newPos)
+{
+	pos.x = newPos.x;
+	pos.y = newPos.y;
+	pos.z = newPos.z;
+}
+
 // set Dimensions
 void Obstacle::setDimension(D3DXVECTOR3 newDimension)
 {
@@ -228,9 +241,9 @@ void Obstacle::setDimension(D3DXVECTOR3 newDimension)
 D3DXVECTOR3 Obstacle::getRandomDimension()
 {
 	std::vector<D3DXVECTOR3> dimensions;
-	dimensions.push_back(DIMENSION_SMALL);
-	dimensions.push_back(DIMENSION_MEDIUM);
-	dimensions.push_back(DIMENSION_MEDIUM);
+	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
+	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
+	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
 	// medium size to appear more frequently
 
 	std::random_device rd;     // only used once to initialise (seed) engine

@@ -20,8 +20,7 @@ public:
 	CollisionManager*			cManager;
 	std::vector<VertexShape*>	qObstacles;
 	std::vector<VertexShape*>	qPlayer;
-	LevelManager*			lManager;
-	std::vector<VertexShape*>	vEntities;
+	LevelManager*				lManager;
 	rapidjson::Document			controlDoc;
 
 	quicky();
