@@ -17,7 +17,7 @@ quicky::~quicky() {
 }
 
 void quicky::initialize(HWND hWnd) {
-	
+
 	Game::initialize(hWnd);
 
 	AllocConsole();
@@ -30,17 +30,24 @@ void quicky::initialize(HWND hWnd) {
 	vEntities.push_back(o3);
 	vEntities.push_back(o4);
 
-	//Implement basic font support
+
+	// Font initialization
 	font = new FontHandler();
 
 	if (!font->initialize(graphics))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
-	
+
 	if (!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
 
-	// parse player control
+	// GUI initialization
+	gui = new GUI();
 
+	if (!gui->initialize(font))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
+
+
+	// parse player control
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
 	char controlBuffer[512];
 	rapidjson::FileReadStream is(controlFile, controlBuffer, sizeof(controlBuffer));
@@ -92,7 +99,7 @@ void quicky::render() {
 	sqr1->draw(worldMat);
 	sqr2->draw(worldMat);
 
-	// font->print(500, 500, "AIR AMERICANA");
+	gui->render();
 }
 
 void quicky::releaseAll() {
