@@ -20,12 +20,11 @@ public:
 
 	QLine(VertexShape*, float);
 
-	D3DXVECTOR3				startPoint;
+	D3DXVECTOR3					startPoint;
 
 	void init(std::vector<VertexShape*>&, Game*);
 	void update(float, std::vector<VertexShape*>&);
 	void draw(D3DXMATRIX&);
 
 };
-
 

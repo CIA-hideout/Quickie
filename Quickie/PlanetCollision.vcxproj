@@ -105,7 +105,6 @@
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\QLine.cpp" />
-    <ClCompile Include="src\textureManager.cpp" />
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
@@ -157,7 +156,6 @@
     <ClInclude Include="src\rapidjson\stream.h" />
     <ClInclude Include="src\rapidjson\stringbuffer.h" />
     <ClInclude Include="src\rapidjson\writer.h" />
-    <ClInclude Include="src\textureManager.h" />
     <ClInclude Include="src\VertexShape.h" />
   </ItemGroup>
   <ItemGroup>

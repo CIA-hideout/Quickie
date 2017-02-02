@@ -12,7 +12,8 @@ class quicky : public Game {
 public:
 
 	CollisionManager*			cManager;
-	std::vector<VertexShape*>	vEntities;
+	std::vector<VertexShape*>	qObstacles;
+	std::vector<VertexShape*>	qPlayer;
 	rapidjson::Document			controlDoc;
 
 	quicky();

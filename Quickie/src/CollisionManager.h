@@ -29,6 +29,7 @@ public:
 	static bool collideAABB(VertexShape*, VertexShape*);
 	static bool collideOOBB(VertexShape*, VertexShape*, D3DXVECTOR3&);
 	static bool collideS(VertexShape*, VertexShape*, D3DXVECTOR3&);
+	static bool collidePixelPerfect(D3DXVECTOR3&, VertexShape*, VertexShape*);
 
 	static void computeAABB(VertexShape*);
 	static void computeOOBB(VertexShape*, D3DXVECTOR3&, D3DXVECTOR3&, D3DXMATRIX&);
@@ -40,5 +41,5 @@ public:
 	static float pDist3(const D3DXVECTOR3&, const D3DXVECTOR3&);
 	static float pDist2(const D3DXVECTOR3&, const D3DXVECTOR3&);
 
-
+	static bool primitiveCollision(D3DXVECTOR3&, std::vector<D3DXVECTOR3>&, std::vector<D3DXVECTOR3>&);
 };

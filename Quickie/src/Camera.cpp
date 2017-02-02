@@ -103,3 +103,12 @@ bool Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos, D3DXMATRIX& w) {
 	return true;
 
 }	
+
+void Camera::pointOnWorldZ(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z, D3DXMATRIX& w) {
+
+	// maps a screen coordinate to world coordinate given z
+
+	pOut.z = z;
+
+
+}

@@ -33,6 +33,7 @@ public:
 	void getLock(D3DXVECTOR3&);
 
 	bool pointOnScreen(D3DXVECTOR3&, D3DXVECTOR3&, D3DXMATRIX&);
+	void pointOnWorldZ(D3DXVECTOR3&, D3DXVECTOR2&, float, D3DXMATRIX&);
 
 	CameraType	cameraType;
 	D3DXVECTOR3	right;

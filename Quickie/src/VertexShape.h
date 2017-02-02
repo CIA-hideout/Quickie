@@ -2,6 +2,7 @@
 
 #include "graphics.h"
 #include "game.h"
+
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
@@ -26,7 +27,7 @@ public:
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	Game*					game;
-	int						vertexCount;
+	int						vertexCount, indicesCount;
 
 	ID3DXMesh*				meshPtr;
 
@@ -35,6 +36,8 @@ public:
 	D3DXVECTOR3				scale;
 	D3DXVECTOR3				color;
 	D3DXVECTOR3				rotation;
+
+	D3DXMATRIX				matTrans, matRot, matScale;
 
 	LVertex*				vertices;
 	WORD*					indices;
@@ -51,6 +54,9 @@ public:
 	ObjectType				objectType;
 
 	int						id;
+	bool					visible, alive;
+
+	D3DPRIMITIVETYPE		primitiveType;
 
 public:
 

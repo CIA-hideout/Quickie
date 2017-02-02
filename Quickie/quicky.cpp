@@ -1,4 +1,5 @@
 #include "quicky.h"
+#include "src/QLine.h"
 
 Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 10, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
@@ -17,7 +18,7 @@ quicky::~quicky() {
 }
 
 void quicky::initialize(HWND hWnd) {
-	
+
 	Game::initialize(hWnd);
 
 	AllocConsole();
@@ -25,17 +26,20 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	vEntities.push_back(o1);
-	vEntities.push_back(o2);
-	vEntities.push_back(o3);
-	vEntities.push_back(o4);
+	qObstacles.push_back(o1);
+	qObstacles.push_back(o2);
+	qObstacles.push_back(o3);
+	qObstacles.push_back(o4);
+
+	qPlayer.push_back(sqr1);
+	qPlayer.push_back(sqr2);
 
 	//Implement basic font support
 	font = new FontHandler();
 
 	if (!font->initialize(graphics))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
-	
+
 	if (!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
 
@@ -48,30 +52,35 @@ void quicky::initialize(HWND hWnd) {
 	printf("%s\n", controlDoc["test_string"].GetString());
 	fclose(controlFile);
 
-	o1->init(this);
-	o2->init(this);
-	o3->init(this);
-	o4->init(this);
-	sqr1->init(this);
-	sqr2->init(this);
+	for (int i = 0; i < qObstacles.size(); i++) {
+		qObstacles[i]->init(this);
+	}
 
-	sqr1->assignControl(controlDoc);
-	sqr2->assignControl(controlDoc);
+	for (int i = 0; i < qPlayer.size(); i++) {
+		Player* temp = (Player*)qPlayer[i];
+		temp->init(this);
+		temp->assignControl(controlDoc);
+	}
 }
 
 void quicky::update() {
-
-	for (int i = 0; i < vEntities.size(); i++) {
-		vEntities[i]->update(deltaTime);
+	for (int i = 0; i < qObstacles.size(); i++) {
+		if (qObstacles[i]->objectType == OT_QL) {
+			QLine* temp = (QLine*)qObstacles[i];
+			temp->update(deltaTime, qObstacles);
+		}
+		else if (qObstacles[i]->objectType == OT_OBS) {
+			Obstacle* temp = (Obstacle*)qObstacles[i];
+			temp->update(deltaTime);
+		}
 	}
 
-	sqr1->update(deltaTime, vEntities);
-	sqr2->update(deltaTime, vEntities);
+	for (int i = 0; i < qPlayer.size(); i++) {
+		Player* temp = (Player*)qPlayer[i];
+		temp->update(deltaTime, qObstacles);
+	}
 
-	// D3DXVECTOR3 out_;
-	// bool onScreen = false;
-	// onScreen = graphics->camera->pointOnScreen(out_, sqr1->pos, worldMat);
-	// printf("%d, %.2f, %.2f\n", onScreen, out_.x, out_.y);
+	// push all temp stuff into respective vectors
 
 }
 
@@ -85,12 +94,14 @@ void quicky::collisions() {
 
 void quicky::render() {
 
-	for (int i = 0; i < vEntities.size(); i++) {
-		vEntities[i]->draw(worldMat);
+	for (int i = 0; i < qObstacles.size(); i++) {
+		qObstacles[i]->draw(worldMat);
 	}
 
-	sqr1->draw(worldMat);
-	sqr2->draw(worldMat);
+	for (int i = 0; i < qPlayer.size(); i++) {
+		Player* temp = (Player*)qPlayer[i];
+		temp->draw(worldMat);
+	}
 
 	// font->print(500, 500, "AIR AMERICANA");
 }

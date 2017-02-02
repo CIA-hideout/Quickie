@@ -27,6 +27,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 	velocity.x = 0;
 	velocity.y = 0;
+
 }
 
 // Create a new obstructor with almost RANDOM variables

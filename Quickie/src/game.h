@@ -8,7 +8,6 @@
 #include "graphics.h"
 #include "gameError.h"
 #include "input.h"
-#include "textureManager.h"
 
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
@@ -19,22 +18,21 @@
 #pragma comment(lib, "dxerr.lib")
 
 class Game {
-protected:
-	// common game properties
+public:
 
-	Graphics		*graphics;
-	Input			*input;
-	HWND			hwnd;
-	HRESULT			hr;
-	LARGE_INTEGER	timeStart;
-	LARGE_INTEGER	timeEnd;
-	LARGE_INTEGER	timerFreq;
-	float			deltaTime;
-	float			fps;
-	DWORD			sleepTime;
-	bool			paused;
-	bool			initialized;
-	float			fov;
+	Graphics					*graphics;
+	Input						*input;
+	HWND						hwnd;
+	HRESULT						hr;
+	LARGE_INTEGER				timeStart;
+	LARGE_INTEGER				timeEnd;
+	LARGE_INTEGER				timerFreq;
+	float						deltaTime;
+	float						fps;
+	DWORD						sleepTime;
+	bool						paused;
+	bool						initialized;
+	float						fov;
 
 public:
 

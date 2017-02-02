@@ -4,6 +4,7 @@
 VertexShape::VertexShape() {
 	static int id_ = 0;
 	this->id = id_++;
+	meshPtr = nullptr;
 }
 
 VertexShape::~VertexShape() {
