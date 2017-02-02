@@ -18,8 +18,8 @@ Input::Input(HWND hWnd) {
 
 	for (int i = DIK_ESCAPE; i <= DIK_MEDIASELECT; i++) {
 		keys.insert(std::pair<int, bool>(i, false));
+		keysPressed.insert(std::pair<int, bool>(i, false));
 	}
-
 }
 
 
@@ -31,7 +31,7 @@ Input::~Input() {
 
 void Input::update() {
 	keyboard->Poll();
-	if (!SUCCEEDED(keyboard->GetDeviceState(256, (LPVOID)&keyState)))
+	if (!SUCCEEDED(keyboard->GetDeviceState(inputNS::KEYS_ARR_LENGTH, (LPVOID)&keyState)))
 		keyboard->Acquire();
 	mouse->Poll();
 	if (!SUCCEEDED(mouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState)))
@@ -43,4 +43,33 @@ void Input::update() {
 
 bool Input::getMouseButton(char button) {
 	return mouseState.rgbButtons[button] & 0x80;
+}
+
+//=============================================================================
+// Return true if the specified VIRTUAL KEY has been pressed in the most recent
+// frame. Key presses are erased at the end of each frame.
+//=============================================================================
+bool Input::wasKeyPressed(int i)
+{
+	if (i < inputNS::KEYS_ARR_LENGTH)
+		return keysPressed[i];
+
+	return false;
+}
+
+//=============================================================================
+// Clear the specified key press
+//=============================================================================
+void Input::clearKeyPress(int i)
+{
+	if (i < inputNS::KEYS_ARR_LENGTH)
+		keysPressed[i] = false;
+}
+
+void Input::clearAll()
+{
+	for (int i = 0; i < inputNS::KEYS_ARR_LENGTH; ++i)
+	{
+		keysPressed[i] = false;
+	}
 }

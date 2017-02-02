@@ -139,7 +139,6 @@ void Game::run(HWND hwnd) {
 	updateMouse();
 	ai();                       // artificial intelligence
 	collisions();               // handle collisions
-
 	renderGame();
 }
 

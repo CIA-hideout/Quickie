@@ -24,7 +24,7 @@ public:
 	bool createFont();
 	bool createFont(int height, UINT width, UINT weight, bool i, std::string fN);
 	void print(int x, int y, std::string sentence);						// prints the text on screen given the coordinates
-	//int getTotalWidth(std::string text);
+	int getTotalWidth(std::string text);
 
 	// GET Methods
 	ID3DXFont* getFont(){ return font; }

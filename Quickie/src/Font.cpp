@@ -124,4 +124,8 @@ void Font::print(int x, int y, std::string s)
 		0xffffffff);						//	Color
 }
 
+int Font::getTotalWidth(std::string s)
+{
+	return width * s.length();
+}
 
