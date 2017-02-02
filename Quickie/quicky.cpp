@@ -34,15 +34,6 @@ void quicky::initialize(HWND hWnd) {
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
 
-	// Font initialization
-	font = new Font();
-
-	if (!font->initialize(graphics))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
-
-	if (!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
-
 	// GUI initialization
 	gui = new GUI();
 
