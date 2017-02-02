@@ -41,7 +41,6 @@ void quicky::initialize(HWND hWnd) {
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
 
 	// parse player control
-
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
 	char controlBuffer[512];
 	rapidjson::FileReadStream is(controlFile, controlBuffer, sizeof(controlBuffer));

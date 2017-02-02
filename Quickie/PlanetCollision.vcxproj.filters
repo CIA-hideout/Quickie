@@ -92,6 +92,9 @@
     <ClInclude Include="src\QLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\rapidjson\error\en.h">
       <Filter>Header Files</Filter>
     </ClInclude>
