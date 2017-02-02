@@ -46,7 +46,7 @@ void quicky::initialize(HWND hWnd) {
 	// GUI initialization
 	gui = new GUI();
 
-	if (!gui->initialize(graphics))
+	if (!gui->initialize(this))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
 
 	// parse player control
@@ -88,6 +88,7 @@ void quicky::update() {
 
 	// push all temp stuff into respective vectors
 
+	gui->update();
 }
 
 void quicky::ai() {
