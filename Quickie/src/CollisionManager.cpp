@@ -7,6 +7,8 @@
 #define P_DIST_3(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2) + pow((float)p1.z - p1.z, 2))
 #define P_DIST_2(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2))
 
+#define CM						CollisionManager
+
 
 CollisionManager::CollisionManager() {
 
@@ -82,7 +84,7 @@ bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, V
 			// v1 list and v2 list now contains the first hop in the indices array
 			// checks if the lines intersects on the x and y axis
 
-			if (CollisionManager::primitiveCollision(pOut, v1List, v2List))
+			if (CM::primitiveCollision(pOut, v1List, v2List))
 				return true;
 
 			v2List.clear();
@@ -171,7 +173,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 	std::vector<D3DXVECTOR4>	normV;
 
 	if (vS->collisionType == CT_AABB) {
-		CollisionManager::computeAABB(vS);
+		CM::computeAABB(vS);
 
 		rayStart = pStart;
 		rayEnd = pEnd;
@@ -185,7 +187,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		tEnd.x = vS->max.x;
 		tEnd.y = vS->max.y;
 
-		if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
 			v.x = intersection.x;
 			v.y = intersection.y;
 			posV.push_back(v);
@@ -211,7 +213,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		tEnd.x = vS->max.x;
 		tEnd.y = vS->min.y;
 
-		if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
 			v.x = intersection.x;
 			v.y = intersection.y;
 			posV.push_back(v);
@@ -236,7 +238,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		tEnd.x = vS->min.x;
 		tEnd.y = vS->min.y;
 
-		if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
 			v.x = intersection.x;
 			v.y = intersection.y;
 			posV.push_back(v);
@@ -261,7 +263,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		tEnd.x = vS->max.x;
 		tEnd.y = vS->min.y;
 
-		if (CollisionManager::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
 			v.x = intersection.x;
 			v.y = intersection.y;
 			posV.push_back(v);
@@ -319,7 +321,7 @@ bool CollisionManager::primitiveCollision(D3DXVECTOR3& pOut, std::vector<D3DXVEC
 
 	for (int i = 0; i < set1.size(); i++) {
 		for (int j = 0; j < set2.size(); j++) {
-			if (CollisionManager::lineSegmentIntersect(pOut, set1[i], set1[(i + 1) % set1.size()], set2[j], set2[(j + 1) % set2.size()]))
+			if (CM::lineSegmentIntersect(pOut, set1[i], set1[(i + 1) % set1.size()], set2[j], set2[(j + 1) % set2.size()]))
 				return true;
 		}
 	}

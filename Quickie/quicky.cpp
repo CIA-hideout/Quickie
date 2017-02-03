@@ -62,6 +62,9 @@ void quicky::initialize(HWND hWnd) {
 }
 
 void quicky::update() {
+
+	gui->update();
+
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {
 			QLine* temp = (QLine*)qObstacles[i];
@@ -80,7 +83,14 @@ void quicky::update() {
 
 	// push all temp stuff into respective vectors
 
-	gui->update();
+	
+	D3DXVECTOR3 out1;
+	D3DXVECTOR2 out2;
+	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);
+	// printf("POS %.2f, %.2f\n", out.x, out.y);
+	out2 = D3DXVECTOR2(out1.x, out1.y);
+	graphics->camera->pointInWorld(out1, out2, 19);
+	printf("PIW %.2f, %.2f, actual pos: %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
 }
 
 void quicky::ai() {
