@@ -75,22 +75,6 @@ const float MIN_FRAME_TIME = 1.0f / FRAME_RATE;   // minimum desired time for 1 
 const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE; // maximum time used in calculations
 const float FOV = PI * 0.5;
 
-// Default Font
-const int FONT_HEIGHT			= 50;
-const UINT FONT_WIDTH			= 25;
-const UINT FONT_WEIGHT			= 500;
-const bool FONT_ITALICS			= false;
-const std::string FONT_NAME		= "Air Americana";
-
-const UCHAR ESC_KEY				= VK_ESCAPE;       // escape key
-const UCHAR ALT_KEY				= VK_MENU;         // Alt key
-const UCHAR ENTER_KEY			= VK_RETURN;       // Enter key
-const UCHAR LEFT_KEY			= DIK_LEFT;
-const UCHAR RIGHT_KEY			= DIK_RIGHT;
-const UCHAR UP_KEY				= DIK_UP;
-const UCHAR DOWN_KEY			= DIK_DOWN;
-const UCHAR SPACEBAR			= 0x20;
-
 // for spawning objects on screen
 const int SPAWN_LEFT[] = {-15, -5 };	// -15 < pos.x < -5
 const int SPAWN_CENTER[] = {-5, 5};		// - 5 < pos.x <  5

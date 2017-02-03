@@ -1,15 +1,13 @@
 #pragma once
 
+#include <math.h>
 #include "src/game.h"
 #include "src/CollisionManager.h"
 #include "src/Font.h"
 #include "src/LevelManager.h"
-#include <math.h>
-#include "src/GUI.h"
+#include "src/Menu.h"
 
 class quicky : public Game {
-
-	GUI*			gui;
 
 public:
 
@@ -35,4 +33,6 @@ public:
 	void updateKeyboard();
 	void keyPress(int key);
 	void keyRelease(int key);
+	void popState() { gameState.pop(); }
+	void pushState(State* s){ gameState.push(s); }
 };
