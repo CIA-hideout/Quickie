@@ -13,8 +13,9 @@ Input::Input(HWND hWnd) {
 
 	for (int i = 0; i < 256; i++) {
 		keyState[i] = false;
+		keys.insert(std::pair<int, bool>(i, false));
+		keysPressed.insert(std::pair<int, bool>(i, false));
 	}
-
 }
 
 
@@ -25,6 +26,35 @@ Input::~Input() {
 
 void Input::update() {
 	keyboard->Poll();
-	if (!SUCCEEDED(keyboard->GetDeviceState(256, (LPVOID)&keyState)))
+	if (!SUCCEEDED(keyboard->GetDeviceState(inputNS::KEYS_ARR_LENGTH, (LPVOID)&keyState)))
 		keyboard->Acquire();
+}
+
+//=============================================================================
+// Return true if the specified VIRTUAL KEY has been pressed in the most recent
+// frame. Key presses are erased at the end of each frame.
+//=============================================================================
+bool Input::wasKeyPressed(int i)
+{
+	if (i < inputNS::KEYS_ARR_LENGTH)
+		return keysPressed[i];
+
+	return false;
+}
+
+//=============================================================================
+// Clear the specified key press
+//=============================================================================
+void Input::clearKeyPress(int i)
+{
+	if (i < inputNS::KEYS_ARR_LENGTH)
+		keysPressed[i] = false;
+}
+
+void Input::clearAll()
+{
+	for (int i = 0; i < inputNS::KEYS_ARR_LENGTH; ++i)
+	{
+		keysPressed[i] = false;
+	}
 }

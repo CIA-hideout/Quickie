@@ -1,7 +1,6 @@
-#include "FontHandler.h"
-#include <dinput.h>
+#include "Font.h"
 
-FontHandler::FontHandler() 
+Font::Font() 
 {
 	graphics = nullptr;
 	font = nullptr;
@@ -14,12 +13,12 @@ FontHandler::FontHandler()
 	fontName = "Arial";
 }
 
-FontHandler::~FontHandler()
+Font::~Font()
 {
 }
 
 
-bool FontHandler::initialize(Graphics* g)
+bool Font::initialize(Graphics* g)
 {
 	try{
 		graphics = g;                               // the graphics object
@@ -28,7 +27,7 @@ bool FontHandler::initialize(Graphics* g)
 	return true;
 }
 
-bool FontHandler::createFont()
+bool Font::createFont()
 {
 	try
 	{
@@ -55,6 +54,8 @@ bool FontHandler::createFont()
 			fontName.c_str(),							//pointer to Facename
 
 			&font);										//ppFont
+
+
 	}
 	catch (...)
 	{
@@ -64,7 +65,7 @@ bool FontHandler::createFont()
 	return true;
 }
 
-bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
+bool Font::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 {
 	height = h;
 	width = wid;
@@ -106,21 +107,25 @@ bool FontHandler::createFont(int h, UINT wid, UINT wei, bool i, std::string fN)
 	return true;
 }
 
-void FontHandler::print(int x, int y, std::string s)
+void Font::print(int x, int y, std::string s)
 {
-	SetRect(font_rect, x, y, x, y);			// left, top, right, bottom
+	SetRect(font_rect, x, y, x, y);			//	left, top, right, bottom
 
-	font->DrawText(nullptr,			//pointer to Sprite
+	font->DrawText(nullptr,					//	pointer to Sprite
 
-		s.c_str(),					//pointer to String
+		s.c_str(),							//	pointer to String
 
-		-1,							//Count
+		-1,									//	Count
 
-		font_rect,					//pointer to Rect
+		font_rect,							//	pointer to Rect
 
-		DT_LEFT | DT_NOCLIP,		//Format
+		DT_LEFT | DT_NOCLIP,				//	Format
 
-		0xffffffff);				//Color
+		0xffffffff);						//	Color
 }
 
+int Font::getTotalWidth(std::string s)
+{
+	return width * s.length();
+}
 
