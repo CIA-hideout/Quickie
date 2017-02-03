@@ -73,8 +73,8 @@ void quicky::initialize(HWND hWnd) {
 	printf("%s\n", obstacleDoc["test_string"].GetString());
 	fclose(obsFile);
 
-	for (int i = 0; i < vEntities.size(); i++) {
-		Obstacle* tempObs = (Obstacle*) vEntities[i];
+	for (int i = 0; i < qObstacles.size(); i++) {
+		Obstacle* tempObs = (Obstacle*)qObstacles[i];
 		tempObs->assign(obstacleDoc);
 	}
 

@@ -2,12 +2,8 @@
 
 #include "src/game.h"
 #include "src/CollisionManager.h"
-<<<<<<< HEAD
 #include "src/Font.h"
-=======
-#include "src/FontHandler.h"
 #include "src/LevelManager.h"
->>>>>>> Add LevelManager
 #include <math.h>
 #include "src/GUI.h"
 
