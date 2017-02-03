@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include <Mmsystem.h>
+#include <DxErr.h>
 #include <vector>
 
 #include "constants.h"
@@ -12,8 +13,8 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
-
-#include <DxErr.h>
+#include <stack>
+#include "State.h"
 
 #pragma comment(lib, "dxerr.lib")
 
@@ -33,8 +34,7 @@ public:
 	bool						paused;
 	bool						initialized;
 	float						fov;
-
-public:
+	std::stack<State*>			gameState;
 
 	D3DXMATRIX		worldMat;
 
@@ -78,5 +78,4 @@ public:
 	virtual void keyPress(int key) = 0;
 
 	virtual void keyRelease(int key) = 0;
-
 };
