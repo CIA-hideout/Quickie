@@ -121,65 +121,31 @@ void GUI::update()
 
 	case MENU_PLAY:
 		setCurrentStateByInput(MENU_CONTROLS, controls.at(guiNS::CONTROL_DOWN));
+		setCurrentStateByInput(GAME, controls.at(guiNS::CONTROL_RIGHT));
 		break;
 
 	case MENU_CONTROLS:
 		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_UP));
 		setCurrentStateByInput(MENU_HIGHSCORE, controls.at(guiNS::CONTROL_DOWN));
+		setCurrentStateByInput(CONTROLS, controls.at(guiNS::CONTROL_RIGHT));
 		break;
 
 	case MENU_HIGHSCORE:
 		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_UP));
+		setCurrentStateByInput(HIGHSCORE, controls.at(guiNS::CONTROL_RIGHT));
 		break;
 
-	/*case MENU_PLAY:
-		if (input->getKeyState(DOWN_KEY))
-		{
-			if (!input->wasKeyPressed(DOWN_KEY))
-			{
-				setCurrentState(MENU_CONTROLS);
-				input->keysPressed[DOWN_KEY] = true;
-			}
-		}
+	case GAME:
+		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_LEFT));
 
+	case CONTROLS:
+		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_LEFT));
 		break;
 
-	case MENU_CONTROLS:
-		if (input->getKeyState(UP_KEY))
-		{
-			if (!input->wasKeyPressed(UP_KEY))
-			{
-				revertState();
-				input->keysPressed[UP_KEY] = true;
-			}
-		}
-		else
-			input->clearKeyPress(UP_KEY);
-
-		if (input->getKeyState(DOWN_KEY))
-		{
-			if (!input->wasKeyPressed(DOWN_KEY))
-			{
-				setCurrentState(MENU_HIGHSCORE);
-				input->keysPressed[DOWN_KEY] = true;
-			}
-		}
-		else
-			input->clearKeyPress(DOWN_KEY);
-
+	case HIGHSCORE:
+		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_LEFT));
 		break;
 
-	case MENU_HIGHSCORE:
-		if (input->getKeyState(UP_KEY))
-		{
-			if (!input->wasKeyPressed(UP_KEY))
-			{
-				revertState();
-				input->keysPressed[UP_KEY] = true;
-			}
-		}
-		break;
-*/
 	}
 }
 
@@ -190,11 +156,21 @@ void GUI::render()
 	case MENU_PLAY:
 	case MENU_CONTROLS:
 	case MENU_HIGHSCORE:
-		this->renderMenu();
+		renderMenu();
 		break;
 
 	case GAME:
+		renderGame();
 		break;
+
+	case CONTROLS:
+		renderControls();
+		break;
+
+	case HIGHSCORE:
+		renderHighscore();
+		break;
+
 	}
 }
 
@@ -234,3 +210,40 @@ void GUI::renderMenu()
 		}
 	}
 }
+
+void GUI::renderGame()
+{
+	if (setFont("MENU_TITLE"))
+	{
+
+		currentFont->print(
+			GAME_WIDTH / 2 - currentFont->getTotalWidth("YOU ARE IN GAME!") / 2,
+			GAME_HEIGHT / 5,
+			"YOU ARE IN GAME!");
+	}
+}
+
+void GUI::renderControls()
+{
+	if (setFont("MENU_OPTION"))
+	{
+		currentFont->print(
+			GAME_WIDTH / 2 - currentFont->getTotalWidth("SORRY, I CAN'T HELP YOU RIGHT NOW") / 2,
+			GAME_HEIGHT / 5,
+			"SORRY, I CAN'T HELP YOU RIGHT NOW");
+	}
+}
+
+void GUI::renderHighscore()
+{
+	if (setFont("MENU_OPTION"))
+	{
+		currentFont->print(
+			GAME_WIDTH / 2 - currentFont->getTotalWidth("YOU ARE NOT THE TOP SCORER!") / 2,
+			GAME_HEIGHT / 5,
+			"YOU ARE NOT THE TOP SCORER!");
+	}
+}
+
+
+

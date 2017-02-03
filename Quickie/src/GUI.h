@@ -45,6 +45,9 @@ class GUI
 
 	void initFonts();
 	void renderMenu();
+	void renderGame();
+	void renderControls();
+	void renderHighscore();
 	void addFont(std::string text, int height, UINT width, UINT weight, bool italics, std::string fontName);
 
 public:
