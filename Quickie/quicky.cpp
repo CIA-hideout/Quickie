@@ -33,8 +33,8 @@ void quicky::initialize(HWND hWnd) {
 	qObstacles.push_back(o2);
 	qObstacles.push_back(o3);
 	qObstacles.push_back(o4);
-	qEntities.push_back(o5);
-	qEntities.push_back(o6);
+	qObstacles.push_back(o5);
+	qObstacles.push_back(o6);
 
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
@@ -65,6 +65,18 @@ void quicky::initialize(HWND hWnd) {
 
 	gui->initControls(controlDoc);
 
+	// parse obstacles details
+	FILE* obsFile = fopen("resource\\data\\obstacles.json", "rb");
+	char obsBuffer[512];
+	rapidjson::FileReadStream obsStream(obsFile, obsBuffer, sizeof(obsBuffer));
+	obstacleDoc.ParseStream(obsStream);
+	printf("%s\n", obstacleDoc["test_string"].GetString());
+	fclose(obsFile);
+
+	for (int i = 0; i < vEntities.size(); i++) {
+		Obstacle* tempObs = (Obstacle*) vEntities[i];
+		tempObs->assign(obstacleDoc);
+	}
 
 	lManager->setLevelOne(qObstacles);
 

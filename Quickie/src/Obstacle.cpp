@@ -252,3 +252,32 @@ D3DXVECTOR3 Obstacle::getRandomDimension()
 	
 	return dimensions.front(); // use first value of random vector
 }
+
+void Obstacle::assign(rapidjson::Document& doc)
+{
+	lvl1Pos = D3DXVECTOR3(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_z"].GetFloat()
+	);
+	lvl1Dim = assignDimension(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_dim"].GetInt());
+
+}
+
+D3DXVECTOR3 Obstacle::assignDimension(int type){
+	switch (type) {
+		case 0: return DIMENSION_HORIZONTAL_SMALL;
+		case 1: return DIMENSION_HORIZONTAL_MEDIUM;
+		case 2: return DIMENSION_HORIZONTAL_LARGE;
+		case 3: return DIMENSION_VERTICAL_SMALL;
+		case 4: return DIMENSION_VERTICAL_MEDIUM;
+		case 5: return DIMENSION_VERTICAL_LARGE;
+	}
+}
+
+void Obstacle::setLevel1()
+{
+	setPosition(lvl1Pos);
+	setDimension(lvl1Dim);
+}

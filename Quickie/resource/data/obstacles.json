@@ -1,6 +1,6 @@
 {
 	"test_string": "JSON Obstacle File",
-	"Obstacle":
+	"obstacle":
 		[
 			{
 				"lvl_1_pos_x": 0,
@@ -34,9 +34,9 @@
 			},
 			{
                 "lvl_1_pos_x": -12,
-                "lvl_1_pos_y": 10,
+                "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 5
+                "lvl_1_dim"  : 2
 			}
 		]
 }

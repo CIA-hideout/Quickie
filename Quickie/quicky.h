@@ -22,6 +22,7 @@ public:
 	std::vector<VertexShape*>	qPlayer;
 	LevelManager*				lManager;
 	rapidjson::Document			controlDoc;
+	rapidjson::Document			obstacleDoc;
 
 	quicky();
 

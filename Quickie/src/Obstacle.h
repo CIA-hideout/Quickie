@@ -3,12 +3,18 @@
 #include "VertexShape.h"
 
 class Obstacle : public VertexShape {
-
 private:
 	int obstacleId;
 	int spawnMinX;
 	int spawnMaxX;
 	float timer = 0;		// a timer to move/change direction
+
+	D3DXVECTOR3 lvl1Pos;
+	D3DXVECTOR3 lvl1Dim;
+	D3DXVECTOR3 lvl2Pos;
+	D3DXVECTOR3 lvl2Dim;
+	D3DXVECTOR3 lvl3Pos;
+	D3DXVECTOR3 lvl3Dim;
 
 public:
 	Obstacle() = default;
@@ -25,5 +31,10 @@ public:
 	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 getRandomDimension();
 
-	//void assignPosition
+	// set Levels location
+	void setLevel1();
+
+	// assign position from json
+	void assign(rapidjson::Document&);
+	D3DXVECTOR3 assignDimension(int);
 };

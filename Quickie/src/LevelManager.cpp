@@ -33,8 +33,6 @@ void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 {
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*) vS[i];
-
-		tempObs->setPosition(lvlOnePos[i]);
-		tempObs->setDimension(lvlOneDimension[i]);
+		tempObs->setLevel1();
 	}
 }
