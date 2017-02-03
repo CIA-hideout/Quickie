@@ -8,21 +8,13 @@ enum CooldownType {
 	COOLDOWN_TELEPORT
 };
 
-enum Control {
-	CONTROL_UP,
-	CONTROL_DOWN,
-	CONTROL_LEFT,
-	CONTROL_RIGHT,
-	CONTROL_BL,
-	CONTROL_TP
-};
-
 class Player : public VertexShape {
 public:
 
 	std::map<CooldownType, float>	cooldown;
 	std::map<Control, int>			controls;
 	int								playerId;
+	int								health;
 
 	Player() = default;
 	~Player();
@@ -40,5 +32,11 @@ public:
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport();
 	void assignControl(rapidjson::Document&);
+	
+	// GET
+	int getHealth(){ return health; }
+
+	// SET
+	int setHealth(){ return health; }
 
 };

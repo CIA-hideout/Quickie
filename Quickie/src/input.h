@@ -14,6 +14,15 @@ namespace inputNS
 	const int				KEYS_ARR_LENGTH = 256;
 }
 
+enum Control {
+	CONTROL_UP,
+	CONTROL_DOWN,
+	CONTROL_LEFT,
+	CONTROL_RIGHT,
+	CONTROL_BL,
+	CONTROL_TP
+};
+
 class Input {
 
 private:

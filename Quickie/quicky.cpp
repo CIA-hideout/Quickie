@@ -6,8 +6,10 @@ Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0
 Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -10, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 
+Obstacle* hp = new Obstacle(D3DXVECTOR3(6, 5, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
-Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));	
 
 quicky::quicky() {
 
@@ -30,15 +32,17 @@ void quicky::initialize(HWND hWnd) {
 	qObstacles.push_back(o2);
 	qObstacles.push_back(o3);
 	qObstacles.push_back(o4);
+	qObstacles.push_back(hp);
 
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
 
-	// GUI initialization
-	gui = new GUI();
+	// Initialize menu
+	Menu* menu = new Menu();
+	menu->initialize(this->getGraphics(), this->getInput());
 
-	if (!gui->initialize(this))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
+	// Start game state in menu
+	gameState.push(menu);
 
 	// parse player control
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
@@ -58,12 +62,12 @@ void quicky::initialize(HWND hWnd) {
 		temp->assignControl(controlDoc);
 	}
 
-	gui->initControls(controlDoc);
+	menu->initControls(controlDoc);
 }
 
 void quicky::update() {
 
-	gui->update();
+	gameState.top()->update();
 
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {
@@ -90,7 +94,7 @@ void quicky::update() {
 	// printf("POS %.2f, %.2f\n", out.x, out.y);
 	out2 = D3DXVECTOR2(out1.x, out1.y);
 	graphics->camera->pointInWorld(out1, out2, 19);
-	printf("PIW %.2f, %.2f, actual pos: %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
+	//printf("PIW %.2f, %.2f, actual pos: %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
 }
 
 void quicky::ai() {
@@ -112,7 +116,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	gui->render();
+	gameState.top()->render();
 }
 
 void quicky::releaseAll() {

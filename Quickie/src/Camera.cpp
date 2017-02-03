@@ -118,7 +118,7 @@ void Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos, D3DXMATRIX& w) {
 	pOut.y = vp.Height / 2 - vp.Height * v4.y / 2 / projection(1, 1);
 	pOut.z = 0;
 
-	printf("%.2f, %.2f, ", pOut.x, pOut.y);
+	//printf("%.2f, %.2f, ", pOut.x, pOut.y);
 
 }
 
