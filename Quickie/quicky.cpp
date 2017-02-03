@@ -34,17 +34,13 @@ void quicky::initialize(HWND hWnd) {
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
 
-	//Implement basic font support
-	font = new FontHandler();
+	// GUI initialization
+	gui = new GUI();
 
-	if (!font->initialize(graphics))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE FONT"));
-
-	if (!font->createFont(FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, FONT_NAME))					// height, width, weight, italics, Font Name
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO CREATE FONT"));
+	if (!gui->initialize(this))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
 
 	// parse player control
-
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
 	char controlBuffer[512];
 	rapidjson::FileReadStream is(controlFile, controlBuffer, sizeof(controlBuffer));
@@ -61,9 +57,14 @@ void quicky::initialize(HWND hWnd) {
 		temp->init(this);
 		temp->assignControl(controlDoc);
 	}
+
+	gui->initControls(controlDoc);
 }
 
 void quicky::update() {
+
+	gui->update();
+
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {
 			QLine* temp = (QLine*)qObstacles[i];
@@ -82,6 +83,7 @@ void quicky::update() {
 
 	// push all temp stuff into respective vectors
 
+	
 	D3DXVECTOR3 out1;
 	D3DXVECTOR2 out2;
 	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);
@@ -89,7 +91,6 @@ void quicky::update() {
 	out2 = D3DXVECTOR2(out1.x, out1.y);
 	graphics->camera->pointInWorld(out1, out2, 19);
 	printf("PIW %.2f, %.2f, actual pos: %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
-
 }
 
 void quicky::ai() {
@@ -111,7 +112,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	// font->print(500, 500, "AIR AMERICANA");
+	gui->render();
 }
 
 void quicky::releaseAll() {

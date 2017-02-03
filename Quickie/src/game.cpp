@@ -134,7 +134,6 @@ void Game::run(HWND hwnd) {
 	input->update();
 	ai();                       // artificial intelligence
 	collisions();               // handle collisions
-
 	renderGame();
 }
 
