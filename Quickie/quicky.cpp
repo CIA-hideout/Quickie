@@ -57,6 +57,8 @@ void quicky::initialize(HWND hWnd) {
 		temp->init(this);
 		temp->assignControl(controlDoc);
 	}
+
+	gui->initControls(controlDoc);
 }
 
 void quicky::update() {

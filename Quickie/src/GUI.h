@@ -15,17 +15,26 @@ enum State
 	GAME,					// hud;				during gameplay
 	INSTRUCTIONS,			// instructions;	during 1st gameplay only
 	CONTROLS,				// instructions;	in the menu
-	HIGHSCORE				// leaderboard;		in the menu
+	HIGHSCORE,				// leaderboard;		in the menu
+	REVERT
 };
 
 namespace guiNS
 {
 	const std::string				options[] = {"Play!", "Controls", "Highscore"};
 	const int						optionsLength = 3;
+
+	enum Control {
+		CONTROL_UP,
+		CONTROL_DOWN,
+		CONTROL_LEFT,
+		CONTROL_RIGHT,
+	};
 }
 
 class GUI
 {
+	std::map<guiNS::Control, int>	controls;
 	std::stack<State>*				stateStack;
 	std::map<std::string, Font*>	fontMap;
 	Font*							currentFont;
@@ -35,7 +44,6 @@ class GUI
 	int								selectedItemIndex;
 
 	void initFonts();
-	//void initControls(rapidjson::Document&);
 	void renderMenu();
 	void addFont(std::string text, int height, UINT width, UINT weight, bool italics, std::string fontName);
 
@@ -43,9 +51,11 @@ public:
 	GUI();
 	~GUI();
 	bool initialize(Game* game);
+	void initControls(rapidjson::Document&);
 	void update();
 	void render();
 	void setCurrentState(State s);
+	void setCurrentStateByInput(State s, int);
 	void revertState(){ stateStack->pop(); };
 
 

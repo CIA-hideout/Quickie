@@ -7,7 +7,13 @@ GUI::GUI()
 	fontMap = std::map<std::string, Font*>();
 	graphics = nullptr;
 	input = nullptr;
+	game = nullptr;
 	selectedItemIndex = 0;
+
+	controls.insert(std::pair<guiNS::Control, int>(guiNS::CONTROL_UP, 0.1f));
+	controls.insert(std::pair<guiNS::Control, int>(guiNS::CONTROL_DOWN, 0.1f));
+	controls.insert(std::pair<guiNS::Control, int>(guiNS::CONTROL_LEFT, 0.1f));
+	controls.insert(std::pair<guiNS::Control, int>(guiNS::CONTROL_RIGHT, 0.1f));
 }
 
 GUI::~GUI(){}
@@ -36,6 +42,15 @@ void GUI::initFonts()
 	this->addFont("MENU_TITLE", FONT_HEIGHT * 1.5, FONT_WIDTH * 1.5, FONT_WEIGHT, FONT_ITALICS, FONT_NAME);
 	this->addFont("MENU_OPTION", FONT_HEIGHT, FONT_WIDTH, FONT_WEIGHT, FONT_ITALICS, "yorkbailehill");
 }
+
+void GUI::initControls(rapidjson::Document& doc)
+{
+	controls.at(guiNS::CONTROL_UP) = doc["control"].GetArray()[0]["up"].GetInt();
+	controls.at(guiNS::CONTROL_DOWN) = doc["control"].GetArray()[0]["down"].GetInt();
+	controls.at(guiNS::CONTROL_LEFT) = doc["control"].GetArray()[0]["left"].GetInt();
+	controls.at(guiNS::CONTROL_RIGHT) = doc["control"].GetArray()[0]["right"].GetInt();
+}
+
 
 void GUI::addFont(std::string s, int h, UINT wid, UINT wei, bool i, std::string fN)
 {
@@ -68,18 +83,65 @@ void GUI::setCurrentState(State s)
 		stateStack->push(s);
 }
 
+void GUI::setCurrentStateByInput(State s, int c)
+{
+	if (s == REVERT)
+	{
+		if (input->getKeyState(c))
+		{
+			if (!input->wasKeyPressed(c))
+			{
+				stateStack->pop();
+				input->keysPressed[c] = true;
+			}
+		}
+		else
+			input->clearKeyPress(c);
+	}
+	else
+	{
+		if (input->getKeyState(c))
+		{
+			if (!input->wasKeyPressed(c))
+			{
+				if (stateStack->top() != s)
+					stateStack->push(s);
+				input->keysPressed[c] = true;
+			}
+		}
+		else
+			input->clearKeyPress(c);
+	}
+}
+
 void GUI::update()
 {
-
 	switch (stateStack->top())
 	{
 
 	case MENU_PLAY:
+		setCurrentStateByInput(MENU_CONTROLS, controls.at(guiNS::CONTROL_DOWN));
+		break;
+
+	case MENU_CONTROLS:
+		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_UP));
+		setCurrentStateByInput(MENU_HIGHSCORE, controls.at(guiNS::CONTROL_DOWN));
+		break;
+
+	case MENU_HIGHSCORE:
+		setCurrentStateByInput(REVERT, controls.at(guiNS::CONTROL_UP));
+		break;
+
+	/*case MENU_PLAY:
 		if (input->getKeyState(DOWN_KEY))
 		{
-			setCurrentState(MENU_CONTROLS);
-			input->keysPressed[DOWN_KEY] = true;
+			if (!input->wasKeyPressed(DOWN_KEY))
+			{
+				setCurrentState(MENU_CONTROLS);
+				input->keysPressed[DOWN_KEY] = true;
+			}
 		}
+
 		break;
 
 	case MENU_CONTROLS:
@@ -104,16 +166,20 @@ void GUI::update()
 		}
 		else
 			input->clearKeyPress(DOWN_KEY);
-			
+
 		break;
 
 	case MENU_HIGHSCORE:
 		if (input->getKeyState(UP_KEY))
 		{
-			revertState();
-			input->keysPressed[UP_KEY] = true;
+			if (!input->wasKeyPressed(UP_KEY))
+			{
+				revertState();
+				input->keysPressed[UP_KEY] = true;
+			}
 		}
-			
+		break;
+*/
 	}
 }
 
