@@ -93,8 +93,8 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 
 	viewPort.Height = h;
 	viewPort.Width = w;
-	viewPort.MaxZ = 1.0f;
-	viewPort.MinZ = 0.0f;
+	viewPort.MaxZ = 1000.0f;
+	viewPort.MinZ = 1.0f;
 	viewPort.X = 0;
 	viewPort.Y = 0;
 
