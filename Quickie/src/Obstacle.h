@@ -33,6 +33,8 @@ public:
 
 	// set Levels location
 	void setLevel1();
+	void setLevel2();
+	void setLevel3();
 
 	// assign position from json
 	void assign(rapidjson::Document&);

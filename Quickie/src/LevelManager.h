@@ -26,9 +26,6 @@ public:
 	LevelManager();
 	~LevelManager();
 
-	// To store location of obs
-	void storeLvlOnePos();
-
 	// Set Different Levels during the Gameplay
 	void setLevelOne(std::vector<VertexShape*>);		// set Lvl 1
 	void setLevelTwo(std::vector<VertexShape*>);		// set Lvl 2

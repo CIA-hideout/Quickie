@@ -30,16 +30,7 @@
 #define DIMENSION_VERTICAL_SMALL	D3DXVECTOR3(1.5,  6, 0.5)
 #define DIMENSION_VERTICAL_MEDIUM	D3DXVECTOR3(1.5, 12, 0.5)
 #define DIMENSION_VERTICAL_LARGE	D3DXVECTOR3(1.5, 25, 0.5)
-
-
-// define position of levelOne Obstacles
-#define LVL_ONE_OBS_1	D3DXVECTOR3(0, 10, 19.5)
-#define LVL_ONE_OBS_2	D3DXVECTOR3(-5, 0, 19.5)
-#define LVL_ONE_OBS_3	D3DXVECTOR3(0, -10, 19.5)
-#define LVL_ONE_OBS_4	D3DXVECTOR3(5, 0, 19.5)
-#define LVL_ONE_OBS_5   D3DXVECTOR3(12, 0, 19.5)
-#define LVL_ONE_OBS_6	D3DXVECTOR3(-12, 0, 19.5)
-
+#define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)		// use if obstacles are not needed
 
 //-----------------------------------------------
 // Useful macros
