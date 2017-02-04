@@ -31,7 +31,8 @@ public:
 	void setLevelTwo(std::vector<VertexShape*>);		// set Lvl 2
 	void setLevelThree(std::vector<VertexShape*>);	// set Lvl 3
 	void setRandomLevel(std::vector<VertexShape*>);	// randomly set the levels
-	
+	void assignRandomLevel();	// randomly set the levels
+
 
 private:
 	float timer = 0;
@@ -40,10 +41,11 @@ private:
 	int maxY = 18;		// max value for Y coordinates
 	int minY = -18;		// min value for Y coordinates
 	double zAxis = 19.5;
+	boolean isRandom = false;
+
+	std::vector<int> randomLevel;
 
 	std::vector<D3DXVECTOR3> lvlOnePos;
 	std::vector<D3DXVECTOR3> lvlTwoPos;
 	std::vector<D3DXVECTOR3> lvlThreePos;
-
-	std::vector<D3DXVECTOR3> lvlOneDimension;
 };
