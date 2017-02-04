@@ -97,7 +97,6 @@
   <ItemGroup>
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Font.cpp" />
-    <ClCompile Include="src\GUI.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -115,7 +114,6 @@
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Font.h" />
-    <ClInclude Include="src\GUI.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Player.h" />
