@@ -6,37 +6,97 @@
 				"lvl_1_pos_x": 0,
                 "lvl_1_pos_y": 10,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 1
+                "lvl_1_dim"  : 1,
+
+				"lvl_2_pos_x": 0,
+                "lvl_2_pos_y": 0,
+                "lvl_2_pos_z": 19.5,
+                "lvl_2_dim"  : 1,
+
+				"lvl_3_pos_x": 0,
+                "lvl_3_pos_y": 10,
+                "lvl_3_pos_z": 19.5,
+                "lvl_3_dim"  : 2
 			},
 			{
                 "lvl_1_pos_x": -5,
                 "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 4
+                "lvl_1_dim"  : 4,
+
+				"lvl_2_pos_x": -8,
+                "lvl_2_pos_y": 7,
+                "lvl_2_pos_z": 19.5,
+                "lvl_2_dim"  : 1,
+
+				"lvl_3_pos_x": 0,
+                "lvl_3_pos_y": -10,
+                "lvl_3_pos_z": 19.5,
+                "lvl_3_dim"  : 2
 			},
 			{
                 "lvl_1_pos_x": 0,
                 "lvl_1_pos_y": -10,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 1
+                "lvl_1_dim"  : 1,
+
+				"lvl_2_pos_x": -14,
+                "lvl_2_pos_y": 14,
+                "lvl_2_pos_z": 19.5,
+                "lvl_2_dim"  : 1,
+
+				"lvl_3_pos_x": -12,
+                "lvl_3_pos_y": 0,
+                "lvl_3_pos_z": 19.5,
+                "lvl_3_dim"  : 2
 			},
 			{
                 "lvl_1_pos_x": 5,
                 "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 4
+                "lvl_1_dim"  : 4,
+
+				"lvl_2_pos_x": 8,
+                "lvl_2_pos_y": -7,
+                "lvl_2_pos_z": 19.5,
+                "lvl_2_dim"  : 1,
+
+				"lvl_3_pos_x": 12,
+                "lvl_3_pos_y": 0,
+                "lvl_3_pos_z": 19.5,
+                "lvl_3_dim"  : 2
 			},
 			{
                 "lvl_1_pos_x": 12,
                 "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 2
+                "lvl_1_dim"  : 2,
+
+				"lvl_2_pos_x": 14,
+                "lvl_2_pos_y": -14,
+                "lvl_2_pos_z": 19.5,
+                "lvl_2_dim"  : 1,
+
+				"lvl_3_pos_x": 0,
+                "lvl_3_pos_y": 0,
+                "lvl_3_pos_z": 19.5,
+                "lvl_3_dim"  : 6
 			},
 			{
                 "lvl_1_pos_x": -12,
                 "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
-                "lvl_1_dim"  : 2
+                "lvl_1_dim"  : 2,
+
+				"lvl_2_pos_x": 0,
+                "lvl_2_pos_y": 0,
+                "lvl_2_pos_z": 19.5,
+                "lvl_2_dim"  : 6,
+
+				"lvl_3_pos_x": 0,
+                "lvl_3_pos_y": 0,
+                "lvl_3_pos_z": 19.5,
+                "lvl_3_dim"  : 6
 			}
 		]
 }
