@@ -4,6 +4,8 @@
 
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() 
 {
+	static int obstacleCount = 0;
+	obstacleId = obstacleCount++;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -33,6 +35,9 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 // Create a new obstructor with almost RANDOM variables
 Obstacle::Obstacle(const int location[]) : VertexShape()
 {
+	static int obstacleCount = 0;
+	obstacleId = obstacleCount++;
+
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	
@@ -158,7 +163,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 }
 
 void Obstacle::update(float deltaTime) {
-
+	//timer += deltaTime;
 }
 
 // Randomly generate a color and returns the value
@@ -189,22 +194,56 @@ void Obstacle::setColor(D3DXVECTOR3 newColor)
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	for (int i = 0; i < vertexCount; i++) {
-		v->color = D3DCOLOR_RGBA( (int) newColor.x, (int)newColor.y, 
-			(int) newColor.z, 255);
+		v->color = D3DCOLOR_RGBA( int (newColor.x), int (newColor.y), 
+			int (newColor.z), 255);
 		v++;
 	}
 
 	meshPtr->UnlockIndexBuffer();
+}
 
+// set position of obstacle
+void Obstacle::setPosition(D3DXVECTOR3 newPos)
+{
+	pos.x = newPos.x;
+	pos.y = newPos.y;
+	pos.z = newPos.z;
+}
+
+// set Dimensions
+void Obstacle::setDimension(D3DXVECTOR3 newDimension)
+{
+	dimension = newDimension;
+
+	meshPtr->LockVertexBuffer(0, (void**)&vertices);
+
+	// 0
+	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 1						 
+	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 2						 
+	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 3						 
+	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 4						 
+	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 5						 
+	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 6						 
+	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+	// 7						 
+	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
+
+	meshPtr->UnlockVertexBuffer();
 }
 
 // generate a random size for the obstructor and returns the size
 D3DXVECTOR3 Obstacle::getRandomDimension()
 {
 	std::vector<D3DXVECTOR3> dimensions;
-	dimensions.push_back(DIMENSION_SMALL);
-	dimensions.push_back(DIMENSION_MEDIUM);
-	dimensions.push_back(DIMENSION_MEDIUM);
+	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
+	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
+	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
 	// medium size to appear more frequently
 
 	std::random_device rd;     // only used once to initialise (seed) engine
@@ -212,4 +251,33 @@ D3DXVECTOR3 Obstacle::getRandomDimension()
 	std::shuffle(dimensions.begin(), dimensions.end(), rng); //ramdomise vector
 	
 	return dimensions.front(); // use first value of random vector
+}
+
+void Obstacle::assign(rapidjson::Document& doc)
+{
+	lvl1Pos = D3DXVECTOR3(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_z"].GetFloat()
+	);
+	lvl1Dim = assignDimension(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_dim"].GetInt());
+
+}
+
+D3DXVECTOR3 Obstacle::assignDimension(int type){
+	switch (type) {
+		case 0: return DIMENSION_HORIZONTAL_SMALL;
+		case 1: return DIMENSION_HORIZONTAL_MEDIUM;
+		case 2: return DIMENSION_HORIZONTAL_LARGE;
+		case 3: return DIMENSION_VERTICAL_SMALL;
+		case 4: return DIMENSION_VERTICAL_MEDIUM;
+		case 5: return DIMENSION_VERTICAL_LARGE;
+	}
+}
+
+void Obstacle::setLevel1()
+{
+	setPosition(lvl1Pos);
+	setDimension(lvl1Dim);
 }

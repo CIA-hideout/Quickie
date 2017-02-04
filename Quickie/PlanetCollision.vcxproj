@@ -98,6 +98,7 @@
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GUI.cpp" />
+    <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\GUI.h" />
+    <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\Input.h" />
@@ -162,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\data\control.json" />
+    <None Include="resource\data\obstacles.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

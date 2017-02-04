@@ -5,12 +5,15 @@ Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 10, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0
 Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -10, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o5 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o6 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+
 
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
 quicky::quicky() {
-
+	lManager = new LevelManager();
 }
 
 quicky::~quicky() {
@@ -30,6 +33,8 @@ void quicky::initialize(HWND hWnd) {
 	qObstacles.push_back(o2);
 	qObstacles.push_back(o3);
 	qObstacles.push_back(o4);
+	qObstacles.push_back(o5);
+	qObstacles.push_back(o6);
 
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
@@ -59,6 +64,24 @@ void quicky::initialize(HWND hWnd) {
 	}
 
 	gui->initControls(controlDoc);
+
+	// parse obstacles details
+	FILE* obsFile = fopen("resource\\data\\obstacles.json", "rb");
+	char obsBuffer[512];
+	rapidjson::FileReadStream obsStream(obsFile, obsBuffer, sizeof(obsBuffer));
+	obstacleDoc.ParseStream(obsStream);
+	printf("%s\n", obstacleDoc["test_string"].GetString());
+	fclose(obsFile);
+
+	for (int i = 0; i < qObstacles.size(); i++) {
+		Obstacle* tempObs = (Obstacle*)qObstacles[i];
+		tempObs->assign(obstacleDoc);
+	}
+
+	lManager->setLevelOne(qObstacles);
+
+	sqr1->assignControl(controlDoc);
+	sqr2->assignControl(controlDoc);
 }
 
 void quicky::update() {
@@ -83,7 +106,7 @@ void quicky::update() {
 
 	// push all temp stuff into respective vectors
 
-	
+
 	D3DXVECTOR3 out1;
 	D3DXVECTOR2 out2;
 	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);

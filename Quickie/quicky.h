@@ -3,6 +3,7 @@
 #include "src/game.h"
 #include "src/CollisionManager.h"
 #include "src/Font.h"
+#include "src/LevelManager.h"
 #include <math.h>
 #include "src/GUI.h"
 
@@ -15,7 +16,9 @@ public:
 	CollisionManager*			cManager;
 	std::vector<VertexShape*>	qObstacles;
 	std::vector<VertexShape*>	qPlayer;
+	LevelManager*				lManager;
 	rapidjson::Document			controlDoc;
+	rapidjson::Document			obstacleDoc;
 
 	quicky();
 
