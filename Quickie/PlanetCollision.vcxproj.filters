@@ -53,7 +53,7 @@
     </ClCompile>
     <ClCompile Include="src\LevelManager.cpp">
         <Filter>Source Files</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="src\State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
