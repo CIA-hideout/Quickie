@@ -30,7 +30,8 @@
 #define DIMENSION_VERTICAL_SMALL	D3DXVECTOR3(1.5,  6, 0.5)
 #define DIMENSION_VERTICAL_MEDIUM	D3DXVECTOR3(1.5, 12, 0.5)
 #define DIMENSION_VERTICAL_LARGE	D3DXVECTOR3(1.5, 25, 0.5)
-#define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)		// use if obstacles are not needed
+#define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)			// use if obstacles are not needed
+#define DIMENSION_ALMOST_ZERO		D3DXVECTOR3(0.01, 0.01, 0.01)	// use for scaling as 0 * n = 0
 
 //-----------------------------------------------
 // Useful macros
@@ -70,3 +71,6 @@ const float FOV = PI * 0.5;
 const int SPAWN_LEFT[] = {-15, -5 };	// -15 < pos.x < -5
 const int SPAWN_CENTER[] = {-5, 5};		// - 5 < pos.x <  5
 const int SPAWN_RIGHT[] = {5, 15};		//   5 < pos.x < 15
+
+// game time between each level
+const float LEVEL_TIME = 10.0f;

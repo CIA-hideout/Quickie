@@ -1,4 +1,4 @@
-/* To manage the generation and moving of obstacles for each level
+/* To manage the location of the obstacles in each levels
  * 
  */
 
@@ -26,6 +26,8 @@ public:
 	LevelManager();
 	~LevelManager();
 
+	void update(float, std::vector<VertexShape*>);
+
 	// Set Different Levels during the Gameplay
 	void setLevelOne(std::vector<VertexShape*>);		// set Lvl 1
 	void setLevelTwo(std::vector<VertexShape*>);		// set Lvl 2
@@ -40,6 +42,7 @@ private:
 	int minX = -15;		// min value for X coordinates
 	int maxY = 18;		// max value for Y coordinates
 	int minY = -18;		// min value for Y coordinates
+	int levelCount = 0;
 	double zAxis = 19.5;
 	boolean isRandom = false;
 

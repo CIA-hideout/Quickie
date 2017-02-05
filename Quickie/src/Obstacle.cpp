@@ -29,7 +29,6 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 	velocity.x = 0;
 	velocity.y = 0;
-
 }
 
 // Create a new obstructor with almost RANDOM variables
@@ -84,7 +83,6 @@ Obstacle::~Obstacle() {
 
 void Obstacle::init(Game* gamePtr)
 {
-
 	this->game = gamePtr;
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
 
@@ -162,8 +160,84 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 }
 
-void Obstacle::update(float deltaTime) {
-	//timer += deltaTime;
+
+void Obstacle::update(float deltaTime)
+{	
+	timer += deltaTime;
+
+	switch (currentState)
+	{
+		case INACTIVE:
+			// change to new position
+			if (newPos != pos)
+				setPosition(newPos);
+
+			if (newPos != DIMENSION_NON_EXISTANT)
+				currentState = GROW;
+
+			break;
+
+		case ACTIVE:
+			break;
+
+	case SHRINK:
+			// update size of obstacle 
+			if (timer >= 0.05f) {
+
+				D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);	//matrix for shrinking
+				D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+				setDimension(dimension);
+				timer = 0;
+
+				/* Avoid Zeno Dichotomy Paradox
+				 * If you divide by half and so on repeatedly,
+				 * you will continue dividing forever and never reach the end.
+				 * So we will set dimensions to 0, when we hit a number close to 0
+				 */
+				if (dimension.x <= 0.01)
+					dimension.x = 0;
+
+				if (dimension.y <= 0.01)
+					dimension.y = 0;
+
+				if (dimension.z <= 0.01)
+					dimension.z = 0;
+
+				if (dimension == DIMENSION_NON_EXISTANT)
+					currentState = INACTIVE;	// change to inactive when dimension are 0		
+			}
+			break;
+
+		case GROW:
+			//  0 * a real number is 0
+			//	change dimensions to something which can be multiplied
+			if (dimension == DIMENSION_NON_EXISTANT)
+				setDimension(DIMENSION_ALMOST_ZERO);
+
+			// update size of obstacle 
+			if (timer >= 0.05f)
+			{
+				D3DXMatrixScaling(&matScale, 1.5f, 1.5f, 1.5f); //matrix for growing
+				D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+				setDimension(dimension);
+				timer = 0;
+
+				if (dimension.x > newDimension.x)
+					dimension.x = newDimension.x;
+
+				if (dimension.y > newDimension.y)
+					dimension.y = newDimension.y;
+
+				if (dimension.z > newDimension.z)
+					dimension.z = newDimension.z;
+
+				if (dimension == newDimension)
+					currentState = ACTIVE;	// change to active when dimension are the same		
+			}
+			break;
+
+		default: break;
+	}
 }
 
 // Randomly generate a color and returns the value
@@ -296,20 +370,29 @@ D3DXVECTOR3 Obstacle::assignDimension(int type){
 	}
 }
 
-void Obstacle::setLevel1()
+void Obstacle::setLevel1(int count)
 {
-	setPosition(lvl1Pos);
-	setDimension(lvl1Dim);
+	newPos = lvl1Pos;
+	newDimension = lvl1Dim;
+	
+	if (count != 0)
+		currentState = SHRINK;
 }
 
-void Obstacle::setLevel2()
+void Obstacle::setLevel2(int count)
 {
-	setPosition(lvl2Pos);
-	setDimension(lvl2Dim);
+	newPos = lvl2Pos;
+	newDimension = lvl2Dim;
+	
+	if (count != 0)
+		currentState = SHRINK;
 }
 
-void Obstacle::setLevel3()
+void Obstacle::setLevel3(int count)
 {
-	setPosition(lvl3Pos);
-	setDimension(lvl3Dim);
+	newPos = lvl3Pos;
+	newDimension = lvl3Dim;
+	
+	if (count != 0)
+		currentState = SHRINK;
 }
