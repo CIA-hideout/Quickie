@@ -32,6 +32,7 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
+	cooldown.insert(std::pair <CooldownType, float>(INVULNERABLE, 0.0f));
 
 	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
 	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
@@ -97,6 +98,7 @@ void Player::init(Game* gamePtr) {
 
 	visible = true;
 	alive = true;
+	health = 3;
 
 }
 
@@ -192,17 +194,16 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	D3DXVECTOR3 poi;
 
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OT_QL && vS[i]->alive == true) {
+		if (vS[i]->objectType == OT_QL && vS[i]->alive == true && cooldown.at(INVULNERABLE) <= 0) {
 			qTemp = (QLine*)vS[i];
 			if (qTemp->parent != this) {
 				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-
-					// collision happened
-					this->visible = false;
-
-					// add this to a list of things to be deleted or something
-					this->alive = false;
-
+					this->health--;
+					if (health <= 0) {
+						this->alive = false;
+						this->visible = false;
+					}
+					cooldown.at(INVULNERABLE) = 2.0f;
 				}
 			}
 		}

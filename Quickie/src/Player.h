@@ -5,7 +5,8 @@
 
 enum CooldownType {
 	COOLDOWN_BLINK,
-	COOLDOWN_TELEPORT
+	COOLDOWN_TELEPORT,
+	INVULNERABLE
 };
 
 enum Control {
@@ -23,6 +24,7 @@ public:
 	std::map<CooldownType, float>	cooldown;
 	std::map<Control, int>			controls;
 	int								playerId;
+	int								health;
 
 	Player() = default;
 	~Player();
