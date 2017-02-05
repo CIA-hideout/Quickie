@@ -8,6 +8,7 @@ private:
 	int spawnMinX;
 	int spawnMaxX;
 	float timer = 0;		// a timer to move/change direction
+	boolean isRandom = false;
 
 	D3DXVECTOR3 lvl1Pos;
 	D3DXVECTOR3 lvl1Dim;
@@ -33,6 +34,8 @@ public:
 
 	// set Levels location
 	void setLevel1();
+	void setLevel2();
+	void setLevel3();
 
 	// assign position from json
 	void assign(rapidjson::Document&);

@@ -255,6 +255,7 @@ D3DXVECTOR3 Obstacle::getRandomDimension()
 
 void Obstacle::assign(rapidjson::Document& doc)
 {
+	// store level 1 stuff
 	lvl1Pos = D3DXVECTOR3(
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_y"].GetFloat(),
@@ -263,16 +264,35 @@ void Obstacle::assign(rapidjson::Document& doc)
 	lvl1Dim = assignDimension(
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_dim"].GetInt());
 
+	// store level 2 stuff
+	lvl2Pos = D3DXVECTOR3(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_z"].GetFloat()
+		);
+	lvl2Dim = assignDimension(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_dim"].GetInt());
+
+	// store level 3 stuff
+	lvl3Pos = D3DXVECTOR3(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_z"].GetFloat()
+		);
+	lvl3Dim = assignDimension(
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_dim"].GetInt());
+
 }
 
 D3DXVECTOR3 Obstacle::assignDimension(int type){
 	switch (type) {
-	case 0: return DIMENSION_HORIZONTAL_SMALL;
-	case 1: return DIMENSION_HORIZONTAL_MEDIUM;
-	case 2: return DIMENSION_HORIZONTAL_LARGE;
-	case 3: return DIMENSION_VERTICAL_SMALL;
-	case 4: return DIMENSION_VERTICAL_MEDIUM;
-	case 5: return DIMENSION_VERTICAL_LARGE;
+		case 0: return DIMENSION_HORIZONTAL_SMALL;
+		case 1: return DIMENSION_HORIZONTAL_MEDIUM;
+		case 2: return DIMENSION_HORIZONTAL_LARGE;
+		case 3: return DIMENSION_VERTICAL_SMALL;
+		case 4: return DIMENSION_VERTICAL_MEDIUM;
+		case 5: return DIMENSION_VERTICAL_LARGE;
+		case 6: return DIMENSION_NON_EXISTANT;
 	}
 }
 
@@ -280,4 +300,16 @@ void Obstacle::setLevel1()
 {
 	setPosition(lvl1Pos);
 	setDimension(lvl1Dim);
+}
+
+void Obstacle::setLevel2()
+{
+	setPosition(lvl2Pos);
+	setDimension(lvl2Dim);
+}
+
+void Obstacle::setLevel3()
+{
+	setPosition(lvl3Pos);
+	setDimension(lvl3Dim);
 }

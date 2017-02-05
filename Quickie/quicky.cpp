@@ -75,7 +75,7 @@ void quicky::initialize(HWND hWnd) {
 		tempObs->assign(obstacleDoc);
 	}
 
-	lManager->setLevelOne(qObstacles);
+	lManager->setRandomLevel(qObstacles);
 
 	sqr1->assignControl(controlDoc);
 	sqr2->assignControl(controlDoc);
