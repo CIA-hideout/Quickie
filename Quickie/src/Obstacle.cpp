@@ -169,8 +169,7 @@ void Obstacle::update(float deltaTime)
 	{
 		case INACTIVE:
 			// change to new position
-			if (newPos != pos)
-				setPosition(newPos);
+			setPosition(newPos);
 
 			if (newPos != DIMENSION_NON_EXISTANT)
 				currentState = GROW;

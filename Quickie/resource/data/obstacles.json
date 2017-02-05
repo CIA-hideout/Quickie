@@ -67,7 +67,7 @@
                 "lvl_3_dim"  : 2
 			},
 			{
-                "lvl_1_pos_x": 12,
+                "lvl_1_pos_x": 14,
                 "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
                 "lvl_1_dim"  : 2,
@@ -83,7 +83,7 @@
                 "lvl_3_dim"  : 6
 			},
 			{
-                "lvl_1_pos_x": -12,
+                "lvl_1_pos_x": -14,
                 "lvl_1_pos_y": 0,
                 "lvl_1_pos_z": 19.5,
                 "lvl_1_dim"  : 2,
