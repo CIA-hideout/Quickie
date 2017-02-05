@@ -4,6 +4,16 @@
 
 #include "graphics.h"
 
+namespace fontNS
+{
+	// Default font values
+	const int						FONT_HEIGHT = 50;
+	const UINT						FONT_WIDTH = 25;
+	const UINT						FONT_WEIGHT = 500;
+	const bool						FONT_ITALICS = false;
+	const std::string				FONT_NAME = "Air Americana";
+}
+
 class Font
 {
 	Graphics*	graphics;

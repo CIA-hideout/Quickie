@@ -8,7 +8,6 @@ Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.
 Obstacle* o5 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 Obstacle* o6 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
 
-
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
@@ -39,8 +38,12 @@ void quicky::initialize(HWND hWnd) {
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
 
-	// GUI initialization
-	// gui = new GUI();
+	// Initialize menu
+	Menu* menu = new Menu();
+	menu->initialize(this->getGraphics(), this->getInput());
+
+	// Start game state in menu
+	gameState.push(menu);
 
 	// parse player control
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
@@ -59,9 +62,7 @@ void quicky::initialize(HWND hWnd) {
 		temp->init(this);
 		temp->assignControl(controlDoc);
 	}
-
-	// gui->initControls(controlDoc);
-
+  
 	// parse obstacles details
 	FILE* obsFile = fopen("resource\\data\\obstacles.json", "rb");
 	char obsBuffer[512];
@@ -79,11 +80,12 @@ void quicky::initialize(HWND hWnd) {
 
 	sqr1->assignControl(controlDoc);
 	sqr2->assignControl(controlDoc);
+	menu->initControls(controlDoc);
 }
 
 void quicky::update() {
 
-	// gui->update();
+	gameState.top()->update();
 
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {
@@ -130,7 +132,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	// gui->render();
+	gameState.top()->render();
 }
 
 void quicky::releaseAll() {
