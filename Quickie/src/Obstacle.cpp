@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <random>
 
-Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() 
+Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape()
 {
 	static int obstacleCount = 0;
 	obstacleId = obstacleCount++;
@@ -40,7 +40,7 @@ Obstacle::Obstacle(const int location[]) : VertexShape()
 
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	
+
 	spawnMinX = location[0];
 	spawnMaxX = location[1];
 	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);	// randomly generate on X axis
@@ -71,7 +71,7 @@ Obstacle::Obstacle(const int location[]) : VertexShape()
 	rotation.z = 0;
 
 	collisionType = CT_AABB;
-  objectType = OT_OBS;
+	objectType = OT_OBS;
 
 	velocity.x = 0;
 	velocity.y = 0;
@@ -138,7 +138,7 @@ void Obstacle::init(Game* gamePtr)
 
 }
 
-void Obstacle::draw(D3DXMATRIX& worldMat) 
+void Obstacle::draw(D3DXMATRIX& worldMat)
 {
 
 	D3DXMATRIX matRot;
@@ -184,7 +184,7 @@ D3DXVECTOR3 Obstacle::getRandomColor()
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(color.begin(), color.end(), rng); // randomise vector content
 
-  	return color.front();	//use first value of randomise array
+	return color.front();	//use first value of randomise array
 }
 
 // set the obstructor to the given color
@@ -194,8 +194,8 @@ void Obstacle::setColor(D3DXVECTOR3 newColor)
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	for (int i = 0; i < vertexCount; i++) {
-		v->color = D3DCOLOR_RGBA( int (newColor.x), int (newColor.y), 
-			int (newColor.z), 255);
+		v->color = D3DCOLOR_RGBA(int(newColor.x), int(newColor.y),
+			int(newColor.z), 255);
 		v++;
 	}
 
@@ -249,7 +249,7 @@ D3DXVECTOR3 Obstacle::getRandomDimension()
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(dimensions.begin(), dimensions.end(), rng); //ramdomise vector
-	
+
 	return dimensions.front(); // use first value of random vector
 }
 
@@ -260,7 +260,7 @@ void Obstacle::assign(rapidjson::Document& doc)
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_y"].GetFloat(),
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_z"].GetFloat()
-	);
+		);
 	lvl1Dim = assignDimension(
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_dim"].GetInt());
 

@@ -116,9 +116,7 @@ void Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos, D3DXMATRIX& w) {
 
 	pOut.x = vp.Width * v4.x / 2 / projection(0, 0) + (vp.Width / 2);
 	pOut.y = vp.Height / 2 - vp.Height * v4.y / 2 / projection(1, 1);
-	pOut.z = 0;
-
-	//printf("%.2f, %.2f, ", pOut.x, pOut.y);
+	pOut.z = vp.MinZ;
 
 }
 
@@ -126,32 +124,14 @@ void Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z) {
 
 	// R2 -> R3 | z
 
-	float x_, y_, z_, w_;
-	D3DXMATRIX temp,invM;
-	getViewMatrix(&temp);
-	temp = projection * temp;
-
-	D3DXVECTOR4 v1, v2;
+	float x_, y_ = 0;
 
 	// normalize to -1 and 1
-	pOut.x = v1.x = (2 * (point.x - 0) / (vp.Width - 0)) - 1;
-	pOut.y = v1.y = (2 * (point.y - 0) / (vp.Height - 0)) - 1;
-	pOut.z = v1.z = z;
-	v1.w = 1;
+	x_ = (2 * (point.x - 0) / (vp.Width - 0)) - 1;
+	y_ = -(2 * (point.y - 0) / (vp.Height - 0) - 1);
+	pOut.z = z;
 
-	D3DXMatrixInverse(&invM, 0, &temp);
-
-	v2.x = v1.x * invM(0, 0) + v1.y * invM(0, 1) + v1.z * invM(0, 2) + v1.w * invM(0, 3);
-	v2.y = v1.x * invM(1, 0) + v1.y * invM(1, 1) + v1.z * invM(1, 2) + v1.w * invM(1, 3);
-	v2.z = v1.x * invM(2, 0) + v1.y * invM(2, 1) + v1.z * invM(2, 2) + v1.w * invM(2, 3);
-	v2.w = v1.x * invM(3, 0) + v1.y * invM(3, 1) + v1.z * invM(3, 2) + v1.w * invM(3, 3);
-
-	v2.x *= v2.w;
-	v2.y *= v2.w;
-	v2.z *= v2.w;
-
-	pOut.x = -v2.x;
-	pOut.y = -v2.y;
-	pOut.z = -v2.z;
+	pOut.x = x_ / vp.MinZ * z;
+	pOut.y = y_ / vp.MinZ * z;
 
 }

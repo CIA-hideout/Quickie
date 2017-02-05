@@ -9,7 +9,6 @@
 
 #define CM						CollisionManager
 
-
 CollisionManager::CollisionManager() {
 
 }
@@ -20,18 +19,13 @@ CollisionManager::~CollisionManager() {
 
 bool CollisionManager::collideAABB(VertexShape* v1, VertexShape* v2) {
 
-	if (v1->collisionType == CT_AABB && v2->collisionType == CT_AABB) {
-		computeAABB(v1);
-		computeAABB(v2);
+	computeAABB(v1);
+	computeAABB(v2);
 
-		bool collides = false;
-
-		if (v1->max.x < v2->min.x || v1->min.x > v2->max.x || v1->max.y < v2->min.y || v1->min.y > v2->max.y || v1->max.z < v2->min.z || v1->min.z > v2->max.z)
-			return collides;
-		else
-			return true;
-	}
-	return false;
+	if (v1->max.x < v2->min.x || v1->min.x > v2->max.x || v1->max.y < v2->min.y || v1->min.y > v2->max.y)
+		return false;
+	else
+		return true;
 }
 
 bool CollisionManager::collideOOBB(VertexShape* v1, VertexShape* v2, D3DXVECTOR3& cV) {
@@ -40,7 +34,8 @@ bool CollisionManager::collideOOBB(VertexShape* v1, VertexShape* v2, D3DXVECTOR3
 
 bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, VertexShape* v2) {
 
-	// first determine if the object uses its mesh, if not, detect collision using vertices
+	if (!collideAABB(v1, v2))
+		return false;
 
 	std::vector<D3DXVECTOR3> v1List, v2List;
 	int v1Hop, v2Hop;
@@ -57,10 +52,9 @@ bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, V
 				v1->vertices[v1->indices[i + i_]].z
 				);
 		}
-		printf("===============\n");
 	}
 
- 	for (int i = 0; i < v1->indicesCount; i += v1Hop) {
+	for (int i = 0; i < v1->indicesCount; i += v1Hop) {
 
 		for (int i_ = 0; i_ < v1Hop; i_++) {
 
@@ -68,7 +62,7 @@ bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, V
 				v1->vertices[v1->indices[i + i_]].x,
 				v1->vertices[v1->indices[i + i_]].y,
 				v1->vertices[v1->indices[i + i_]].z
-			) + v1->pos);
+				) + v1->pos);
 		}
 
 		for (int j = 0; j < v2->indicesCount; j += v2Hop) {
@@ -78,7 +72,7 @@ bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, V
 					v2->vertices[v2->indices[j + j_]].x,
 					v2->vertices[v2->indices[j + j_]].y,
 					v2->vertices[v2->indices[j + j_]].z
-				) + v2->pos);
+					) + v2->pos);
 			}
 
 			// v1 list and v2 list now contains the first hop in the indices array
@@ -102,17 +96,14 @@ bool CollisionManager::collideS(VertexShape* v1, VertexShape* v2, D3DXVECTOR3& c
 
 void CollisionManager::computeAABB(VertexShape* vs) {
 
-	LVertex* v;
 	D3DXMATRIX mat;
-
-	vs->meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	vs->max.x = -999; vs->max.y = -999; vs->max.z = -999;
 	vs->min.x = +999; vs->min.y = +999; vs->min.z = +999;
 
 	for (int i = 0; i < vs->vertexCount; i++) {
 
-		D3DXMatrixTranslation(&mat, vs->pos.x + v->x, vs->pos.y + v->y, vs->pos.z + v->z);
+		D3DXMatrixTranslation(&mat, vs->pos.x + vs->vertices[i].x, vs->pos.y + vs->vertices[i].y, vs->pos.z + vs->vertices[i].z);
 
 		if (vs->max.x < mat(3, 0))
 			vs->max.x = mat(3, 0);
@@ -123,15 +114,12 @@ void CollisionManager::computeAABB(VertexShape* vs) {
 
 		if (vs->min.x > mat(3, 0))
 			vs->min.x = mat(3, 0);
-		if (vs->max.y > mat(3, 1))
+		if (vs->min.y > mat(3, 1))
 			vs->min.y = mat(3, 1);
 		if (vs->min.z > mat(3, 2))
 			vs->min.z = mat(3, 2);
 
-		v++;
 	}
-
-	vs->meshPtr->UnlockVertexBuffer();
 
 }
 

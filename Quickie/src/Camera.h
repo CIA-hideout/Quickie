@@ -3,6 +3,12 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+enum CameraState {
+	CS_PAN,
+	CS_SHAKE,
+	CS_STATIONARY
+};
+
 enum CameraType {
 	CAMERA_TYPE_LAND_OBJECT,
 	CAMERA_TYPE_FREE
