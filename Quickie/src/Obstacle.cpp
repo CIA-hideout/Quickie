@@ -177,6 +177,7 @@ void Obstacle::update(float deltaTime)
 			break;
 
 		case ACTIVE:
+			setColor(COLOR_PURPLE);
 			break;
 
 	case SHRINK:
@@ -264,6 +265,7 @@ D3DXVECTOR3 Obstacle::getRandomColor()
 void Obstacle::setColor(D3DXVECTOR3 newColor)
 {
 	LVertex* v;
+	color = newColor;
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	for (int i = 0; i < vertexCount; i++) {
@@ -373,7 +375,8 @@ void Obstacle::setLevel1(int count)
 {
 	newPos = lvl1Pos;
 	newDimension = lvl1Dim;
-	
+	setColor(COLOR_GREEN);
+
 	if (count != 0)
 		currentState = SHRINK;
 }
@@ -382,7 +385,8 @@ void Obstacle::setLevel2(int count)
 {
 	newPos = lvl2Pos;
 	newDimension = lvl2Dim;
-	
+	setColor(COLOR_GREEN);
+
 	if (count != 0)
 		currentState = SHRINK;
 }
@@ -391,7 +395,8 @@ void Obstacle::setLevel3(int count)
 {
 	newPos = lvl3Pos;
 	newDimension = lvl3Dim;
-	
+	setColor(COLOR_GREEN);
+
 	if (count != 0)
-		currentState = SHRINK;
+		currentState = SHRINK;	
 }
