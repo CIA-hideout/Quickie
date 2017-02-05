@@ -95,7 +95,7 @@ void quicky::update() {
 		}
 		else if (qObstacles[i]->objectType == OT_OBS) {
 			Obstacle* temp = (Obstacle*)qObstacles[i];
-			temp->update(deltaTime);
+			temp->update(deltaTime, qPlayer);
 		}
 	}
 
@@ -113,7 +113,7 @@ void quicky::update() {
 	graphics->camera->pointInWorld(out1, out2, 20);
 	printf("POS %.2f, %.2f | %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
 
-	graphics->camera->pitch(-1.0 * deltaTime);
+	//graphics->camera->pitch(-1.0 * deltaTime);
 }
 
 void quicky::ai() {

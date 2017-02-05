@@ -78,7 +78,7 @@
                 "lvl_2_dim"  : 1,
 
 				"lvl_3_pos_x": 0,
-                "lvl_3_pos_y": 0,
+                "lvl_3_pos_y": 20,
                 "lvl_3_pos_z": 19.5,
                 "lvl_3_dim"  : 6
 			},
@@ -89,12 +89,12 @@
                 "lvl_1_dim"  : 2,
 
 				"lvl_2_pos_x": 0,
-                "lvl_2_pos_y": 0,
+                "lvl_2_pos_y": 20,
                 "lvl_2_pos_z": 19.5,
                 "lvl_2_dim"  : 6,
 
 				"lvl_3_pos_x": 0,
-                "lvl_3_pos_y": 0,
+                "lvl_3_pos_y": 20,
                 "lvl_3_pos_z": 19.5,
                 "lvl_3_dim"  : 6
 			}

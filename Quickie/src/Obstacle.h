@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VertexShape.h"
+#include "CollisionManager.h"
 
 enum ObsState
 {
@@ -33,13 +34,11 @@ private:
 public:
 	Obstacle() = default;
 	Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);
-	Obstacle(const int[]);
 	~Obstacle();
 
 	void init(Game*);
 	void draw(D3DXMATRIX&);
-	void draw(D3DXMATRIX&, D3DXVECTOR3);
-	void update(float);
+	void update(float, std::vector<VertexShape*>);
 	void setColor(D3DXVECTOR3);
 	void setDimension(D3DXVECTOR3);
 	void setPosition(D3DXVECTOR3);

@@ -31,52 +31,6 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	velocity.y = 0;
 }
 
-// Create a new obstructor with almost RANDOM variables
-Obstacle::Obstacle(const int location[]) : VertexShape()
-{
-	static int obstacleCount = 0;
-	obstacleId = obstacleCount++;
-
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-
-	spawnMinX = location[0];
-	spawnMaxX = location[1];
-	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);	// randomly generate on X axis
-	std::uniform_int_distribution<int> randomY(-5, 5);					// randomly generate near center when game begins
-
-	D3DXVECTOR3& pos = D3DXVECTOR3(randomX(rng), randomY(rng), 20);
-	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
-
-	D3DXVECTOR3& dimension = getRandomDimension();
-	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
-
-	D3DXVECTOR3& scale = D3DXVECTOR3(1, 1, 1);
-	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
-
-	D3DXVECTOR3& color = getRandomColor();
-	memcpy(this->color, color, sizeof(D3DXVECTOR3));
-
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
-	rotation.x = 0;
-	rotation.y = 0;
-	rotation.z = 0;
-
-	collisionType = CT_AABB;
-	objectType = OT_OBS;
-
-	velocity.x = 0;
-	velocity.y = 0;
-	velocity.z = 0;
-}
-
 Obstacle::~Obstacle() {
 
 }
@@ -161,7 +115,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 }
 
 
-void Obstacle::update(float deltaTime)
+void Obstacle::update(float deltaTime, std::vector<VertexShape*> players)
 {	
 	timer += deltaTime;
 
@@ -172,43 +126,45 @@ void Obstacle::update(float deltaTime)
 			setPosition(newPos);
 
 			if (newPos != DIMENSION_NON_EXISTANT)
-				currentState = GROW;
-
+					currentState = GROW;
 			break;
 
 		case ACTIVE:
-			setColor(COLOR_PURPLE);
 			break;
 
-	case SHRINK:
+		case SHRINK:
 			// update size of obstacle 
 			if (timer >= 0.05f) {
 
-				D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);	//matrix for shrinking
-				D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
-				setDimension(dimension);
+				if (!CollisionManager::collideAABB(this, players[0]) || !CollisionManager::collideAABB(this, players[1]))
+						D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);	//matrix for shrinking
+						D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+						setDimension(dimension);
+
+						/* Avoid Zeno Dichotomy Paradox
+						* If you divide by half and so on repeatedly,
+						* you will continue dividing forever and never reach the end.
+						* So we will set dimensions to 0, when we hit a number close to 0
+						*/
+						if (dimension.x <= 0.01)
+							dimension.x = 0;
+
+						if (dimension.y <= 0.01)
+							dimension.y = 0;
+
+						if (dimension.z <= 0.01)
+							dimension.z = 0;
+
+						if (dimension == DIMENSION_NON_EXISTANT)
+							currentState = INACTIVE;	// change to inactive when dimension are 0		
+				
 				timer = 0;
-
-				/* Avoid Zeno Dichotomy Paradox
-				 * If you divide by half and so on repeatedly,
-				 * you will continue dividing forever and never reach the end.
-				 * So we will set dimensions to 0, when we hit a number close to 0
-				 */
-				if (dimension.x <= 0.01)
-					dimension.x = 0;
-
-				if (dimension.y <= 0.01)
-					dimension.y = 0;
-
-				if (dimension.z <= 0.01)
-					dimension.z = 0;
-
-				if (dimension == DIMENSION_NON_EXISTANT)
-					currentState = INACTIVE;	// change to inactive when dimension are 0		
 			}
 			break;
 
 		case GROW:
+			//for (int i = 0; i < players.size(); i++)
+			
 			//  0 * a real number is 0
 			//	change dimensions to something which can be multiplied
 			if (dimension == DIMENSION_NON_EXISTANT)
@@ -265,7 +221,7 @@ D3DXVECTOR3 Obstacle::getRandomColor()
 void Obstacle::setColor(D3DXVECTOR3 newColor)
 {
 	LVertex* v;
-	color = newColor;
+
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	for (int i = 0; i < vertexCount; i++) {
@@ -375,7 +331,6 @@ void Obstacle::setLevel1(int count)
 {
 	newPos = lvl1Pos;
 	newDimension = lvl1Dim;
-	setColor(COLOR_GREEN);
 
 	if (count != 0)
 		currentState = SHRINK;
@@ -385,7 +340,6 @@ void Obstacle::setLevel2(int count)
 {
 	newPos = lvl2Pos;
 	newDimension = lvl2Dim;
-	setColor(COLOR_GREEN);
 
 	if (count != 0)
 		currentState = SHRINK;
@@ -395,7 +349,6 @@ void Obstacle::setLevel3(int count)
 {
 	newPos = lvl3Pos;
 	newDimension = lvl3Dim;
-	setColor(COLOR_GREEN);
 
 	if (count != 0)
 		currentState = SHRINK;	
