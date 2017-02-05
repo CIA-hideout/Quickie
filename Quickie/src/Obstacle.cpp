@@ -29,53 +29,6 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 	velocity.x = 0;
 	velocity.y = 0;
-
-}
-
-// Create a new obstructor with almost RANDOM variables
-Obstacle::Obstacle(const int location[]) : VertexShape()
-{
-	static int obstacleCount = 0;
-	obstacleId = obstacleCount++;
-
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-
-	spawnMinX = location[0];
-	spawnMaxX = location[1];
-	std::uniform_int_distribution<int> randomX(spawnMinX, spawnMaxX);	// randomly generate on X axis
-	std::uniform_int_distribution<int> randomY(-5, 5);					// randomly generate near center when game begins
-
-	D3DXVECTOR3& pos = D3DXVECTOR3(randomX(rng), randomY(rng), 20);
-	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
-
-	D3DXVECTOR3& dimension = getRandomDimension();
-	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
-
-	D3DXVECTOR3& scale = D3DXVECTOR3(1, 1, 1);
-	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
-
-	D3DXVECTOR3& color = getRandomColor();
-	memcpy(this->color, color, sizeof(D3DXVECTOR3));
-
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
-	rotation.x = 0;
-	rotation.y = 0;
-	rotation.z = 0;
-
-	collisionType = CT_AABB;
-	objectType = OT_OBS;
-
-	velocity.x = 0;
-	velocity.y = 0;
-	velocity.z = 0;
 }
 
 Obstacle::~Obstacle() {
@@ -84,7 +37,6 @@ Obstacle::~Obstacle() {
 
 void Obstacle::init(Game* gamePtr)
 {
-
 	this->game = gamePtr;
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
 
@@ -162,8 +114,86 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 }
 
-void Obstacle::update(float deltaTime) {
-	//timer += deltaTime;
+
+void Obstacle::update(float deltaTime, std::vector<VertexShape*> players)
+{	
+	timer += deltaTime;
+
+	switch (currentState)
+	{
+		case INACTIVE:
+			// change to new position
+			setPosition(newPos);
+
+			if (newPos != DIMENSION_NON_EXISTANT)
+					currentState = GROW;
+			break;
+
+		case ACTIVE:
+			break;
+
+		case SHRINK:
+			// update size of obstacle 
+			if (timer >= 0.05f) {
+
+				if (!CollisionManager::collideAABB(this, players[0]) || !CollisionManager::collideAABB(this, players[1]))
+						D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);	//matrix for shrinking
+						D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+						setDimension(dimension);
+
+						/* Avoid Zeno Dichotomy Paradox
+						* If you divide by half and so on repeatedly,
+						* you will continue dividing forever and never reach the end.
+						* So we will set dimensions to 0, when we hit a number close to 0
+						*/
+						if (dimension.x <= 0.01)
+							dimension.x = 0;
+
+						if (dimension.y <= 0.01)
+							dimension.y = 0;
+
+						if (dimension.z <= 0.01)
+							dimension.z = 0;
+
+						if (dimension == DIMENSION_NON_EXISTANT)
+							currentState = INACTIVE;	// change to inactive when dimension are 0		
+				
+				timer = 0;
+			}
+			break;
+
+		case GROW:
+			//for (int i = 0; i < players.size(); i++)
+			
+			//  0 * a real number is 0
+			//	change dimensions to something which can be multiplied
+			if (dimension == DIMENSION_NON_EXISTANT)
+				setDimension(DIMENSION_ALMOST_ZERO);
+
+			// update size of obstacle 
+			if (timer >= 0.05f)
+			{
+				D3DXMatrixScaling(&matScale, 1.5f, 1.5f, 1.5f); //matrix for growing
+				D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+				setDimension(dimension);
+				timer = 0;
+
+				if (dimension.x > newDimension.x)
+					dimension.x = newDimension.x;
+
+				if (dimension.y > newDimension.y)
+					dimension.y = newDimension.y;
+
+				if (dimension.z > newDimension.z)
+					dimension.z = newDimension.z;
+
+				if (dimension == newDimension)
+					currentState = ACTIVE;	// change to active when dimension are the same		
+			}
+			break;
+
+		default: break;
+	}
 }
 
 // Randomly generate a color and returns the value
@@ -191,6 +221,7 @@ D3DXVECTOR3 Obstacle::getRandomColor()
 void Obstacle::setColor(D3DXVECTOR3 newColor)
 {
 	LVertex* v;
+
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 
 	for (int i = 0; i < vertexCount; i++) {
@@ -296,20 +327,29 @@ D3DXVECTOR3 Obstacle::assignDimension(int type){
 	}
 }
 
-void Obstacle::setLevel1()
+void Obstacle::setLevel1(int count)
 {
-	setPosition(lvl1Pos);
-	setDimension(lvl1Dim);
+	newPos = lvl1Pos;
+	newDimension = lvl1Dim;
+
+	if (count != 0)
+		currentState = SHRINK;
 }
 
-void Obstacle::setLevel2()
+void Obstacle::setLevel2(int count)
 {
-	setPosition(lvl2Pos);
-	setDimension(lvl2Dim);
+	newPos = lvl2Pos;
+	newDimension = lvl2Dim;
+
+	if (count != 0)
+		currentState = SHRINK;
 }
 
-void Obstacle::setLevel3()
+void Obstacle::setLevel3(int count)
 {
-	setPosition(lvl3Pos);
-	setDimension(lvl3Dim);
+	newPos = lvl3Pos;
+	newDimension = lvl3Dim;
+
+	if (count != 0)
+		currentState = SHRINK;	
 }

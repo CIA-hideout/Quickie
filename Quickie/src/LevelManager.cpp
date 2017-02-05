@@ -10,12 +10,25 @@ LevelManager::~LevelManager()
 	
 }
 
+void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)
+{
+	timer += deltaTime;
+
+	// change level every 60s
+	if (timer >= LEVEL_TIME && isRandom)
+	{
+		setRandomLevel(vS);
+		timer = 0;
+		levelCount++;
+	}
+}
+
 // set obstacles location for level 1
 void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 {
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*) vS[i];
-		tempObs->setLevel1();
+		tempObs->setLevel1(levelCount);
 	}
 }
 
@@ -24,7 +37,7 @@ void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
 {
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*)vS[i];
-		tempObs->setLevel2();
+		tempObs->setLevel2(levelCount);
 	}
 }
 
@@ -33,7 +46,7 @@ void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
 {
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*)vS[i];
-		tempObs->setLevel3();
+		tempObs->setLevel3(levelCount);
 	}
 }
 
