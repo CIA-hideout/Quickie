@@ -1,212 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
-    </Filter>
+    <ClCompile Include="src\CollisionManager.cpp" />
+    <ClCompile Include="src\Font.cpp" />
+    <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\LevelManager.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Obstacle.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="quicky.cpp" />
+    <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\graphics.cpp" />
+    <ClCompile Include="src\QLine.cpp" />
+    <ClCompile Include="src\State.cpp" />
+    <ClCompile Include="src\winmain.cpp" />
+    <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\winmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="quicky.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VertexShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Obstacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CollisionManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\QLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LevelManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gameError.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="quicky.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VertexShape.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Obstacle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CollisionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\QLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\error\en.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\error\error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\biginteger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\diyfp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\dtoa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\ieee754.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\itoa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\meta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\pow10.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\regex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\strfunc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\strtod.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\internal\swap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\msinttypes\inttypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\msinttypes\stdint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\allocators.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\document.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\encodedstream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\encodings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\filereadstream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\filewritestream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\fwd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\istreamwrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\memorybuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\memorystream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\ostreamwrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\pointer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\prettywriter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\rapidjson.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\reader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\schema.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\stream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\stringbuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rapidjson\writer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Font.h">
-    <ClInclude Include="src\LevelManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\CollisionManager.h" />
+    <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\LevelManager.h" />
+    <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Obstacle.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="quicky.h" />
+    <ClInclude Include="src\constants.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\gameError.h" />
+    <ClInclude Include="src\graphics.h" />
+    <ClInclude Include="src\QLine.h" />
+    <ClInclude Include="src\rapidjson\allocators.h" />
+    <ClInclude Include="src\rapidjson\document.h" />
+    <ClInclude Include="src\rapidjson\encodedstream.h" />
+    <ClInclude Include="src\rapidjson\encodings.h" />
+    <ClInclude Include="src\rapidjson\error\en.h" />
+    <ClInclude Include="src\rapidjson\error\error.h" />
+    <ClInclude Include="src\rapidjson\filereadstream.h" />
+    <ClInclude Include="src\rapidjson\filewritestream.h" />
+    <ClInclude Include="src\rapidjson\fwd.h" />
+    <ClInclude Include="src\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="src\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="src\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="src\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="src\rapidjson\internal\itoa.h" />
+    <ClInclude Include="src\rapidjson\internal\meta.h" />
+    <ClInclude Include="src\rapidjson\internal\pow10.h" />
+    <ClInclude Include="src\rapidjson\internal\regex.h" />
+    <ClInclude Include="src\rapidjson\internal\stack.h" />
+    <ClInclude Include="src\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="src\rapidjson\internal\strtod.h" />
+    <ClInclude Include="src\rapidjson\internal\swap.h" />
+    <ClInclude Include="src\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="src\rapidjson\memorybuffer.h" />
+    <ClInclude Include="src\rapidjson\memorystream.h" />
+    <ClInclude Include="src\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="src\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="src\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="src\rapidjson\pointer.h" />
+    <ClInclude Include="src\rapidjson\prettywriter.h" />
+    <ClInclude Include="src\rapidjson\rapidjson.h" />
+    <ClInclude Include="src\rapidjson\reader.h" />
+    <ClInclude Include="src\rapidjson\schema.h" />
+    <ClInclude Include="src\rapidjson\stream.h" />
+    <ClInclude Include="src\rapidjson\stringbuffer.h" />
+    <ClInclude Include="src\rapidjson\writer.h" />
+    <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\VertexShape.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\data\control.json" />

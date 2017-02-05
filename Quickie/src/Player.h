@@ -9,15 +9,6 @@ enum CooldownType {
 	INVULNERABLE
 };
 
-enum Control {
-	CONTROL_UP,
-	CONTROL_DOWN,
-	CONTROL_LEFT,
-	CONTROL_RIGHT,
-	CONTROL_BL,
-	CONTROL_TP
-};
-
 class Player : public VertexShape {
 public:
 
@@ -42,5 +33,11 @@ public:
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport();
 	void assignControl(rapidjson::Document&);
+	
+	// GET
+	int getHealth(){ return health; }
+
+	// SET
+	int setHealth(){ return health; }
 
 };

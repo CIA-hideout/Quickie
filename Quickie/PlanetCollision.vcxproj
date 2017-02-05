@@ -97,27 +97,28 @@
   <ItemGroup>
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Font.cpp" />
-    <ClCompile Include="src\GUI.cpp" />
+    <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
+    <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
-    <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="quicky.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\QLine.cpp" />
+    <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Font.h" />
-    <ClInclude Include="src\GUI.h" />
+    <ClInclude Include="src\input.h" />
     <ClInclude Include="src\LevelManager.h" />
+    <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
-    <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="quicky.h" />
     <ClInclude Include="src\constants.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\rapidjson\stream.h" />
     <ClInclude Include="src\rapidjson\stringbuffer.h" />
     <ClInclude Include="src\rapidjson\writer.h" />
+    <ClInclude Include="src\State.h" />
     <ClInclude Include="src\VertexShape.h" />
   </ItemGroup>
   <ItemGroup>
