@@ -17,7 +17,9 @@ enum CollisionType {
 enum ObjectType {
 	OT_PLY,
 	OT_OBS,
-	OT_QL
+	OT_QL,
+	OT_P,
+	OT_PS
 };
 
 class VertexShape {

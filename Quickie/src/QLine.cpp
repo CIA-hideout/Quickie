@@ -1,5 +1,4 @@
 #include "QLine.h"
-#include "Player.h"
 
 QLine::QLine(VertexShape* vS, float rotation_) {
 
@@ -7,7 +6,7 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
 
-	parent = (Player*)vS;
+	parent = vS;
 
 	this->rotation_ = rotation_;
 
@@ -29,8 +28,6 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 }
 
 void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
-
-	parent->cooldown.at(COOLDOWN_BLINK) = 1.0f;
 
 	D3DXVECTOR3 intersect, fIntersect, rayStart, rayEnd, ts, te, projPoint;
 	D3DXVECTOR4 norm, fNorm;

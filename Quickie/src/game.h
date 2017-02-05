@@ -13,10 +13,14 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
-#include <stack>
 #include "State.h"
+#include <stack>
+
+#include <random>
 
 #pragma comment(lib, "dxerr.lib")
+
+#define MINMAXRAND(min_, max_) rand() % (max_ - min_ + 1) + (float)min_
 
 class Game {
 public:

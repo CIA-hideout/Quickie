@@ -5,8 +5,6 @@
 #include <vector>
 
 #include "VertexShape.h"
-#include "Player.h"
-#include "Obstacle.h"
 #include <algorithm>
 #include <functional>
 

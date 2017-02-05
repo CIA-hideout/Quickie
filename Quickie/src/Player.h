@@ -1,7 +1,7 @@
 #pragma once
 
-#include "VertexShape.h"
-#include "CollisionManager.h"
+#include "ParticleSource.h"
+#include "QLine.h"
 
 enum CooldownType {
 	COOLDOWN_BLINK,
@@ -17,6 +17,8 @@ public:
 	int								playerId;
 	int								health;
 
+	ParticleSource					ps;
+
 	Player() = default;
 	~Player();
 
@@ -25,9 +27,6 @@ public:
 	void init(Game*);
 	void draw(D3DXMATRIX&);
 	void update(float, std::vector<VertexShape*>&);
-	void moveX(float&);
-	void moveY(float&);
-	void moveZ(float&);
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
 	void blink(std::vector<VertexShape*>&, float);

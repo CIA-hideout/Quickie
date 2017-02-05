@@ -23,7 +23,7 @@ void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
 
-	AllocConsole();
+	// AllocConsole();
 	freopen("conin$", "r", stdin);
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
@@ -81,6 +81,7 @@ void quicky::initialize(HWND hWnd) {
 	sqr1->assignControl(controlDoc);
 	sqr2->assignControl(controlDoc);
 	menu->initControls(controlDoc);
+
 }
 
 void quicky::update() {
@@ -103,16 +104,6 @@ void quicky::update() {
 		temp->update(deltaTime, qObstacles);
 	}
 
-	// push all temp stuff into respective vectors
-
-	D3DXVECTOR3 out1;
-	D3DXVECTOR2 out2;
-	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);
-	out2 = D3DXVECTOR2(out1.x, out1.y);
-	graphics->camera->pointInWorld(out1, out2, 20);
-	printf("POS %.2f, %.2f | %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
-
-	graphics->camera->pitch(-1.0 * deltaTime);
 }
 
 void quicky::ai() {
@@ -134,7 +125,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	gameState.top()->render();
+	// gameState.top()->render();
 }
 
 void quicky::releaseAll() {

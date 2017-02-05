@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "QLine.h"
 
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
@@ -121,6 +120,10 @@ void Player::draw(D3DXMATRIX& worldMat) {
 		meshPtr->DrawSubset(0);
 	}
 
+	if (!alive) {
+		ps.draw(worldMat);
+	}
+
 }
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -162,6 +165,11 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
 	}
+
+	else {
+		ps.update(deltaTime, vS);
+	}
+
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
@@ -204,6 +212,8 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 					if (health <= 0) {
 						this->alive = false;
 						this->visible = false;
+						ps = ParticleSource(100, D3DX_PI, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+						ps.init(game);
 					}
 					cooldown.at(INVULNERABLE) = 2.0f;
 				}
@@ -228,6 +238,7 @@ void Player::respawn() {
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
+	cooldown.at(COOLDOWN_BLINK) = 1.0f;
 	velocity *= 0;
 	QLine* l = new QLine(this, angle);
 	l->init(vS, game);
