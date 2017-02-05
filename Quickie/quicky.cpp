@@ -40,10 +40,7 @@ void quicky::initialize(HWND hWnd) {
 	qPlayer.push_back(sqr2);
 
 	// GUI initialization
-	gui = new GUI();
-
-	if (!gui->initialize(this))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "FAIL TO INITIALIZE GUI"));
+	// gui = new GUI();
 
 	// parse player control
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
@@ -63,7 +60,7 @@ void quicky::initialize(HWND hWnd) {
 		temp->assignControl(controlDoc);
 	}
 
-	gui->initControls(controlDoc);
+	// gui->initControls(controlDoc);
 
 	// parse obstacles details
 	FILE* obsFile = fopen("resource\\data\\obstacles.json", "rb");
@@ -86,7 +83,7 @@ void quicky::initialize(HWND hWnd) {
 
 void quicky::update() {
 
-	gui->update();
+	// gui->update();
 
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {
@@ -106,14 +103,12 @@ void quicky::update() {
 
 	// push all temp stuff into respective vectors
 
-
 	D3DXVECTOR3 out1;
 	D3DXVECTOR2 out2;
 	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);
-	// printf("POS %.2f, %.2f\n", out.x, out.y);
 	out2 = D3DXVECTOR2(out1.x, out1.y);
-	graphics->camera->pointInWorld(out1, out2, 19);
-	printf("PIW %.2f, %.2f, actual pos: %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
+	graphics->camera->pointInWorld(out1, out2, 20);
+	printf("POS %.2f, %.2f | %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
 }
 
 void quicky::ai() {
@@ -135,7 +130,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	gui->render();
+	// gui->render();
 }
 
 void quicky::releaseAll() {
