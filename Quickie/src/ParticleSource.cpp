@@ -18,7 +18,6 @@ ParticleSource::~ParticleSource() {
 void ParticleSource::init(Graphics* graphics) {
 	std::random_device rdev;
 	std::mt19937 generator(rdev());
-
 	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
 
 	this->graphics = graphics;

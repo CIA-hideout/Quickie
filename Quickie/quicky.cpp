@@ -105,6 +105,7 @@ void quicky::update() {
 		Player* temp = (Player*)qPlayer[i];
 		temp->update(deltaTime, qObstacles);
 	}
+	graphics->camera->update(deltaTime);
 }
 
 void quicky::ai() {
