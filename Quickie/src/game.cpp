@@ -51,6 +51,23 @@ void Game::initialize(HWND hw)
 	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &graphics->camera->projection);
 
 	input = new Input(hw);
+
+	// Init sound system
+	audio = new Audio();
+	// If sound files defined
+	if (*WAVE_BANK != '\0' && *SOUND_BANK != '\0')
+	{
+		if (FAILED(hr = audio->initialise()))
+		{
+			if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+				throw(GameError(gameErrorNS::FATAL_ERROR,
+				"Failed to initialize sound system" \
+				"because media file not found."));
+			else
+				throw(GameError(gameErrorNS::FATAL_ERROR,
+				"Failed to initialize sound system."));
+		}
+	}
 }
 
 //=============================================================================
@@ -109,6 +126,9 @@ void Game::run(HWND hwnd) {
 	if (graphics == NULL)            // if graphics not initialized
 		return;
 
+	// Perform periodic sound engine tasks
+	audio->run(); 
+
 	// calculate elapsed time of last frame, save in deltaTime
 	QueryPerformanceCounter(&timeEnd);
 	deltaTime = (float)(timeEnd.QuadPart - timeStart.QuadPart) / (float)timerFreq.QuadPart;
@@ -150,6 +170,7 @@ void Game::deleteAll() {
 	releaseAll();               // call onLostDevice() for every graphics item
 	SAFE_DELETE(graphics);
 	SAFE_DELETE(input);
+	SAFE_DELETE(audio);
 	initialized = false;
 }
 

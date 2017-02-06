@@ -22,6 +22,7 @@ quicky::~quicky() {
 void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
+	lManager->init(this);
 
 	AllocConsole();
 	freopen("conin$", "r", stdin);
@@ -54,7 +55,7 @@ void quicky::initialize(HWND hWnd) {
 	fclose(controlFile);
 
 	for (int i = 0; i < qObstacles.size(); i++) {
-		qObstacles[i]->init(this->graphics);
+		qObstacles[i]->init(this->audio, this->graphics);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {

@@ -29,6 +29,7 @@ public:
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	Graphics*				graphics;
+	Audio*					audio;	// pointer to audio system
 	int						vertexCount, indicesCount;
 
 	Input*					input;
@@ -69,13 +70,12 @@ public:
 	VertexShape();
 	virtual ~VertexShape();
 
-	virtual void init(Graphics*);
+	virtual void init(Audio*, Graphics*);
 	virtual void draw(D3DXMATRIX&);
 	virtual void update(float);
 
 	void computeBoundingBox();
 	void computeBoundingSphere();
 	bool collidesWith(VertexShape&);
-
 };
 

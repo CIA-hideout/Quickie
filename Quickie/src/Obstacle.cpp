@@ -35,9 +35,10 @@ Obstacle::~Obstacle() {
 
 }
 
-void Obstacle::init(Graphics* graphics)
+void Obstacle::init(Audio* audio, Graphics* graphics)
 {
 	this->graphics = graphics;
+	this->audio = audio;
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	vertices = 0;

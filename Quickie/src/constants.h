@@ -74,3 +74,19 @@ const int SPAWN_RIGHT[] = {5, 15};		//   5 < pos.x < 15
 
 // game time between each level
 const float LEVEL_TIME = 10.0f;
+
+// audio file required by audio.cpp
+// WAVE_BANK must be the location of the xwb file
+const char WAVE_BANK[] = "resource\\audio\\Win\\Wave Bank.xwb";
+// SOUND_BANK must be location of .xsb file
+const char SOUND_BANK[] = "resource\\audio\\Win\\Sound Bank.xsb";
+// XGS_FILE must be location of .xgs file.
+const char XGS_FILE[] = "resource\\audio\\Win\\quickie-sound.xgs";
+
+// Sound cues
+const char BGM1[] = "bgm1";
+const char BGM2[] = "bgm2";
+const char BGM3[] = "bgm3";
+const char BGM4[] = "bgm4";
+const char BGM5[] = "bgm5";
+const char BGMRand[] = "bgmRandom";	// play random sound BGM1 - BGM5
