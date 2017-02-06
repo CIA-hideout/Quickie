@@ -67,7 +67,8 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	vertexPoint.push_back(rayStart);
 
-	while (m_ > 0) {
+	while (m_ > 0.0f) {
+
 		rayEnd.x = rayStart.x + cos(rotation_) * m_;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
 		dist_ = cDist_ = 999;
@@ -96,13 +97,14 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 		fLatestID = latestID;
 
-		if (c_ < 1) {
-			// no collisioin detected. probably the end of blink
+		if (cDist_ >= 999) {
+			// no collision detected. probably the end of blink
 			vertexPoint.push_back(rayEnd);
 			m_ = 0;
 		}
 		else {
 			// this is required if and only if the ray intersects
+
 			vertexPoint.push_back(fIntersect);
 			m_ -= cDist_;
 
@@ -131,7 +133,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 			dx = projPoint.x - fIntersect.x;
 			dy = projPoint.y - fIntersect.y;
 
-			if (dx > 0) {
+			if (dx >= 0) {
 				rotation_ = atan(dy / dx);
 			}
 			else if (dx < 0) {
@@ -166,7 +168,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	_com_error err(res);
 	std::string errMsg = err.ErrorMessage();
-	printf("%s\n", errMsg.c_str());
+	//printf("%s\n", errMsg.c_str());
 
 	res = graphics->get3Ddevice()->CreateIndexBuffer(
 		(vertexCount * 2 - 2) * sizeof(WORD),
@@ -179,7 +181,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	err = _com_error(res);
 	errMsg = err.ErrorMessage();
-	printf("%s\n", errMsg.c_str());
+	//printf("%s\n", errMsg.c_str());
 
 	vertexBuffer->Lock(0, 0, (void**)&vertices, 0);
 
@@ -212,6 +214,8 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	vS.push_back(this);
 
 	initialized = true;
+
+	printf("init end\n");
 }
 
 void QLine::draw(D3DXMATRIX& worldMat) {

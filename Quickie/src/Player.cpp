@@ -165,6 +165,8 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 
 		velocity.x *= 0.75;
+		// velocity.x *= 0.0f;
+		// velocity.y *= 0.75;
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
 	}

@@ -174,7 +174,6 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		tNorm.w = -dx;
 
 		normV.push_back(tNorm);
-
 	}
 
 	// [1] botom
@@ -264,9 +263,8 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		}
 	}
 
-	if (closest == -1) {
+	if (closest == -1)
 		return false;
-	}
 
 	pNorm.x = normV[closest].x;
 	pNorm.y = normV[closest].y;

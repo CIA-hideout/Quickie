@@ -12,8 +12,7 @@ enum Fonts
 	GAME
 };
 
-namespace stateNS
-{
+namespace stateNS {
 	enum NextState
 	{
 		INSTRUCTIONS,
@@ -51,5 +50,5 @@ public:
 	virtual void render() = 0;
 	virtual void collisions() = 0;
 	virtual void releaseAll() = 0;
-	virtual void resetAll() = 0;	
+	virtual void resetAll() = 0;
 };
