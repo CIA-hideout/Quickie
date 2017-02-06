@@ -25,13 +25,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		visible = false;
 	}
 
-<<<<<<< HEAD
 	D3DXVECTOR3 intersect;
-=======
-void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
-
-	graphics = g;
->>>>>>> Change VertexShape init parameters
 
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
