@@ -17,15 +17,15 @@ void LevelManager::init(Audio* a)
 
 void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)
 {
-	timer += deltaTime;
+	//timer += deltaTime;
 
-	// change level every 60s 
-	if (timer >= LEVEL_TIME && isRandom)
-	{
-		setRandomLevel(vS);
-		timer = 0;
-		levelCount++;
-	}
+	//// change level every 60s 
+	//if (timer >= LEVEL_TIME && isRandom)
+	//{
+	//	setRandomLevel(vS);
+	//	timer = 0;
+	//	levelCount++;
+	//}
 }
 
 // set obstacles location for level 1
@@ -33,10 +33,12 @@ void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 {
 	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
-		Obstacle* tempObs = (Obstacle*) vS[i];
-		tempObs->setLevel1(levelCount);
+		if (vS[i]->objectType == OT_OBS) {
+			Obstacle* tempObs = (Obstacle*)vS[i];
+			tempObs->setLevel1(levelCount);
+		}
 	}
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 }
 
 // set obstacles location for level 2
@@ -44,10 +46,12 @@ void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
 {
 	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
-		Obstacle* tempObs = (Obstacle*)vS[i];
-		tempObs->setLevel2(levelCount);
+		if (vS[i]->objectType == OT_OBS) {
+			Obstacle* tempObs = (Obstacle*)vS[i];
+			tempObs->setLevel2(levelCount);
+		}
 	}
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 
 }
 
@@ -56,10 +60,12 @@ void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
 {
 	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
-		Obstacle* tempObs = (Obstacle*)vS[i];
-		tempObs->setLevel3(levelCount);
+		if (vS[i]->objectType == OT_OBS) {
+			Obstacle* tempObs = (Obstacle*)vS[i];
+			tempObs->setLevel3(levelCount);
+		}
 	}
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 }
 
 // set obstacles location for random levels

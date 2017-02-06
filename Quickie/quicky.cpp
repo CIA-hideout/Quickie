@@ -29,12 +29,12 @@ void quicky::initialize(HWND hWnd) {
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 
-	qObstacles.push_back(o1);
-	qObstacles.push_back(o2);
-	qObstacles.push_back(o3);
-	qObstacles.push_back(o4);
-	qObstacles.push_back(o5);
-	qObstacles.push_back(o6);
+	qEnvironmentObj.push_back(o1);
+	qEnvironmentObj.push_back(o2);
+	qEnvironmentObj.push_back(o3);
+	qEnvironmentObj.push_back(o4);
+	qEnvironmentObj.push_back(o5);
+	qEnvironmentObj.push_back(o6);
 
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
@@ -54,8 +54,8 @@ void quicky::initialize(HWND hWnd) {
 	printf("%s\n", controlDoc["test_string"].GetString());
 	fclose(controlFile);
 
-	for (int i = 0; i < qObstacles.size(); i++) {
-		Obstacle* temp = (Obstacle*)qObstacles[i];
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
 	  temp->init(this->audio, this->graphics);
 	}
 
@@ -73,12 +73,12 @@ void quicky::initialize(HWND hWnd) {
 	printf("%s\n", obstacleDoc["test_string"].GetString());
 	fclose(obsFile);
 
-	for (int i = 0; i < qObstacles.size(); i++) {
-		Obstacle* tempObs = (Obstacle*)qObstacles[i];
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
 		tempObs->assign(obstacleDoc);
 	}
 
-	lManager->setRandomLevel(qObstacles);
+	lManager->setRandomLevel(qEnvironmentObj);
 
 	sqr1->assignControl(controlDoc);
 	sqr2->assignControl(controlDoc);
@@ -89,11 +89,10 @@ void quicky::initialize(HWND hWnd) {
 void quicky::update() {
 
 	gameState.top()->update();
-	lManager->update(deltaTime, qObstacles);
+	lManager->update(deltaTime, qEnvironmentObj);
 
 	if (gameState.top()->getNextState() != nullptr)
 	{
-		printf("NEXT STATE\n");
 		stateNS::NextState pState = *gameState.top()->getNextState();
 		gameState.top()->clearNextState();
 
@@ -117,20 +116,20 @@ void quicky::update() {
 		}
 	}
 
-	for (int i = 0; i < qObstacles.size(); i++) {
-		if (qObstacles[i]->objectType == OT_QL) {
-			QLine* temp = (QLine*)qObstacles[i];
-			temp->update(deltaTime, qObstacles);
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		if (qEnvironmentObj[i]->objectType == OT_QL) {
+			QLine* temp = (QLine*)qEnvironmentObj[i];
+			temp->update(deltaTime, qEnvironmentObj);
 		}
-		else if (qObstacles[i]->objectType == OT_OBS) {
-			Obstacle* temp = (Obstacle*)qObstacles[i];
+		else if (qEnvironmentObj[i]->objectType == OT_OBS) {
+			Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
 			temp->update(deltaTime, qPlayer);
 		}
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
-		temp->update(deltaTime, qObstacles);
+		temp->update(deltaTime, qEnvironmentObj);
 	}
 	graphics->camera->update(deltaTime);
 }
@@ -145,8 +144,8 @@ void quicky::collisions() {
 
 void quicky::render() {
 
-	for (int i = 0; i < qObstacles.size(); i++) {
-		qObstacles[i]->draw(worldMat);
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		qEnvironmentObj[i]->draw(worldMat);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {

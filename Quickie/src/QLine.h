@@ -14,7 +14,6 @@ public:
 
 	std::vector<D3DXVECTOR3>	vertexPoint;
 
-	QLine() = default;
 	~QLine();
 
 	QLine(VertexShape*, float);

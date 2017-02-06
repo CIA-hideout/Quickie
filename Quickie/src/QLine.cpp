@@ -1,23 +1,18 @@
 #include "QLine.h"
 #include "Player.h"
+#include <comdef.h>
+
+#pragma comment(lib, "comsuppw.lib")
+#pragma comment(lib, "comsuppwd.lib")
 
 QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
-
 	time = 0.5;
-
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
-
 	parent = vS;
-
 	this->rotation_ = rotation_;
-
 	magnetude = 20;
-
 	objectType = OT_QL;
-	collisionType = CT_OOBB;
-
 	meshPtr = nullptr;
-
 	color = parent->color;
 }
 
@@ -45,19 +40,16 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
 						qtemp->alive = false;
 						vS[i]->pos = intersect;
+
+						graphics->camera->shake(0.25f, 1.0f);
 					}
-				}
-				else {
-					printf("does not intersect\n");
 				}
 			}
 		}
 	}
-
 }
 
 void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
-
 	D3DXVECTOR3 intersect, fIntersect, rayStart, rayEnd, ts, te, projPoint;
 	D3DXVECTOR4 norm, fNorm;
 
@@ -76,7 +68,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	vertexPoint.push_back(rayStart);
 
 	while (m_ > 0) {
-
 		rayEnd.x = rayStart.x + cos(rotation_) * m_;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
 		dist_ = cDist_ = 999;
@@ -99,7 +90,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 						latestID = vS[i]->id;
 						fNorm = norm;
 					}
-					// add a vertex into vertexPoint
 				}
 			}
 		}
@@ -165,7 +155,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	// no need for meshes here. lines can be rendered with primitive indices
 	vertices = 0;
 
-	graphics->get3Ddevice()->CreateVertexBuffer(
+	HRESULT res = graphics->get3Ddevice()->CreateVertexBuffer(
 		sizeof(LVertex)* vertexCount,
 		D3DUSAGE_WRITEONLY,
 		CUSTOMFVF,
@@ -174,7 +164,11 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		0
 		);
 
-	graphics->get3Ddevice()->CreateIndexBuffer(
+	_com_error err(res);
+	std::string errMsg = err.ErrorMessage();
+	printf("%s\n", errMsg.c_str());
+
+	res = graphics->get3Ddevice()->CreateIndexBuffer(
 		(vertexCount * 2 - 2) * sizeof(WORD),
 		D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16,
@@ -182,6 +176,10 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		&indexBuffer,
 		0
 		);
+
+	err = _com_error(res);
+	errMsg = err.ErrorMessage();
+	printf("%s\n", errMsg.c_str());
 
 	vertexBuffer->Lock(0, 0, (void**)&vertices, 0);
 
@@ -213,10 +211,10 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	vS.push_back(this);
 
+	initialized = true;
 }
 
 void QLine::draw(D3DXMATRIX& worldMat) {
-
 	if (visible) {
 		D3DXMatrixTranslation(&matTrans, startPoint.x, startPoint.y, parent->pos.z);
 
@@ -230,5 +228,5 @@ void QLine::draw(D3DXMATRIX& worldMat) {
 }
 
 QLine::~QLine() {
-
+	
 }

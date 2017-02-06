@@ -25,7 +25,6 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	rotation.y = 0;
 	rotation.z = 0;
 
-	collisionType = CT_AABB;
 	objectType = OT_PLY;
 
 	velocity.x = 0;
@@ -249,8 +248,8 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	cooldown.at(COOLDOWN_BLINK) = 1.0f;
 	velocity *= 0;
-	QLine* l = new QLine(this, angle);
-	l->init(vS, graphics);
+	QLine* qline = new QLine(this, angle);
+	qline->init(vS, graphics);
 
 }
 

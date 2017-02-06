@@ -1,9 +1,5 @@
 ﻿#include "CollisionManager.h"
 
-#define C_CT_AABB_AABB(v1, v2)	(v1->collisionType == CT_AABB && v2->collisionType == CT_AABB)
-#define C_CT_OOBB_OOBB(v1, v2)	(v1->collisionType == CT_OOBB && v2->collisionType == CT_OOBB)
-#define C_CT_S_S(v1, v2)		(v1->collisionType == CT_S && v2->collisionType == CT_S)
-
 #define P_DIST_3(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2) + pow((float)p1.z - p1.z, 2))
 #define P_DIST_2(p1, p2)		sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2))
 
@@ -150,112 +146,110 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 	std::vector<D3DXVECTOR3>	posV;
 	std::vector<D3DXVECTOR4>	normV;
 
-	if (vS->collisionType == CT_AABB) {
-		CM::computeAABB(vS);
+	CM::computeAABB(vS);
 
-		rayStart = pStart;
-		rayEnd = pEnd;
+	rayStart = pStart;
+	rayEnd = pEnd;
 
-		// [0] top
-		// min.x, max.y	->	max.x, max.y
+	// [0] top
+	// min.x, max.y	->	max.x, max.y
 
-		tStart.x = vS->min.x;
-		tStart.y = vS->max.y;
+	tStart.x = vS->min.x;
+	tStart.y = vS->max.y;
 
-		tEnd.x = vS->max.x;
-		tEnd.y = vS->max.y;
+	tEnd.x = vS->max.x;
+	tEnd.y = vS->max.y;
 
-		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
-			v.x = intersection.x;
-			v.y = intersection.y;
-			posV.push_back(v);
+	if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
 
-			dx = tStart.x - tEnd.x;
-			dy = tStart.y - tEnd.y;
+		dx = tStart.x - tEnd.x;
+		dy = tStart.y - tEnd.y;
 
-			tNorm.x = -dy;
-			tNorm.y = dx;
-			tNorm.z = dy;
-			tNorm.w = -dx;
+		tNorm.x = -dy;
+		tNorm.y = dx;
+		tNorm.z = dy;
+		tNorm.w = -dx;
 
-			normV.push_back(tNorm);
+		normV.push_back(tNorm);
 
-		}
+	}
 
-		// [1] botom
-		// min.x, min.y	->	max.x, min.y
+	// [1] botom
+	// min.x, min.y	->	max.x, min.y
 
-		tStart.x = vS->min.x;
-		tStart.y = vS->min.y;
+	tStart.x = vS->min.x;
+	tStart.y = vS->min.y;
 
-		tEnd.x = vS->max.x;
-		tEnd.y = vS->min.y;
+	tEnd.x = vS->max.x;
+	tEnd.y = vS->min.y;
 
-		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
-			v.x = intersection.x;
-			v.y = intersection.y;
-			posV.push_back(v);
+	if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
 
-			dx = tStart.x - tEnd.x;
-			dy = tStart.y - tEnd.y;
+		dx = tStart.x - tEnd.x;
+		dy = tStart.y - tEnd.y;
 
-			tNorm.x = -dy;
-			tNorm.y = dx;
-			tNorm.z = dy;
-			tNorm.w = -dx;
+		tNorm.x = -dy;
+		tNorm.y = dx;
+		tNorm.z = dy;
+		tNorm.w = -dx;
 
-			normV.push_back(tNorm);
-		}
+		normV.push_back(tNorm);
+	}
 
-		// [2] left
-		// min.x, max.y	->	min.x, min.y
+	// [2] left
+	// min.x, max.y	->	min.x, min.y
 
-		tStart.x = vS->min.x;
-		tStart.y = vS->max.y;
+	tStart.x = vS->min.x;
+	tStart.y = vS->max.y;
 
-		tEnd.x = vS->min.x;
-		tEnd.y = vS->min.y;
+	tEnd.x = vS->min.x;
+	tEnd.y = vS->min.y;
 
-		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
-			v.x = intersection.x;
-			v.y = intersection.y;
-			posV.push_back(v);
+	if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
 
-			dx = tStart.x - tEnd.x;
-			dy = tStart.y - tEnd.y;
+		dx = tStart.x - tEnd.x;
+		dy = tStart.y - tEnd.y;
 
-			tNorm.x = -dy;
-			tNorm.y = dx;
-			tNorm.z = dy;
-			tNorm.w = -dx;
+		tNorm.x = -dy;
+		tNorm.y = dx;
+		tNorm.z = dy;
+		tNorm.w = -dx;
 
-			normV.push_back(tNorm);
-		}
+		normV.push_back(tNorm);
+	}
 
-		// [3] right
-		// max.x, max.y	->	max.x, min.y
+	// [3] right
+	// max.x, max.y	->	max.x, min.y
 
-		tStart.x = vS->max.x;
-		tStart.y = vS->max.y;
+	tStart.x = vS->max.x;
+	tStart.y = vS->max.y;
 
-		tEnd.x = vS->max.x;
-		tEnd.y = vS->min.y;
+	tEnd.x = vS->max.x;
+	tEnd.y = vS->min.y;
 
-		if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
-			v.x = intersection.x;
-			v.y = intersection.y;
-			posV.push_back(v);
+	if (CM::lineSegmentIntersect(intersection, tStart, tEnd, rayStart, rayEnd)) {
+		v.x = intersection.x;
+		v.y = intersection.y;
+		posV.push_back(v);
 
-			dx = tStart.x - tEnd.x;
-			dy = tStart.y - tEnd.y;
+		dx = tStart.x - tEnd.x;
+		dy = tStart.y - tEnd.y;
 
-			tNorm.x = -dy;
-			tNorm.y = dx;
-			tNorm.z = dy;
-			tNorm.w = -dx;
+		tNorm.x = -dy;
+		tNorm.y = dx;
+		tNorm.z = dy;
+		tNorm.w = -dx;
 
-			normV.push_back(tNorm);
-		}
+		normV.push_back(tNorm);
 	}
 
 	// the point of intersection will be the one closest to pStart

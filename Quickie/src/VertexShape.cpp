@@ -73,9 +73,6 @@ void VertexShape::computeBoundingBox() {
 
 void VertexShape::computeBoundingSphere() {
 
-	if (collisionType != CT_S)
-		return;
-
 	BYTE* v = 0;
 	meshPtr->LockVertexBuffer(0, (void**)&v);
 

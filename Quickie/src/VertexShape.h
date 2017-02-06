@@ -7,13 +7,6 @@
 #include "rapidjson/document.h"
 #include "Input.h"
 
-enum CollisionType {
-	CT_AABB,
-	CT_OOBB,
-	CT_S,
-	CT_N
-};
-
 enum ObjectType {
 	OT_PLY,
 	OT_OBS,
@@ -56,11 +49,10 @@ public:
 
 	DWORD					spawntime;
 
-	CollisionType			collisionType;
 	ObjectType				objectType;
 
 	int						id;
-	bool					visible, alive;
+	bool					visible, alive, initialized;
 
 	D3DPRIMITIVETYPE		primitiveType;
 
