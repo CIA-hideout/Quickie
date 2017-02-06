@@ -23,7 +23,7 @@ public:
 	Obstacle(const int[]);
 	~Obstacle();
 
-	void init(Game*);
+	void init(Graphics*);
 	void draw(D3DXMATRIX&);
 	void update(float);
 	void setColor(D3DXVECTOR3);

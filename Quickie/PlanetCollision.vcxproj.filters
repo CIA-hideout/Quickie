@@ -16,6 +16,7 @@
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
+    <ClCompile Include="src\Instructions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />
@@ -69,6 +70,7 @@
     <ClInclude Include="src\rapidjson\writer.h" />
     <ClInclude Include="src\State.h" />
     <ClInclude Include="src\VertexShape.h" />
+    <ClInclude Include="src\Instructions.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\data\control.json" />

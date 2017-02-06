@@ -3,6 +3,7 @@
 Menu::Menu()
 {
 	menuStack.push(PLAY);
+	firstGame = true;
 };
 
 
@@ -21,6 +22,17 @@ void Menu::update()
 
 	case PLAY:
 		setCurrentSceneByInput(CONTROLS, controls.at(CONTROL_DOWN));
+		if (input->getKeyState(controls.at(CONTROL_RIGHT)) && firstGame)
+		{
+			nextState = stateNS::INSTRUCTIONS;
+			pNextState = &nextState;
+			firstGame = false;
+		}
+		else if (input->getKeyState(controls.at(CONTROL_RIGHT)))
+		{
+			nextState = stateNS::GAMEPLAY;
+			pNextState = &nextState;
+		}
 		break;
 
 	case CONTROLS:
@@ -74,7 +86,7 @@ void Menu::render()
 
 void Menu::setCurrentSceneByInput(Scene s, int c)
 {
-	if (s == REVERT)
+	if (s == REVERT && s != PLAY)
 	{
 		if (input->getKeyState(c))
 		{

@@ -17,7 +17,8 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 	collisionType = CT_OOBB;
 
 	meshPtr = nullptr;
-	
+	graphics = nullptr;
+	input = nullptr;
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -28,7 +29,9 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 }
 
-void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
+void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
+
+	graphics = g;
 
 	parent->cooldown.at(COOLDOWN_BLINK) = 1.0f;
 
@@ -133,14 +136,12 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 
 	// create all the vertices
 
-	this->game = gamePtr;
-
 	vertexCount = vertexPoint.size();
 
 	// no need for meshes here. lines can be rendered with primitive indices
 	vertices = 0;
 
-	gamePtr->getGraphics()->get3Ddevice()->CreateVertexBuffer(
+	graphics->get3Ddevice()->CreateVertexBuffer(
 		sizeof(LVertex)* vertexCount,
 		D3DUSAGE_WRITEONLY,
 		CUSTOMFVF,
@@ -149,7 +150,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 		0
 		);
 
-	gamePtr->getGraphics()->get3Ddevice()->CreateIndexBuffer(
+	graphics->get3Ddevice()->CreateIndexBuffer(
 		(vertexCount * 2 - 2) * sizeof(WORD),
 		D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16,
@@ -195,12 +196,12 @@ void QLine::draw(D3DXMATRIX& worldMat) {
 	if (visible) {
 		D3DXMatrixTranslation(&matTrans, startPoint.x, startPoint.y, parent->pos.z);
 
-		game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTrans);
+		graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTrans);
 
-		game->getGraphics()->get3Ddevice()->SetStreamSource(0, vertexBuffer, 0, sizeof(LVertex));
-		game->getGraphics()->get3Ddevice()->SetIndices(indexBuffer);
-		game->getGraphics()->get3Ddevice()->SetFVF(CUSTOMFVF);
-		game->getGraphics()->get3Ddevice()->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, vertexCount, 0, vertexCount - 1);
+		graphics->get3Ddevice()->SetStreamSource(0, vertexBuffer, 0, sizeof(LVertex));
+		graphics->get3Ddevice()->SetIndices(indexBuffer);
+		graphics->get3Ddevice()->SetFVF(CUSTOMFVF);
+		graphics->get3Ddevice()->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, vertexCount, 0, vertexCount - 1);
 	}
 }
 

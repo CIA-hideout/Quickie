@@ -3,9 +3,9 @@
 #include <math.h>
 #include "src/game.h"
 #include "src/CollisionManager.h"
-#include "src/Font.h"
 #include "src/LevelManager.h"
 #include "src/Menu.h"
+#include "src/Instructions.h"
 
 class quicky : public Game {
 
@@ -17,6 +17,7 @@ public:
 	LevelManager*				lManager;
 	rapidjson::Document			controlDoc;
 	rapidjson::Document			obstacleDoc;
+	std::stack<State*>			gameState;
 
 	quicky();
 
@@ -33,6 +34,4 @@ public:
 	void updateKeyboard();
 	void keyPress(int key);
 	void keyRelease(int key);
-	void popState() { gameState.pop(); }
-	void pushState(State* s){ gameState.push(s); }
 };

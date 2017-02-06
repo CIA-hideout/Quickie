@@ -13,8 +13,6 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
-#include <stack>
-#include "State.h"
 
 #pragma comment(lib, "dxerr.lib")
 
@@ -34,7 +32,6 @@ public:
 	bool						paused;
 	bool						initialized;
 	float						fov;
-	std::stack<State*>			gameState;
 
 	D3DXMATRIX		worldMat;
 

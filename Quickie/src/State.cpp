@@ -5,6 +5,7 @@ State::State()
 	input = nullptr;
 	fonts = std::map<Fonts, Font>();
 	graphics = nullptr;
+	pNextState = nullptr;
 };
 
 

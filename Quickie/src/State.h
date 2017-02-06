@@ -1,9 +1,7 @@
-#ifndef _STATE_H
-#define _STATE_H
+#pragma once
 
 #include "input.h"
 #include "Font.h"
-
 #include "rapidjson/document.h"
 
 enum Fonts
@@ -13,6 +11,17 @@ enum Fonts
 	MENU_OPTIONS,
 	GAME
 };
+
+namespace stateNS
+{
+	enum NextState
+	{
+		INSTRUCTIONS,
+		GAMEPLAY,
+		HIGHSCORE,
+		REVERT
+	};
+}
 
 class State
 {
@@ -25,12 +34,16 @@ protected:
 	Input*					input;
 	std::map<Fonts, Font>	fonts;
 	std::map<Control, int>	controls;
+	stateNS::NextState		nextState;
+	stateNS::NextState*		pNextState = nullptr;
 
 public:
 	State();
 	virtual ~State();
 
-	void initControls(rapidjson::Document&);
+	void					initControls(rapidjson::Document&);
+	stateNS::NextState*		getNextState(){ return pNextState; }
+	void					clearNextState(){ pNextState = nullptr; }
 
 	virtual void initialize(Graphics* graphics, Input* input);
 	virtual void update() = 0;
@@ -38,7 +51,5 @@ public:
 	virtual void render() = 0;
 	virtual void collisions() = 0;
 	virtual void releaseAll() = 0;
-	virtual void resetAll() = 0;
+	virtual void resetAll() = 0;	
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _MENU_H_
-#define _MENU_H_
+#pragma once
 
 #include <stack>
 #include "State.h"
@@ -21,19 +20,20 @@ namespace menuNS
 
 class Menu : public State
 {
+	bool					firstGame;
 	std::stack<Scene>		menuStack;
 
 	void setCurrentSceneByInput(Scene s, int);
+
 public:
 	Menu();
 	virtual ~Menu();
 	
-	void initialize(Graphics* graphics, Input* i);
-	void update();
-	void ai(){};
-	void render();
-	void collisions(){};
-	void releaseAll(){};
-	void resetAll(){};
+	void initialize(Graphics* graphics, Input* input) override;
+	void update() override;
+	void ai() override{};
+	void render() override;
+	void collisions() override{};
+	void releaseAll() override{};
+	void resetAll() override{};
 };
-#endif

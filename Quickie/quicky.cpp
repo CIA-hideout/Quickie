@@ -54,12 +54,13 @@ void quicky::initialize(HWND hWnd) {
 	fclose(controlFile);
 
 	for (int i = 0; i < qObstacles.size(); i++) {
-		qObstacles[i]->init(this);
+		Obstacle* temp = (Obstacle*)qObstacles[i];
+		temp->init(this->getGraphics());
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
-		temp->init(this);
+		temp->init(this->getGraphics(),this->getInput());
 		temp->assignControl(controlDoc);
 	}
   
@@ -87,6 +88,32 @@ void quicky::update() {
 
 	gameState.top()->update();
 
+	if (gameState.top()->getNextState() != nullptr)
+	{
+		printf("NEXT STATE\n");
+		stateNS::NextState pState = *gameState.top()->getNextState();
+		gameState.top()->clearNextState();
+
+		switch (pState)
+		{
+		case stateNS::INSTRUCTIONS:
+		{
+									  Instructions* i = new Instructions();
+
+									  i->initialize(graphics, input);
+									  gameState.push(i);
+		}
+			break;
+
+		case stateNS::GAMEPLAY:
+			break;
+
+		case stateNS::REVERT:
+			gameState.pop();
+			break;
+		}
+	}
+
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {
 			QLine* temp = (QLine*)qObstacles[i];
@@ -110,7 +137,7 @@ void quicky::update() {
 	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);
 	out2 = D3DXVECTOR2(out1.x, out1.y);
 	graphics->camera->pointInWorld(out1, out2, 20);
-	printf("POS %.2f, %.2f | %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
+	//printf("POS %.2f, %.2f | %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
 }
 
 void quicky::ai() {
