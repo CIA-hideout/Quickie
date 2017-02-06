@@ -26,7 +26,6 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	D3DXVECTOR3 intersect;
-
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true) {
@@ -154,20 +153,12 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
 	// create all the vertices
-<<<<<<< HEAD
-=======
-
->>>>>>> Change VertexShape init parameters
 	vertexCount = vertexPoint.size();
 
 	// no need for meshes here. lines can be rendered with primitive indices
 	vertices = 0;
 
-<<<<<<< HEAD
 	HRESULT res = graphics->get3Ddevice()->CreateVertexBuffer(
-=======
-	graphics->get3Ddevice()->CreateVertexBuffer(
->>>>>>> Change VertexShape init parameters
 		sizeof(LVertex)* vertexCount,
 		D3DUSAGE_WRITEONLY,
 		CUSTOMFVF,
@@ -175,16 +166,12 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		&vertexBuffer,
 		0
 		);
-
-<<<<<<< HEAD
+		
 	_com_error err(res);
 	std::string errMsg = err.ErrorMessage();
 	//printf("%s\n", errMsg.c_str());
 
 	res = graphics->get3Ddevice()->CreateIndexBuffer(
-=======
-	graphics->get3Ddevice()->CreateIndexBuffer(
->>>>>>> Change VertexShape init parameters
 		(vertexCount * 2 - 2) * sizeof(WORD),
 		D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16,

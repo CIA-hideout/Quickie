@@ -9,9 +9,9 @@ Menu::Menu()
 
 Menu::~Menu(){};
 
-void Menu::initialize(Graphics* g, Input* i)
+void Menu::initialize(Graphics* g, Input* i, Audio* a , rapidjson::Document& doc)
 {
-	State::initialize(g, i);
+	State::initialize(g, i, a, doc);
 }
 
 
@@ -24,26 +24,18 @@ void Menu::update()
 		setCurrentSceneByInput(CONTROLS, controls.at(CONTROL_DOWN));
 		if (input->getKeyState(controls.at(CONTROL_RIGHT)) && firstGame)
 		{
-			nextState = stateNS::INSTRUCTIONS;
-			pNextState = &nextState;
+			setNextStateByInput(stateNS::INSTRUCTIONS, controls.at(CONTROL_RIGHT));
 			firstGame = false;
 		}
 		else if (input->getKeyState(controls.at(CONTROL_RIGHT)))
 		{
-			nextState = stateNS::GAMEPLAY;
-			pNextState = &nextState;
+			setNextStateByInput(stateNS::GAMEPLAY, controls.at(CONTROL_RIGHT));
 		}
 		break;
 
 	case CONTROLS:
 		setCurrentSceneByInput(REVERT, controls.at(CONTROL_UP));
-		setCurrentSceneByInput(HIGHSCORE, controls.at(CONTROL_DOWN));
 		setCurrentSceneByInput(CONTROLS, controls.at(CONTROL_RIGHT));
-		break;
-
-	case HIGHSCORE:
-		setCurrentSceneByInput(REVERT, controls.at(CONTROL_UP));
-		setCurrentSceneByInput(HIGHSCORE, controls.at(CONTROL_RIGHT));
 		break;
 	}
 }

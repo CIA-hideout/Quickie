@@ -11,16 +11,13 @@ State::State()
 
 State::~State(){};
 
-void State::initialize(Graphics* g, Input* i)
+void State::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc)
 {
 	graphics = g;
 	input = i;
+	audio = a;
 	initFonts();
-
-	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_LEFT, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, 0.1f));
+	assignControls(doc);
 }
 
 void State::initFonts()
@@ -31,12 +28,21 @@ void State::initFonts()
 	addFont(GAME, fontNS::FONT_HEIGHT / 2, fontNS::FONT_WIDTH / 20, fontNS::FONT_WEIGHT / 5, fontNS::FONT_ITALICS, "HeartFont");
 }
 
-void State::initControls(rapidjson::Document& doc)
+void State::assignControls(rapidjson::Document& doc)
 {
-	controls.at(CONTROL_UP) = doc["control"].GetArray()[0]["up"].GetInt();
-	controls.at(CONTROL_DOWN) = doc["control"].GetArray()[0]["down"].GetInt();
-	controls.at(CONTROL_LEFT) = doc["control"].GetArray()[0]["left"].GetInt();
-	controls.at(CONTROL_RIGHT) = doc["control"].GetArray()[0]["right"].GetInt();
+	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_LEFT, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_ENTER, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_ESC, 0.1f));
+
+	controls.at(CONTROL_UP) = doc["state"].GetArray()[stateNS::docID]["up"].GetInt();
+	controls.at(CONTROL_DOWN) = doc["state"].GetArray()[stateNS::docID]["down"].GetInt();
+	controls.at(CONTROL_LEFT) = doc["state"].GetArray()[stateNS::docID]["left"].GetInt();
+	controls.at(CONTROL_RIGHT) = doc["state"].GetArray()[stateNS::docID]["right"].GetInt();
+	controls.at(CONTROL_ENTER) = doc["state"].GetArray()[stateNS::docID]["enter"].GetInt();
+	controls.at(CONTROL_ESC) = doc["state"].GetArray()[stateNS::docID]["escape"].GetInt();
 }
 
 void State::addFont(Fonts f, int h, UINT wid, UINT wei, bool i, std::string fN)
@@ -50,4 +56,19 @@ void State::addFont(Fonts f, int h, UINT wid, UINT wei, bool i, std::string fN)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "FAILED TO CREATE FONT"));
 
 	fonts[f] = tempFont;
+}
+
+void State::setNextStateByInput(stateNS::NextState nS, int c)
+{
+		if (input->getKeyState(c))
+		{
+			if (!input->wasKeyPressed(c))
+			{
+				nextState = nS;
+				pNextState = &nextState;
+				input->keysPressed[c] = true;
+			}
+		}
+		else
+			input->clearKeyPress(c);
 }

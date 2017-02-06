@@ -17,7 +17,7 @@ public:
 	Instructions();
 	virtual ~Instructions();
 
-	void initialize(Graphics* graphics, Input* input) override;
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc) override;
 	void update() override;
 	void ai() override{};
 	void render() override;

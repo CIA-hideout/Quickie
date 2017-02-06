@@ -10,27 +10,21 @@ Instructions::~Instructions()
 	
 }
 
-void Instructions::initialize(Graphics* g, Input* i)
+void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc)
 {
+	State::initialize(g, i, a, doc);
 	sqr1->init(g, i);
+	sqr1->setLocked(true);
 	sqr2->init(g, i);
-	State::initialize(g, i);
+	sqr2->setLocked(true);
 }
 
 void Instructions::update()
 {
 	std::vector<VertexShape*> tempVector = {sqr1};
 
-	if (input->getKeyState(controls.at(CONTROL_RIGHT)))
-	{
-		nextState = stateNS::GAMEPLAY;
-		pNextState = &nextState;
-	}
-	if (input->getKeyState(controls.at(CONTROL_LEFT)))
-	{
-		nextState = stateNS::REVERT;
-		pNextState = &nextState;
-	}
+	setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
+	setNextStateByInput(stateNS::GAMEPLAY, controls.at(CONTROL_RIGHT));
 
 	if (blink)
 	{

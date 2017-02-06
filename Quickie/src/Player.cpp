@@ -4,9 +4,8 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 	graphics = nullptr;
 	input = nullptr;
-	static int playerCount = 0;
-	playerId = playerCount++;
 	health = 3;
+	locked = false;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -136,33 +135,36 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			i->second -= deltaTime;
 	}
 
-	if (alive) {
-		if (input->getKeyState(controls.at(CONTROL_UP))) {
-			velocity.y += deltaTime * 10;
-		}
-		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
-			velocity.y -= deltaTime * 10;
-		}
-		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-			velocity.x -= deltaTime * 10 / ASPECT_RATIO;
-		}
-		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-			velocity.x += deltaTime * 10 / ASPECT_RATIO;
-		}
-
-		// blink and tp direction
-		if (input->getKeyState(controls.at(CONTROL_BL))) {
-			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-				cooldown.at(COOLDOWN_BLINK) = 1.0f;
-				float r_;
-				if (velocity.x >= 0)
-					r_ = atan(velocity.y / velocity.x);
-				else if (velocity.x < 0)
-					r_ = D3DX_PI + atan(velocity.y / velocity.x);
-
-				blink(vS, r_);
+	if (!locked)
+	{
+		if (alive) {
+			if (input->getKeyState(controls.at(CONTROL_UP))) {
+				velocity.y += deltaTime * 10;
 			}
-		}
+			if (input->getKeyState(controls.at(CONTROL_DOWN))) {
+				velocity.y -= deltaTime * 10;
+			}
+			if (input->getKeyState(controls.at(CONTROL_LEFT))) {
+				velocity.x -= deltaTime * 10 / ASPECT_RATIO;
+			}
+			if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
+				velocity.x += deltaTime * 10 / ASPECT_RATIO;
+			}
+
+			// blink and tp direction
+			if (input->getKeyState(controls.at(CONTROL_BL))) {
+				if (cooldown.at(COOLDOWN_BLINK) <= 0) {
+					cooldown.at(COOLDOWN_BLINK) = 1.0f;
+					float r_;
+					if (velocity.x >= 0)
+						r_ = atan(velocity.y / velocity.x);
+					else if (velocity.x < 0)
+						r_ = D3DX_PI + atan(velocity.y / velocity.x);
+
+					blink(vS, r_);
+				}
+			}
+	}
 
 		velocity.x *= 0.75;
 		// velocity.x *= 0.0f;
@@ -255,14 +257,14 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 }
 
-void Player::assignControl(rapidjson::Document& doc) {
+void Player::assignControl(rapidjson::Document& doc, int i) {
 
-	controls.at(CONTROL_UP) = doc["control"].GetArray()[playerId]["up"].GetInt();
-	controls.at(CONTROL_DOWN) = doc["control"].GetArray()[playerId]["down"].GetInt();
-	controls.at(CONTROL_LEFT) = doc["control"].GetArray()[playerId]["left"].GetInt();
-	controls.at(CONTROL_RIGHT) = doc["control"].GetArray()[playerId]["right"].GetInt();
-	controls.at(CONTROL_BL) = doc["control"].GetArray()[playerId]["bl"].GetInt();
-	controls.at(CONTROL_TP) = doc["control"].GetArray()[playerId]["tp"].GetInt();
+	controls.at(CONTROL_UP) = doc["player"].GetArray()[i]["up"].GetInt();
+	controls.at(CONTROL_DOWN) = doc["player"].GetArray()[i]["down"].GetInt();
+	controls.at(CONTROL_LEFT) = doc["player"].GetArray()[i]["left"].GetInt();
+	controls.at(CONTROL_RIGHT) = doc["player"].GetArray()[i]["right"].GetInt();
+	controls.at(CONTROL_BL) = doc["player"].GetArray()[i]["bl"].GetInt();
+	controls.at(CONTROL_TP) = doc["player"].GetArray()[i]["tp"].GetInt();
 
 }
 
