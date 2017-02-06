@@ -51,6 +51,6 @@ public:
 	void setLevel3(int);
 
 	// assign position from json
-	void assign(rapidjson::Document&);
+	void assignPosition(rapidjson::Document&, int obstacle);
 	D3DXVECTOR3 assignDimension(int);
 };

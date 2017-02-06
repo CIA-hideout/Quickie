@@ -2,6 +2,8 @@
 
 #include "input.h"
 #include "Font.h"
+#include "audio.h"
+
 #include "rapidjson/document.h"
 
 enum Fonts
@@ -12,12 +14,13 @@ enum Fonts
 	GAME
 };
 
-namespace stateNS {
+namespace stateNS
+{
+	const int docID = 0;
 	enum NextState
 	{
 		INSTRUCTIONS,
 		GAMEPLAY,
-		HIGHSCORE,
 		REVERT
 	};
 }
@@ -31,6 +34,7 @@ class State
 protected:
 	Graphics*				graphics;
 	Input*					input;
+	Audio*					audio;
 	std::map<Fonts, Font>	fonts;
 	std::map<Control, int>	controls;
 	stateNS::NextState		nextState;
@@ -40,11 +44,12 @@ public:
 	State();
 	virtual ~State();
 
-	void					initControls(rapidjson::Document&);
+	void					assignControls(rapidjson::Document&);
 	stateNS::NextState*		getNextState(){ return pNextState; }
+	void					setNextStateByInput(stateNS::NextState nS, int key);
 	void					clearNextState(){ pNextState = nullptr; }
 
-	virtual void initialize(Graphics* graphics, Input* input);
+	virtual void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc);
 	virtual void update() = 0;
 	virtual void ai() = 0;
 	virtual void render() = 0;

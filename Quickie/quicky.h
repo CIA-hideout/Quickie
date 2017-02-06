@@ -2,25 +2,15 @@
 
 #include <math.h>
 #include "src/game.h"
-#include "src/CollisionManager.h"
-#include "src/VertexShape.h"
-#include "src/Player.h"
-#include "src/Obstacle.h"
-#include "src/ParticleSource.h"
-#include "src/Font.h"
-#include "src/LevelManager.h"
 #include "src/Menu.h"
 #include "src/Instructions.h"
+#include "src/Gameplay.h"
 
 class quicky : public Game {
 
 public:
 
-	std::vector<VertexShape*>	qEnvironmentObj;
-	std::vector<VertexShape*>	qPlayer;
-	LevelManager*				lManager;
 	rapidjson::Document			controlDoc;
-	rapidjson::Document			obstacleDoc;
 	std::stack<State*>			gameState;
 
 	quicky();

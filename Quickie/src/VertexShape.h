@@ -7,6 +7,7 @@
 #include "rapidjson/document.h"
 #include "Input.h"
 
+
 enum ObjectType {
 	OBJECT_TYPE_PLAYER,
 	OBJECT_TYPE_OBSTACLE,
@@ -22,6 +23,7 @@ public:
 	Graphics*				graphics;
 	Input*					input;
 	Audio*					audio;	// pointer to audio system
+
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	int						vertexCount, indicesCount;
@@ -68,4 +70,3 @@ public:
 	void computeBoundingSphere();
 	bool collidesWith(VertexShape&);
 };
-

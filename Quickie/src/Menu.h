@@ -7,14 +7,13 @@ enum Scene
 {
 		PLAY,				// main menu;		when is it displayed
 		CONTROLS,			//
-		HIGHSCORE,			//
 		REVERT
 };
 
 namespace menuNS
 {
-	const std::string				options[] = { "Play!", "Controls", "Highscore" };
-	const int						optionsLength = 3;
+	const std::string				options[] = { "Play!", "Controls" };
+	const int						optionsLength = 2;
 
 }
 
@@ -29,7 +28,7 @@ public:
 	Menu();
 	virtual ~Menu();
 	
-	void initialize(Graphics* graphics, Input* input) override;
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc) override;
 	void update() override;
 	void ai() override{};
 	void render() override;

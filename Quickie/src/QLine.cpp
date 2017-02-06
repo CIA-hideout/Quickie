@@ -14,6 +14,8 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	objectType = OBJECT_TYPE_QLINE;
 	meshPtr = nullptr;
 	color = parent->color;
+	graphics = nullptr;
+	input = nullptr;
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -24,7 +26,6 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	D3DXVECTOR3 intersect;
-
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true) {
@@ -232,5 +233,5 @@ void QLine::draw(D3DXMATRIX& worldMat) {
 }
 
 QLine::~QLine() {
-	
+
 }
