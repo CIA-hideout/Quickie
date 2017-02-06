@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "QLine.h"
 
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
@@ -35,6 +34,8 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
+	cooldown.insert(std::pair <CooldownType, float>(INVULNERABLE, 0.0f));
+	cooldown.insert(std::pair <CooldownType, float>(SPAWN_TIME, 0.0f));
 
 	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
 	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
@@ -45,11 +46,11 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 }
 
-void Player::init(Graphics* g, Input* i) {
+void Player::init(Graphics* graphics, Input* input) {
 
-	graphics = g;
-	input = i;
-
+	this->input = input;
+	this->graphics = graphics;
+  
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
@@ -102,6 +103,7 @@ void Player::init(Graphics* g, Input* i) {
 
 	visible = true;
 	alive = true;
+	health = 3;
 
 }
 
@@ -122,9 +124,18 @@ void Player::draw(D3DXMATRIX& worldMat) {
 		meshPtr->DrawSubset(0);
 	}
 
+	if (!alive) {
+		ps.draw(worldMat);
+	}
+
 }
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
+
+	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
+		if (i->second > 0.0f)
+			i->second -= deltaTime;
+	}
 
 	if (alive) {
 		if (input->getKeyState(controls.at(CONTROL_UP))) {
@@ -154,15 +165,17 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			}
 		}
 
-		for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
-			if (i->second > 0.0f)
-				i->second -= deltaTime;
-		}
-
 		velocity.x *= 0.75;
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
 	}
+	else {
+		ps.update(deltaTime, vS);
+		if (cooldown.at(SPAWN_TIME) <= 0.0f) {
+			respawn();
+		}
+	}
+
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
@@ -197,17 +210,15 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	D3DXVECTOR3 poi;
 
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OT_QL && vS[i]->alive == true) {
+		if (vS[i]->objectType == OT_QL && vS[i]->alive == true && cooldown.at(INVULNERABLE) <= 0) {
 			qTemp = (QLine*)vS[i];
 			if (qTemp->parent != this) {
 				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-
-					// collision happened
-					this->visible = false;
-
-					// add this to a list of things to be deleted or something
 					this->alive = false;
-
+					this->visible = false;
+					ps = ParticleSource(100, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+					ps.init(graphics);
+					cooldown.at(SPAWN_TIME) = 3.0f;
 				}
 			}
 		}
@@ -215,6 +226,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 }
 
 void Player::respawn() {
+
 	if (pos.y <= -25) {
 		pos.y = 20;
 	}
@@ -223,13 +235,18 @@ void Player::respawn() {
 		pos.x = 20;
 	}
 
-	if (pos.x > 20){
-		pos.x = -20;
-	}
+	alive = true;
+	visible = true;
+
+	cooldown.at(INVULNERABLE) = 2.0f;
+
+	ps.clean();
+
 }
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
+	cooldown.at(COOLDOWN_BLINK) = 1.0f;
 	velocity *= 0;
 	QLine* l = new QLine(this, angle);
 	l->init(vS, graphics);

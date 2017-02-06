@@ -13,14 +13,19 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
+#include <random>
+#include "audio.h"
 
 #pragma comment(lib, "dxerr.lib")
+
+#define MINMAXRAND(min_, max_) rand() % (max_ - min_ + 1) + (float)min_
 
 class Game {
 public:
 
 	Graphics					*graphics;
 	Input						*input;
+	Audio						*audio;
 	HWND						hwnd;
 	HRESULT						hr;
 	LARGE_INTEGER				timeStart;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VertexShape.h"
+#include "Player.h"
 #include "CollisionManager.h"
 
 class QLine : public VertexShape {
@@ -10,8 +10,7 @@ public:
 	float						time;
 	float						magnetude;
 	float						rotation_;
-	int							id;
-	Player*						parent;
+	VertexShape*				parent;
 
 	std::vector<D3DXVECTOR3>	vertexPoint;
 

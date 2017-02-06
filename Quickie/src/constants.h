@@ -30,7 +30,8 @@
 #define DIMENSION_VERTICAL_SMALL	D3DXVECTOR3(1.5,  6, 0.5)
 #define DIMENSION_VERTICAL_MEDIUM	D3DXVECTOR3(1.5, 12, 0.5)
 #define DIMENSION_VERTICAL_LARGE	D3DXVECTOR3(1.5, 25, 0.5)
-#define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)		// use if obstacles are not needed
+#define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)			// use if obstacles are not needed
+#define DIMENSION_ALMOST_ZERO		D3DXVECTOR3(0.01, 0.01, 0.01)	// use for scaling as 0 * n = 0
 
 //-----------------------------------------------
 // Useful macros
@@ -70,3 +71,22 @@ const float FOV = PI * 0.5;
 const int SPAWN_LEFT[] = {-15, -5 };	// -15 < pos.x < -5
 const int SPAWN_CENTER[] = {-5, 5};		// - 5 < pos.x <  5
 const int SPAWN_RIGHT[] = {5, 15};		//   5 < pos.x < 15
+
+// game time between each level
+const float LEVEL_TIME = 10.0f;
+
+// audio file required by audio.cpp
+// WAVE_BANK must be the location of the xwb file
+const char WAVE_BANK[] = "resource\\audio\\Win\\Wave Bank.xwb";
+// SOUND_BANK must be location of .xsb file
+const char SOUND_BANK[] = "resource\\audio\\Win\\Sound Bank.xsb";
+// XGS_FILE must be location of .xgs file.
+const char XGS_FILE[] = "resource\\audio\\Win\\quickie-sound.xgs";
+
+// Sound cues
+const char BGM1[] = "bgm1";
+const char BGM2[] = "bgm2";
+const char BGM3[] = "bgm3";
+const char BGM4[] = "bgm4";
+const char BGM5[] = "bgm5";
+const char BGMRand[] = "bgmRandom";	// play random sound BGM1 - BGM5

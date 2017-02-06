@@ -95,12 +95,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\audio.cpp" />
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\Instructions.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\ParticleSource.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -113,12 +115,14 @@
     <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\audio.h" />
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\Instructions.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\ParticleSource.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\Camera.h" />

@@ -1,11 +1,13 @@
 #pragma once
 
-#include "VertexShape.h"
-#include "CollisionManager.h"
+#include "ParticleSource.h"
+#include "QLine.h"
 
 enum CooldownType {
 	COOLDOWN_BLINK,
-	COOLDOWN_TELEPORT
+	COOLDOWN_TELEPORT,
+	INVULNERABLE,
+	SPAWN_TIME
 };
 
 class Player : public VertexShape {
@@ -16,6 +18,8 @@ public:
 	int								playerId;
 	int								health;
 
+	ParticleSource					ps;
+
 	Player() = default;
 	~Player();
 
@@ -24,14 +28,13 @@ public:
 	void init(Graphics*, Input*);
 	void draw(D3DXMATRIX&);
 	void update(float, std::vector<VertexShape*>&);
-	void moveX(float&);
-	void moveY(float&);
-	void moveZ(float&);
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport();
 	void assignControl(rapidjson::Document&);
+
+	void startDeath();
 	
 	// GET
 	int getHealth(){ return health; }

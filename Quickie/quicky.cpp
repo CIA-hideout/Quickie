@@ -1,12 +1,12 @@
 #include "quicky.h"
 #include "src/QLine.h"
 
-Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 10, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o2 = new Obstacle(D3DXVECTOR3(-5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, -10, 20 - 0.5), D3DXVECTOR3(10, 1.5, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o4 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o5 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
-Obstacle* o6 = new Obstacle(D3DXVECTOR3(5, 0, 20 - 0.5), D3DXVECTOR3(1.5, 10, 0.5), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 0, 255));
+Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
+Obstacle* o2 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
+Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
+Obstacle* o4 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
+Obstacle* o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
+Obstacle* o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 
 Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
 Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
@@ -22,6 +22,7 @@ quicky::~quicky() {
 void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
+	lManager->init(this);
 
 	AllocConsole();
 	freopen("conin$", "r", stdin);
@@ -55,15 +56,15 @@ void quicky::initialize(HWND hWnd) {
 
 	for (int i = 0; i < qObstacles.size(); i++) {
 		Obstacle* temp = (Obstacle*)qObstacles[i];
-		temp->init(this->getGraphics());
+	  temp->init(this->audio, this->graphics);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
-		temp->init(this->getGraphics(),this->getInput());
+		temp->init(this->graphics, this->input);
 		temp->assignControl(controlDoc);
 	}
-  
+
 	// parse obstacles details
 	FILE* obsFile = fopen("resource\\data\\obstacles.json", "rb");
 	char obsBuffer[512];
@@ -82,11 +83,13 @@ void quicky::initialize(HWND hWnd) {
 	sqr1->assignControl(controlDoc);
 	sqr2->assignControl(controlDoc);
 	menu->initControls(controlDoc);
+
 }
 
 void quicky::update() {
 
 	gameState.top()->update();
+	lManager->update(deltaTime, qObstacles);
 
 	if (gameState.top()->getNextState() != nullptr)
 	{
@@ -121,7 +124,7 @@ void quicky::update() {
 		}
 		else if (qObstacles[i]->objectType == OT_OBS) {
 			Obstacle* temp = (Obstacle*)qObstacles[i];
-			temp->update(deltaTime);
+			temp->update(deltaTime, qPlayer);
 		}
 	}
 
@@ -129,15 +132,6 @@ void quicky::update() {
 		Player* temp = (Player*)qPlayer[i];
 		temp->update(deltaTime, qObstacles);
 	}
-
-	// push all temp stuff into respective vectors
-
-	D3DXVECTOR3 out1;
-	D3DXVECTOR2 out2;
-	graphics->camera->pointOnScreen(out1, sqr1->pos, worldMat);
-	out2 = D3DXVECTOR2(out1.x, out1.y);
-	graphics->camera->pointInWorld(out1, out2, 20);
-	//printf("POS %.2f, %.2f | %.2f, %.2f\n", out1.x, out1.y, sqr1->pos.x, sqr1->pos.y);
 }
 
 void quicky::ai() {
@@ -159,7 +153,7 @@ void quicky::render() {
 		temp->draw(worldMat);
 	}
 
-	gameState.top()->render();
+	// gameState.top()->render();
 }
 
 void quicky::releaseAll() {

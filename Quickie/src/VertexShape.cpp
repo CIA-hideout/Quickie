@@ -5,13 +5,15 @@ VertexShape::VertexShape() {
 	static int id_ = 0;
 	this->id = id_++;
 	meshPtr = nullptr;
+	spawntime = timeGetTime();
 }
 
 VertexShape::~VertexShape() {
 }
 
-void VertexShape::init(Graphics* g, Input* i) {
-
+void VertexShape::init(Audio* audio, Graphics* graphics) {
+	this->audio = audio;			// The audio system
+	this->graphics = graphics;
 }
 
 void VertexShape::draw(D3DXMATRIX& worldMat) {

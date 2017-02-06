@@ -17,7 +17,9 @@ enum CollisionType {
 enum ObjectType {
 	OT_PLY,
 	OT_OBS,
-	OT_QL
+	OT_QL,
+	OT_P,
+	OT_PS
 };
 
 class VertexShape {
@@ -26,9 +28,12 @@ public:
 
 	Graphics*				graphics;
 	Input*					input;
+	Audio*					audio;	// pointer to audio system
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	int						vertexCount, indicesCount;
+
+	Input*					input;
 
 	ID3DXMesh*				meshPtr;
 
@@ -51,6 +56,8 @@ public:
 
 	float					mass;
 
+	DWORD					spawntime;
+
 	CollisionType			collisionType;
 	ObjectType				objectType;
 
@@ -63,14 +70,12 @@ public:
 
 	VertexShape();
 	virtual ~VertexShape();
-
-	virtual void init(Graphics*, Input*);
+	virtual void init(Audio*, Graphics*, Input*);
 	virtual void draw(D3DXMATRIX&);
 	virtual void update(float);
 
 	void computeBoundingBox();
 	void computeBoundingSphere();
 	bool collidesWith(VertexShape&);
-
 };
 

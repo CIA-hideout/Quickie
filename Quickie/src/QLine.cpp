@@ -1,13 +1,13 @@
 #include "QLine.h"
 #include "Player.h"
 
-QLine::QLine(VertexShape* vS, float rotation_) {
+QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 
 	time = 0.5;
 
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
 
-	parent = (Player*)vS;
+	parent = vS;
 
 	this->rotation_ = rotation_;
 
@@ -17,8 +17,8 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 	collisionType = CT_OOBB;
 
 	meshPtr = nullptr;
-	graphics = nullptr;
-	input = nullptr;
+
+	color = parent->color;
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -27,16 +27,44 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		alive = false;
 		visible = false;
 	}
-}
 
 void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
 
 	graphics = g;
+	D3DXVECTOR3 intersect;
 
-	parent->cooldown.at(COOLDOWN_BLINK) = 1.0f;
+	if (alive) {
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->objectType == OT_QL && vS[i]->alive == true) {
+				QLine* qtemp = (QLine*)vS[i];
+				if (CollisionManager::collidePixelPerfect(intersect, this, qtemp)) {
+					Player* ptemp = (Player*)qtemp->parent;
+					if (vS[i]->id > id && this->parent != qtemp->parent) {
+						ptemp->alive = false;
+						ptemp->visible = false;
+						ptemp->ps = ParticleSource(100, parent->velocity, intersect, qtemp->color);
+
+						ptemp->ps.init(graphics);
+						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
+						qtemp->alive = false;
+						vS[i]->pos = intersect;
+					}
+				}
+				else {
+					printf("does not intersect\n");
+				}
+			}
+		}
+	}
+
+}
+
+void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	D3DXVECTOR3 intersect, fIntersect, rayStart, rayEnd, ts, te, projPoint;
 	D3DXVECTOR4 norm, fNorm;
+
+	this->graphics = graphics;
 
 	float r_, m_ = magnetude;
 	float dist_, cDist_;
@@ -135,7 +163,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
 	// create all the vertices
-
 	vertexCount = vertexPoint.size();
 
 	// no need for meshes here. lines can be rendered with primitive indices
@@ -166,7 +193,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
 		v_.x = vertexPoint[i].x - startPoint.x;
 		v_.y = vertexPoint[i].y - startPoint.y;
 		v_.z = 0;
-		v_.color = D3DCOLOR_ARGB(255, 255, 255, 255);
+		v_.color = D3DCOLOR_ARGB(255, (int)parent->color.x, (int)parent->color.y, (int)parent->color.z);
 		vertices[i] = v_;
 	}
 
