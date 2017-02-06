@@ -28,9 +28,6 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		visible = false;
 	}
 
-void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
-
-	graphics = g;
 	D3DXVECTOR3 intersect;
 
 	if (alive) {

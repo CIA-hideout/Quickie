@@ -1,7 +1,7 @@
 #pragma once
 
 #include "graphics.h"
-
+#include "audio.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
@@ -32,8 +32,6 @@ public:
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	int						vertexCount, indicesCount;
-
-	Input*					input;
 
 	ID3DXMesh*				meshPtr;
 

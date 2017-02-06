@@ -2,6 +2,7 @@
 
 #include "VertexShape.h"
 #include "CollisionManager.h"
+#include "random"
 
 #ifndef _PARTICLE_SOURCE_
 #define _PARTICLE_SOURCE_

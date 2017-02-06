@@ -3,6 +3,7 @@
 #include <vector>
 #include "State.h"
 #include "CollisionManager.h"
+#include "Player.h"
 
 class Instructions : public State
 {
