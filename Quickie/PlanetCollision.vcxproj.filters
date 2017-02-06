@@ -19,7 +19,6 @@
     <ClCompile Include="src\Instructions.cpp" />
     <ClCompile Include="src\ParticleSource.cpp" />
     <ClCompile Include="src\audio.cpp" />
-    <ClCompile Include="src\Gameplay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />
@@ -76,7 +75,6 @@
     <ClInclude Include="src\Instructions.h" />
     <ClInclude Include="src\ParticleSource.h" />
     <ClInclude Include="src\audio.h" />
-    <ClInclude Include="src\Gameplay.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\data\control.json" />

@@ -47,38 +47,37 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	printf("%s\n", obstacleDoc["test_string"].GetString());
 	fclose(obsFile);
 
-	for (int i = 0; i < qObstacles.size(); i++) {
-		Obstacle* temp = (Obstacle*)qObstacles[i];
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
 		temp->init(this->audio, this->graphics);
 		temp->assignPosition(obstacleDoc, i);
 	}
 
-	printf("%d", qPlayer.size());
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
 		temp->init(this->graphics, this->input);
 		temp->assignControl(controlsDoc, i);
 	}
 
-	lManager->setRandomLevel(qObstacles);
+	lManager->setRandomLevel(qEnvironmentObj);
 }
 
 void Gameplay::update()
 {
-	for (int i = 0; i < qObstacles.size(); i++) {
-		if (qObstacles[i]->objectType == OT_QL) {
-			QLine* temp = (QLine*)qObstacles[i];
-			temp->update(*deltaTime, qObstacles);
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {
+			QLine* temp = (QLine*)qEnvironmentObj[i];
+			temp->update(*deltaTime, qEnvironmentObj);
 		}
-		else if (qObstacles[i]->objectType == OT_OBS) {
-			Obstacle* temp = (Obstacle*)qObstacles[i];
+		else if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
 			temp->update(*deltaTime, qPlayer);
 		}
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
-		temp->update(*deltaTime, qObstacles);
+		temp->update(*deltaTime, qEnvironmentObj);
 	}
 
 	graphics->camera->update(*deltaTime);
@@ -88,8 +87,8 @@ void Gameplay::update()
 
 void Gameplay::render()
 {
-	for (int i = 0; i < qObstacles.size(); i++) {
-		qObstacles[i]->draw(worldMatrix);
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		qEnvironmentObj[i]->draw(worldMatrix);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {

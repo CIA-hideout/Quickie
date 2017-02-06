@@ -48,7 +48,7 @@ void Player::init(Graphics* graphics, Input* input) {
 
 	this->input = input;
 	this->graphics = graphics;
-
+	
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);

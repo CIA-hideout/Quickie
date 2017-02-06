@@ -22,15 +22,14 @@ void Menu::update()
 
 	case PLAY:
 		setCurrentSceneByInput(CONTROLS, controls.at(CONTROL_DOWN));
+		
 		if (input->getKeyState(controls.at(CONTROL_RIGHT)) && firstGame)
 		{
 			setNextStateByInput(stateNS::INSTRUCTIONS, controls.at(CONTROL_RIGHT));
 			firstGame = false;
 		}
-		else if (input->getKeyState(controls.at(CONTROL_RIGHT)))
-		{
+		else
 			setNextStateByInput(stateNS::GAMEPLAY, controls.at(CONTROL_RIGHT));
-		}
 		break;
 
 	case CONTROLS:
@@ -60,14 +59,14 @@ void Menu::render()
 		{
 			f.print(
 				GAME_WIDTH / 2 - f.getTotalWidth(("> " + menuNS::options[i])) / 2,
-				GAME_HEIGHT / 3 + offSetY,
+				GAME_HEIGHT / 2 + offSetY,
 				"> " + menuNS::options[i]);
 		}
 		else
 		{
 			f.print(
 				GAME_WIDTH / 2 - f.getTotalWidth(menuNS::options[i]) / 2,
-				GAME_HEIGHT / 3 + offSetY,
+				GAME_HEIGHT / 2 + offSetY,
 				menuNS::options[i]);
 		}
 

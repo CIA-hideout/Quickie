@@ -7,6 +7,7 @@
 #include "rapidjson/document.h"
 #include "Input.h"
 
+
 enum ObjectType {
 	OBJECT_TYPE_PLAYER,
 	OBJECT_TYPE_OBSTACLE,

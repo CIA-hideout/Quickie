@@ -7,7 +7,7 @@ Instructions::Instructions()
 
 Instructions::~Instructions()
 {
-	
+
 }
 
 void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc)
@@ -46,6 +46,6 @@ void Instructions::render()
 		GAME_HEIGHT / 5,
 		"Press something to blink.");
 
-	sqr1->draw(worldMatrix);
-	sqr2->draw(worldMatrix);
+	//sqr1->draw(worldMatrix);
+	//sqr2->draw(worldMatrix);
 }

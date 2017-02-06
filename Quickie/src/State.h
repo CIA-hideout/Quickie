@@ -3,6 +3,7 @@
 #include "input.h"
 #include "Font.h"
 #include "audio.h"
+
 #include "rapidjson/document.h"
 
 enum Fonts
@@ -47,7 +48,6 @@ public:
 	stateNS::NextState*		getNextState(){ return pNextState; }
 	void					setNextStateByInput(stateNS::NextState nS, int key);
 	void					clearNextState(){ pNextState = nullptr; }
-	
 
 	virtual void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc);
 	virtual void update() = 0;

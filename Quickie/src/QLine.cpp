@@ -166,7 +166,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		&vertexBuffer,
 		0
 		);
-		
+
 	_com_error err(res);
 	std::string errMsg = err.ErrorMessage();
 	//printf("%s\n", errMsg.c_str());
