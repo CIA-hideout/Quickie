@@ -258,13 +258,33 @@ void Obstacle::setDimension(D3DXVECTOR3 newDimension) {
 	meshPtr->UnlockVertexBuffer();
 }
 
+void Obstacle::setRandomDimension(int count)
+{
+	if (count != 0)
+		currentState = SHRINK;
+
+	setDimension(getRandomDimension());		// get a random direction and set it
+
+}
+
 // generate a random size for the obstructor and returns the size
 D3DXVECTOR3 Obstacle::getRandomDimension() {
+
 	std::vector<D3DXVECTOR3> dimensions;
+
+	// small and medium size to appear more frequently (horizontal)
+	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
 	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
 	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
 	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
-	// medium size to appear more frequently
+	dimensions.push_back(DIMENSION_HORIZONTAL_LARGE);
+
+	// small and medium size to appear more frequently (vertical)
+	dimensions.push_back(DIMENSION_VERTICAL_SMALL);
+	dimensions.push_back(DIMENSION_VERTICAL_SMALL);
+	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
+	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
+	dimensions.push_back(DIMENSION_VERTICAL_LARGE);
 
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)

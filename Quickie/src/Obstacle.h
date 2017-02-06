@@ -42,6 +42,7 @@ public:
 	void setColor(D3DXVECTOR3);
 	void setDimension(D3DXVECTOR3);
 	void setPosition(D3DXVECTOR3);
+	void setRandomDimension(int);
 	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 getRandomDimension();
 
