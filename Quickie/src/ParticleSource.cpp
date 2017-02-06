@@ -9,6 +9,8 @@ ParticleSource::ParticleSource(int count, float angle, D3DXVECTOR3& srcPos, D3DX
 	particleCount = count;
 	this->color = color;
 	objectType = OT_PS;
+
+	duration = 3.0f;
 }
 
 ParticleSource::~ParticleSource() {
@@ -90,7 +92,7 @@ void ParticleSource::init(Game* game) {
 
 		static int randCount = 0;
 
-		vs->velocity.x = distribution(generator) / 5.0f;
+		vs->velocity.x = distribution(generator) / 5.0f / ASPECT_RATIO;
 		vs->velocity.y = distribution(generator) / 5.0f;
 		vs->velocity.z = distribution(generator) / 5.0f;
 
@@ -154,4 +156,15 @@ void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 			}
 		}
 	}
+}
+
+void ParticleSource::clean() {
+
+	for (int i = 0; i < particleCount; i++) {
+		delete particles[i];
+		particles[i] = nullptr;
+	}
+
+	particles.clear();
+
 }

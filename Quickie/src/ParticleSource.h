@@ -15,13 +15,15 @@ public:
 	~ParticleSource();
 
 	int							particleCount;
-	float						direction;
+	float						direction, duration;
 	std::vector<VertexShape*>	particles;
 
 	void init(Game*);
 	void draw(D3DXMATRIX&);
 	void update(float, std::vector<VertexShape*>&);
 	void move(std::vector<VertexShape*>&, float);
+
+	void clean();
 
 };
 

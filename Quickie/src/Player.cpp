@@ -34,6 +34,7 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_BLINK, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(INVULNERABLE, 0.0f));
+	cooldown.insert(std::pair <CooldownType, float>(SPAWN_TIME, 0.0f));
 
 	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
 	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
@@ -128,6 +129,11 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
+	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
+		if (i->second > 0.0f)
+			i->second -= deltaTime;
+	}
+
 	if (alive) {
 		if (game->getInput()->getKeyState(controls.at(CONTROL_UP))) {
 			velocity.y += deltaTime * 10;
@@ -156,18 +162,15 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			}
 		}
 
-		for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
-			if (i->second > 0.0f)
-				i->second -= deltaTime;
-		}
-
 		velocity.x *= 0.75;
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
 	}
-
 	else {
 		ps.update(deltaTime, vS);
+		if (cooldown.at(SPAWN_TIME) <= 0.0f) {
+			respawn();
+		}
 	}
 
 }
@@ -208,14 +211,11 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 			qTemp = (QLine*)vS[i];
 			if (qTemp->parent != this) {
 				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-					this->health--;
-					if (health <= 0) {
-						this->alive = false;
-						this->visible = false;
-						ps = ParticleSource(100, D3DX_PI, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
-						ps.init(game);
-					}
-					cooldown.at(INVULNERABLE) = 2.0f;
+					this->alive = false;
+					this->visible = false;
+					ps = ParticleSource(100, D3DX_PI, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+					ps.init(game);
+					cooldown.at(SPAWN_TIME) = 3.0f;
 				}
 			}
 		}
@@ -223,6 +223,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 }
 
 void Player::respawn() {
+
 	if (pos.y <= -25) {
 		pos.y = 20;
 	}
@@ -231,9 +232,13 @@ void Player::respawn() {
 		pos.x = 20;
 	}
 
-	if (pos.x > 20){
-		pos.x = -20;
-	}
+	alive = true;
+	visible = true;
+
+	cooldown.at(INVULNERABLE) = 2.0f;
+
+	ps.clean();
+
 }
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {

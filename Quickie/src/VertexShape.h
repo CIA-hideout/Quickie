@@ -52,6 +52,8 @@ public:
 
 	float					mass;
 
+	DWORD					spawntime;
+
 	CollisionType			collisionType;
 	ObjectType				objectType;
 

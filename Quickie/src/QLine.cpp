@@ -16,7 +16,9 @@ QLine::QLine(VertexShape* vS, float rotation_) {
 	collisionType = CT_OOBB;
 
 	meshPtr = nullptr;
-	
+
+	color = parent->color;
+
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -162,7 +164,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Game* gamePtr) {
 		v_.x = vertexPoint[i].x - startPoint.x;
 		v_.y = vertexPoint[i].y - startPoint.y;
 		v_.z = 0;
-		v_.color = D3DCOLOR_ARGB(255, 255, 255, 255);
+		v_.color = D3DCOLOR_ARGB(255, (int)parent->color.x, (int)parent->color.y, (int)parent->color.z);
 		vertices[i] = v_;
 	}
 

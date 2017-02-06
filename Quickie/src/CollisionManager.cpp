@@ -45,16 +45,6 @@ bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, V
 	v2Hop = (v2->meshPtr == nullptr) ? 2 : 3;
 
 	for (int i = 0; i < v1->indicesCount; i += v1Hop) {
-		for (int i_ = 0; i_ < v1Hop; i_++) {
-			printf("%.2f, %.2f\n",
-				v1->vertices[v1->indices[i + i_]].x,
-				v1->vertices[v1->indices[i + i_]].y,
-				v1->vertices[v1->indices[i + i_]].z
-				);
-		}
-	}
-
-	for (int i = 0; i < v1->indicesCount; i += v1Hop) {
 
 		for (int i_ = 0; i_ < v1Hop; i_++) {
 

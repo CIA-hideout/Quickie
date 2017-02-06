@@ -6,7 +6,8 @@
 enum CooldownType {
 	COOLDOWN_BLINK,
 	COOLDOWN_TELEPORT,
-	INVULNERABLE
+	INVULNERABLE,
+	SPAWN_TIME
 };
 
 class Player : public VertexShape {
