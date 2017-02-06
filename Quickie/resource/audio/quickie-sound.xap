@@ -16,8 +16,8 @@ Global Settings
     Header File = quickie-sound.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
-    Last Modified Low = 1779601823;
-    Last Modified High = 30572585;
+    Last Modified Low = 2910225993;
+    Last Modified High = 30572589;
 
     Category
     {
@@ -227,10 +227,10 @@ Wave Bank
     Compression Preset Name = <none>;
     Xbox Bank Last Modified Low = 0;
     Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 1779721812;
-    PC Bank Last Modified High = 30572585;
-    Bank Last Revised Low = 535778589;
-    Bank Last Revised High = 30572585;
+    PC Bank Last Modified Low = 2910550977;
+    PC Bank Last Modified High = 30572589;
+    Bank Last Revised Low = 2910541027;
+    Bank Last Revised High = 30572589;
 
     Wave
     {
@@ -250,8 +250,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 998900736;
-            Last Modified High = 30571609;
+            Last Modified Low = 1825917952;
+            Last Modified High = 30572588;
         }
     }
 
@@ -273,8 +273,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 1158900736;
-            Last Modified High = 30571609;
+            Last Modified Low = 1825917952;
+            Last Modified High = 30572588;
         }
     }
 
@@ -296,8 +296,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 1218900736;
-            Last Modified High = 30571609;
+            Last Modified Low = 1825917952;
+            Last Modified High = 30572588;
         }
     }
 
@@ -319,8 +319,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 1298900736;
-            Last Modified High = 30571609;
+            Last Modified Low = 1825917952;
+            Last Modified High = 30572588;
         }
     }
 
@@ -342,8 +342,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 1388900736;
-            Last Modified High = 30571609;
+            Last Modified Low = 1825917952;
+            Last Modified High = 30572588;
         }
     }
 }
@@ -355,15 +355,15 @@ Sound Bank
     Windows File = Win\Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Bank Last Modified Low = 1780141901;
-    Bank Last Modified High = 30572585;
+    Bank Last Modified Low = 2911075978;
+    Bank Last Modified High = 30572589;
     Header Last Modified High = 0;
     Header Last Modified Low = 0;
 
     Sound
     {
         Name = bgm4;
-        Volume = -1200;
+        Volume = 300;
         Pitch = 0;
         Priority = 0;
 
@@ -411,7 +411,7 @@ Sound Bank
     Sound
     {
         Name = bgm1;
-        Volume = -1200;
+        Volume = 300;
         Pitch = 0;
         Priority = 0;
 
@@ -459,7 +459,7 @@ Sound Bank
     Sound
     {
         Name = bgm2;
-        Volume = -1200;
+        Volume = 300;
         Pitch = 0;
         Priority = 0;
 
@@ -507,7 +507,7 @@ Sound Bank
     Sound
     {
         Name = bgm3;
-        Volume = -1200;
+        Volume = 300;
         Pitch = 0;
         Priority = 0;
 
@@ -555,7 +555,7 @@ Sound Bank
     Sound
     {
         Name = bgm5;
-        Volume = -1200;
+        Volume = 300;
         Pitch = 0;
         Priority = 0;
 

@@ -77,11 +77,11 @@ const float LEVEL_TIME = 10.0f;
 
 // audio file required by audio.cpp
 // WAVE_BANK must be the location of the xwb file
-const char WAVE_BANK[] = "resource\\audio\\Win\\WaveBank.xwb";
+const char WAVE_BANK[] = "resource\\audio\\Win\\Wave Bank.xwb";
 // SOUND_BANK must be location of .xsb file
-const char SOUND_BANK[] = "resource\\audio\\Win\\SoundBank.xsb";
+const char SOUND_BANK[] = "resource\\audio\\Win\\Sound Bank.xsb";
 // XGS_FILE must be location of .xgs file.
-const char XGS_FILE[] = "resource\\audio\\Win\\quickie.xgs";
+const char XGS_FILE[] = "resource\\audio\\Win\\quickie-sound.xgs";
 
 // Sound cues
 const char BGM1[] = "bgm1";
