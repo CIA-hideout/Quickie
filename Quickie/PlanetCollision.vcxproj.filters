@@ -17,8 +17,11 @@
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
     <ClCompile Include="src\Instructions.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="src\ParticleSource.cpp" />
     <ClCompile Include="src\audio.cpp" />
+=======
+>>>>>>> Change VertexShape init parameters
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />

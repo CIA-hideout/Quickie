@@ -11,10 +11,15 @@ VertexShape::VertexShape() {
 VertexShape::~VertexShape() {
 }
 
+<<<<<<< HEAD
 void VertexShape::init(Audio* audio, Graphics* graphics, Input* input) {
 	this->audio = audio;			// The audio system
 	this->graphics = graphics;
 	this->input = input;
+=======
+void VertexShape::init(Graphics* g, Input* i) {
+
+>>>>>>> Change VertexShape init parameters
 }
 
 void VertexShape::draw(D3DXMATRIX& worldMat) {

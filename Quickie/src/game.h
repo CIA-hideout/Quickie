@@ -4,17 +4,17 @@
 #include <Mmsystem.h>
 #include <DxErr.h>
 #include <vector>
+#include <random>
 
 #include "constants.h"
 #include "graphics.h"
 #include "gameError.h"
 #include "input.h"
+#include "audio.h"
 
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
-#include <random>
-#include "audio.h"
 
 #pragma comment(lib, "dxerr.lib")
 

@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <random>
 
-
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 	static int obstacleCount = 0;
 	obstacleId = obstacleCount++;
@@ -33,10 +32,10 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 Obstacle::~Obstacle() {
 }
 
-
 void Obstacle::init(Audio* audio, Graphics* graphics) {
 	this->graphics = graphics;
 	this->audio = audio;
+
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	vertices = 0;
@@ -94,8 +93,10 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 
 	LPDIRECT3DVERTEXBUFFER9 vBuffer;
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
+
 	meshPtr->GetVertexBuffer(&vBuffer);
 	meshPtr->GetIndexBuffer(&iBuffer);
+
 	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
 	graphics->get3Ddevice()->SetIndices(iBuffer);
 

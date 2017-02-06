@@ -12,7 +12,8 @@ enum Fonts
 	GAME
 };
 
-namespace stateNS {
+namespace stateNS
+{
 	enum NextState
 	{
 		INSTRUCTIONS,

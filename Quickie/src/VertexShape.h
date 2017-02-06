@@ -22,6 +22,7 @@ public:
 	Graphics*				graphics;
 	Input*					input;
 	Audio*					audio;	// pointer to audio system
+
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	int						vertexCount, indicesCount;
@@ -68,4 +69,3 @@ public:
 	void computeBoundingSphere();
 	bool collidesWith(VertexShape&);
 };
-

@@ -107,6 +107,23 @@ void quicky::update() {
 		}
 			break;
 
+	if (gameState.top()->getNextState() != nullptr)
+	{
+		printf("NEXT STATE\n");
+		stateNS::NextState pState = *gameState.top()->getNextState();
+		gameState.top()->clearNextState();
+
+		switch (pState)
+		{
+		case stateNS::INSTRUCTIONS:
+		{
+									  Instructions* i = new Instructions();
+
+									  i->initialize(graphics, input);
+									  gameState.push(i);
+		}
+			break;
+
 		case stateNS::GAMEPLAY:
 			break;
 
@@ -131,6 +148,7 @@ void quicky::update() {
 		Player* temp = (Player*)qPlayer[i];
 		temp->update(deltaTime, qEnvironmentObj);
 	}
+	
 	graphics->camera->update(deltaTime);
 }
 

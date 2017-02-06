@@ -49,26 +49,26 @@ void Player::init(Graphics* graphics, Input* input) {
 
 	this->input = input;
 	this->graphics = graphics;
-  
+
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
 
 	// 0
 	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 1						 												    
+	// 1
 	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 2						 												    
+	// 2
 	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 3						 												    
+	// 3
 	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 4						 												    
+	// 4
 	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 5						 												    
+	// 5
 	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 6						 												    
+	// 6
 	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 7						 												    
+	// 7
 	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 
 	meshPtr->UnlockVertexBuffer();

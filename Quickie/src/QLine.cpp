@@ -14,6 +14,8 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	objectType = OBJECT_TYPE_QLINE;
 	meshPtr = nullptr;
 	color = parent->color;
+	graphics = nullptr;
+	input = nullptr;
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -23,7 +25,13 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		visible = false;
 	}
 
+<<<<<<< HEAD
 	D3DXVECTOR3 intersect;
+=======
+void QLine::init(std::vector<VertexShape*>& vS, Graphics* g) {
+
+	graphics = g;
+>>>>>>> Change VertexShape init parameters
 
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
@@ -152,12 +160,20 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
 	// create all the vertices
+<<<<<<< HEAD
+=======
+
+>>>>>>> Change VertexShape init parameters
 	vertexCount = vertexPoint.size();
 
 	// no need for meshes here. lines can be rendered with primitive indices
 	vertices = 0;
 
+<<<<<<< HEAD
 	HRESULT res = graphics->get3Ddevice()->CreateVertexBuffer(
+=======
+	graphics->get3Ddevice()->CreateVertexBuffer(
+>>>>>>> Change VertexShape init parameters
 		sizeof(LVertex)* vertexCount,
 		D3DUSAGE_WRITEONLY,
 		CUSTOMFVF,
@@ -166,11 +182,15 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		0
 		);
 
+<<<<<<< HEAD
 	_com_error err(res);
 	std::string errMsg = err.ErrorMessage();
 	//printf("%s\n", errMsg.c_str());
 
 	res = graphics->get3Ddevice()->CreateIndexBuffer(
+=======
+	graphics->get3Ddevice()->CreateIndexBuffer(
+>>>>>>> Change VertexShape init parameters
 		(vertexCount * 2 - 2) * sizeof(WORD),
 		D3DUSAGE_WRITEONLY,
 		D3DFMT_INDEX16,
@@ -232,5 +252,5 @@ void QLine::draw(D3DXMATRIX& worldMat) {
 }
 
 QLine::~QLine() {
-	
+
 }
