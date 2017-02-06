@@ -15,8 +15,8 @@
 #include "rapidjson/document.h"
 #include "State.h"
 #include <stack>
-
 #include <random>
+#include "audio.h"
 
 #pragma comment(lib, "dxerr.lib")
 
@@ -27,6 +27,7 @@ public:
 
 	Graphics					*graphics;
 	Input						*input;
+	Audio						*audio;
 	HWND						hwnd;
 	HRESULT						hr;
 	LARGE_INTEGER				timeStart;

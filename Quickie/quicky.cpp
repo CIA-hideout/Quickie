@@ -22,6 +22,7 @@ quicky::~quicky() {
 void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
+	lManager->init(this);
 
 	AllocConsole();
 	freopen("conin$", "r", stdin);
