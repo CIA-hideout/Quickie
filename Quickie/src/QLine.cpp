@@ -28,30 +28,32 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		alive = false;
 		visible = false;
 	}
-	
-	//D3DXVECTOR3 intersect;
 
-	//for (int i = 0; i < vS.size(); i++) {
-	//	if (vS[i]->objectType == OT_QL && vS[i]->alive == true) {
-	//		if (CollisionManager::collidePixelPerfect(intersect, this, vS[i])) {
-	//			if (vS[i]->id > id) {
-	//				QLine* qtemp = (QLine*)vS[i];
-	//				Player* ptemp = (Player*)qtemp->parent;
-	//				ptemp->alive = false;
-	//				ptemp->visible = false;
-	//				ptemp->ps = ParticleSource(100, parent->velocity, pos, this->color);
+	D3DXVECTOR3 intersect;
 
-	//				ptemp->ps.init(game);
-	//				ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
-	//				qtemp->alive = false;
-	//				ptemp->pos = intersect;
-	//			}
-	//		}
-	//		else {
-	//			printf("does not intersect\n");
-	//		}
-	//	}
-	//}
+	if (alive) {
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->objectType == OT_QL && vS[i]->alive == true) {
+				QLine* qtemp = (QLine*)vS[i];
+				if (CollisionManager::collidePixelPerfect(intersect, this, qtemp)) {
+					Player* ptemp = (Player*)qtemp->parent;
+					if (vS[i]->id > id && this->parent != qtemp->parent) {
+						ptemp->alive = false;
+						ptemp->visible = false;
+						ptemp->ps = ParticleSource(100, parent->velocity, intersect, qtemp->color);
+
+						ptemp->ps.init(graphics);
+						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
+						qtemp->alive = false;
+						vS[i]->pos = intersect;
+					}
+				}
+				else {
+					printf("does not intersect\n");
+				}
+			}
+		}
+	}
 
 }
 

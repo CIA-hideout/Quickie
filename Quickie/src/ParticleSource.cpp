@@ -1,7 +1,6 @@
 #include "ParticleSource.h"
 
 ParticleSource::ParticleSource() : VertexShape() {
-
 }
 
 ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos, D3DXVECTOR3& color) : VertexShape() {
@@ -14,23 +13,19 @@ ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos
 }
 
 ParticleSource::~ParticleSource() {
-
 }
 
 void ParticleSource::init(Graphics* graphics) {
-
 	std::random_device rdev;
 	std::mt19937 generator(rdev());
-	
-	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
 
+	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
 
 	this->graphics = graphics;
 
 	// create the particles here
 
 	for (int i = 0; i < particleCount; i++) {
-
 		VertexShape* vs = new VertexShape();
 
 		vs->graphics = graphics;
@@ -45,19 +40,19 @@ void ParticleSource::init(Graphics* graphics) {
 
 		// 0
 		vs->vertices[0] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 1						 												    
+		// 1
 		vs->vertices[1] = { -0.5f / ASPECT_RATIO / 2, +0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 2						 												    
+		// 2
 		vs->vertices[2] = { +0.5f / ASPECT_RATIO / 2, +0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 3						 												    
+		// 3
 		vs->vertices[3] = { +0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 4						 												    
+		// 4
 		vs->vertices[4] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 5						 												    
+		// 5
 		vs->vertices[5] = { -0.5f / ASPECT_RATIO / 2, +0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 6						 												    
+		// 6
 		vs->vertices[6] = { +0.5f / ASPECT_RATIO / 2, +0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 7						 												    
+		// 7
 		vs->vertices[7] = { +0.5f / ASPECT_RATIO / 2, -0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
 
 		vs->meshPtr->UnlockVertexBuffer();
@@ -91,7 +86,6 @@ void ParticleSource::init(Graphics* graphics) {
 		vs->visible = true;
 		vs->alive = true;
 
-
 		static int randCount = 0;
 
 		vs->velocity.x = distribution(generator) / 5.0f / ASPECT_RATIO + velocity.x * 10;
@@ -105,7 +99,6 @@ void ParticleSource::init(Graphics* graphics) {
 }
 
 void ParticleSource::draw(D3DXMATRIX& worldMat) {
-
 	LPDIRECT3DVERTEXBUFFER9 vBuffer;
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
 
@@ -129,7 +122,6 @@ void ParticleSource::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 	for (int i = 0; i < particleCount; i++) {
-
 		particles[i]->pos.x += particles[i]->velocity.x;
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OT_OBS) {
@@ -159,12 +151,10 @@ void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 }
 
 void ParticleSource::clean() {
-
 	for (int i = 0; i < particleCount; i++) {
 		delete particles[i];
 		particles[i] = nullptr;
 	}
 
 	particles.clear();
-
 }

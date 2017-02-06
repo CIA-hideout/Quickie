@@ -2,8 +2,7 @@
 #include <algorithm>
 #include <random>
 
-Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape()
-{
+Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 	static int obstacleCount = 0;
 	obstacleId = obstacleCount++;
 
@@ -32,11 +31,9 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 }
 
 Obstacle::~Obstacle() {
-
 }
 
-void Obstacle::init(Audio* audio, Graphics* graphics)
-{
+void Obstacle::init(Audio* audio, Graphics* graphics) {
 	this->graphics = graphics;
 	this->audio = audio;
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
@@ -46,19 +43,19 @@ void Obstacle::init(Audio* audio, Graphics* graphics)
 
 	// 0
 	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 1						 
+	// 1
 	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 2						 
+	// 2
 	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 3						 
+	// 3
 	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 4						 
+	// 4
 	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 5						 
+	// 5
 	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 6						 
+	// 6
 	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 7						 
+	// 7
 	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 
 	meshPtr->UnlockVertexBuffer();
@@ -88,12 +85,9 @@ void Obstacle::init(Audio* audio, Graphics* graphics)
 	indices[33] = 4; indices[34] = 3; indices[35] = 7;
 
 	meshPtr->UnlockIndexBuffer();
-
 }
 
-void Obstacle::draw(D3DXMATRIX& worldMat)
-{
-
+void Obstacle::draw(D3DXMATRIX& worldMat) {
 	D3DXMATRIX matRot;
 	D3DXMATRIX matTemp;
 
@@ -112,94 +106,89 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
 	meshPtr->DrawSubset(0);
-
 }
 
-
-void Obstacle::update(float deltaTime, std::vector<VertexShape*> players)
-{	
+void Obstacle::update(float deltaTime, std::vector<VertexShape*> players) {
 	timer += deltaTime;
 
 	switch (currentState)
 	{
-		case INACTIVE:
-			// change to new position
-			setPosition(newPos);
+	case INACTIVE:
+		// change to new position
+		setPosition(newPos);
 
-			if (newPos != DIMENSION_NON_EXISTANT)
-					currentState = GROW;
-			break;
+		if (newPos != DIMENSION_NON_EXISTANT)
+			currentState = GROW;
+		break;
 
-		case ACTIVE:
-			break;
+	case ACTIVE:
+		break;
 
-		case SHRINK:
-			// update size of obstacle 
-			if (timer >= 0.05f) {
+	case SHRINK:
+		// update size of obstacle
+		if (timer >= 0.05f) {
+			if (!CollisionManager::collideAABB(this, players[0]) || !CollisionManager::collideAABB(this, players[1]))
+				D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);	//matrix for shrinking
+			D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+			setDimension(dimension);
 
-				if (!CollisionManager::collideAABB(this, players[0]) || !CollisionManager::collideAABB(this, players[1]))
-						D3DXMatrixScaling(&matScale, 0.5f, 0.5f, 0.5f);	//matrix for shrinking
-						D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
-						setDimension(dimension);
+			/* Avoid Zeno Dichotomy Paradox
+			* If you divide by half and so on repeatedly,
+			* you will continue dividing forever and never reach the end.
+			* So we will set dimensions to 0, when we hit a number close to 0
+			*/
+			if (dimension.x <= 0.01)
+				dimension.x = 0;
 
-						/* Avoid Zeno Dichotomy Paradox
-						* If you divide by half and so on repeatedly,
-						* you will continue dividing forever and never reach the end.
-						* So we will set dimensions to 0, when we hit a number close to 0
-						*/
-						if (dimension.x <= 0.01)
-							dimension.x = 0;
+			if (dimension.y <= 0.01)
+				dimension.y = 0;
 
-						if (dimension.y <= 0.01)
-							dimension.y = 0;
+			if (dimension.z <= 0.01)
+				dimension.z = 0;
 
-						if (dimension.z <= 0.01)
-							dimension.z = 0;
-
-						if (dimension == DIMENSION_NON_EXISTANT)
-							currentState = INACTIVE;	// change to inactive when dimension are 0		
-				
-				timer = 0;
-			}
-			break;
-
-		case GROW:
-			//for (int i = 0; i < players.size(); i++)
-			
-			//  0 * a real number is 0
-			//	change dimensions to something which can be multiplied
 			if (dimension == DIMENSION_NON_EXISTANT)
-				setDimension(DIMENSION_ALMOST_ZERO);
+				currentState = INACTIVE;	// change to inactive when dimension are 0
 
-			// update size of obstacle 
-			if (timer >= 0.05f)
-			{
-				D3DXMatrixScaling(&matScale, 1.5f, 1.5f, 1.5f); //matrix for growing
-				D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
-				setDimension(dimension);
-				timer = 0;
+			timer = 0;
+		}
+		break;
 
-				if (dimension.x > newDimension.x)
-					dimension.x = newDimension.x;
+	case GROW:
+		//for (int i = 0; i < players.size(); i++)
 
-				if (dimension.y > newDimension.y)
-					dimension.y = newDimension.y;
+		//  0 * a real number is 0
+		//	change dimensions to something which can be multiplied
+		if (dimension == DIMENSION_NON_EXISTANT)
+			setDimension(DIMENSION_ALMOST_ZERO);
 
-				if (dimension.z > newDimension.z)
-					dimension.z = newDimension.z;
+		// update size of obstacle
+		if (timer >= 0.05f)
+		{
+			D3DXMatrixScaling(&matScale, 1.5f, 1.5f, 1.5f); //matrix for growing
+			D3DXVec3TransformCoord(&dimension, &dimension, &matScale);
+			setDimension(dimension);
+			timer = 0;
 
-				if (dimension == newDimension)
-					currentState = ACTIVE;	// change to active when dimension are the same		
-			}
-			break;
+			if (dimension.x > newDimension.x)
+				dimension.x = newDimension.x;
 
-		default: break;
+			if (dimension.y > newDimension.y)
+				dimension.y = newDimension.y;
+
+			if (dimension.z > newDimension.z)
+				dimension.z = newDimension.z;
+
+			if (dimension == newDimension)
+				currentState = ACTIVE;	// change to active when dimension are the same
+		}
+		break;
+
+	default: break;
 	}
 }
 
 // Randomly generate a color and returns the value
-D3DXVECTOR3 Obstacle::getRandomColor()
-{
+D3DXVECTOR3 Obstacle::getRandomColor() {
 	//std::srand(unsigned(std::time(nullptr)));
 
 	// array is not dynamic use vector instead
@@ -219,8 +208,7 @@ D3DXVECTOR3 Obstacle::getRandomColor()
 }
 
 // set the obstructor to the given color
-void Obstacle::setColor(D3DXVECTOR3 newColor)
-{
+void Obstacle::setColor(D3DXVECTOR3 newColor) {
 	LVertex* v;
 
 	meshPtr->LockVertexBuffer(0, (void**)&v);
@@ -243,35 +231,33 @@ void Obstacle::setPosition(D3DXVECTOR3 newPos)
 }
 
 // set Dimensions
-void Obstacle::setDimension(D3DXVECTOR3 newDimension)
-{
+void Obstacle::setDimension(D3DXVECTOR3 newDimension) {
 	dimension = newDimension;
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
 
 	// 0
 	vertices[0] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 1						 
+	// 1
 	vertices[1] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 2						 
+	// 2
 	vertices[2] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 3						 
+	// 3
 	vertices[3] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, -dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 4						 
+	// 4
 	vertices[4] = { -dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 5						 
+	// 5
 	vertices[5] = { -dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 6						 
+	// 6
 	vertices[6] = { +dimension.x / ASPECT_RATIO / 2, +dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
-	// 7						 
+	// 7
 	vertices[7] = { +dimension.x / ASPECT_RATIO / 2, -dimension.y / 2, +dimension.z / 2, D3DCOLOR_XRGB((int)(color.x), (int)(color.y), (int)(color.z)) };
 
 	meshPtr->UnlockVertexBuffer();
 }
 
 // generate a random size for the obstructor and returns the size
-D3DXVECTOR3 Obstacle::getRandomDimension()
-{
+D3DXVECTOR3 Obstacle::getRandomDimension() {
 	std::vector<D3DXVECTOR3> dimensions;
 	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
 	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
@@ -285,8 +271,7 @@ D3DXVECTOR3 Obstacle::getRandomDimension()
 	return dimensions.front(); // use first value of random vector
 }
 
-void Obstacle::assign(rapidjson::Document& doc)
-{
+void Obstacle::assign(rapidjson::Document& doc) {
 	// store level 1 stuff
 	lvl1Pos = D3DXVECTOR3(
 		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
@@ -313,23 +298,21 @@ void Obstacle::assign(rapidjson::Document& doc)
 		);
 	lvl3Dim = assignDimension(
 		doc["obstacle"].GetArray()[obstacleId]["lvl_3_dim"].GetInt());
-
 }
 
 D3DXVECTOR3 Obstacle::assignDimension(int type){
 	switch (type) {
-		case 0: return DIMENSION_HORIZONTAL_SMALL;
-		case 1: return DIMENSION_HORIZONTAL_MEDIUM;
-		case 2: return DIMENSION_HORIZONTAL_LARGE;
-		case 3: return DIMENSION_VERTICAL_SMALL;
-		case 4: return DIMENSION_VERTICAL_MEDIUM;
-		case 5: return DIMENSION_VERTICAL_LARGE;
-		case 6: return DIMENSION_NON_EXISTANT;
+	case 0: return DIMENSION_HORIZONTAL_SMALL;
+	case 1: return DIMENSION_HORIZONTAL_MEDIUM;
+	case 2: return DIMENSION_HORIZONTAL_LARGE;
+	case 3: return DIMENSION_VERTICAL_SMALL;
+	case 4: return DIMENSION_VERTICAL_MEDIUM;
+	case 5: return DIMENSION_VERTICAL_LARGE;
+	case 6: return DIMENSION_NON_EXISTANT;
 	}
 }
 
-void Obstacle::setLevel1(int count)
-{
+void Obstacle::setLevel1(int count) {
 	newPos = lvl1Pos;
 	newDimension = lvl1Dim;
 
@@ -352,5 +335,5 @@ void Obstacle::setLevel3(int count)
 	newDimension = lvl3Dim;
 
 	if (count != 0)
-		currentState = SHRINK;	
+		currentState = SHRINK;
 }
