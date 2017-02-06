@@ -9,6 +9,7 @@ Camera::Camera(CameraType cT, float fov, D3DVIEWPORT9& viewPort) {
 
 	cameraType = cT;
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	originalPos = pos;
 	look = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
@@ -17,6 +18,8 @@ Camera::Camera(CameraType cT, float fov, D3DVIEWPORT9& viewPort) {
 
 	D3DXMatrixPerspectiveFovLH(&projection, fov, vp.Width / vp.Height, vp.MinZ, vp.MaxZ);
 
+	cameraEffect.insert(std::pair<CameraState, float>(CS_SHAKE, 0.0f));
+
 }
 
 
@@ -24,7 +27,21 @@ Camera::~Camera() {
 }
 
 void Camera::getViewMatrix(D3DXMATRIX* v_) {
-	D3DXMatrixLookAtLH(v_, &pos, &look, &up);
+
+	if (cameraEffect.at(CS_SHAKE) > 0.0f) {
+		std::random_device rdev;
+		std::mt19937 generator(rdev());
+		std::uniform_real_distribution<float> distribution(-shakeIntensity, shakeIntensity);
+
+		pos.x = originalPos.x + distribution(generator) / 15.0f;
+		pos.y = originalPos.y + distribution(generator) / 15.0f;
+		pos.z = originalPos.z + distribution(generator) / 15.0f;
+		D3DXMatrixLookAtLH(v_, &pos, &look, &up);
+	}
+	else {
+		D3DXMatrixLookAtLH(v_, &originalPos, &look, &up);
+	}
+	
 }
 
 void Camera::pitch(float angle) {
@@ -69,25 +86,25 @@ void Camera::yaw(float angle) {
 
 void Camera::walk(float u) {
 	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		pos += D3DXVECTOR3(look.x, 0.0f, look.z) * u;
+		originalPos += D3DXVECTOR3(look.x, 0.0f, look.z) * u;
 	}
 	else if (cameraType == CAMERA_TYPE_FREE) {
-		pos += look * u;
+		originalPos += look * u;
 	}
 }
 
 void Camera::strafe(float u) {
 	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		pos += D3DXVECTOR3(right.x, 0.0f, right.z) * u;
+		originalPos += D3DXVECTOR3(right.x, 0.0f, right.z) * u;
 	}
 	else if (cameraType == CAMERA_TYPE_FREE) {
-		pos += right * u;
+		originalPos += right * u;
 	}
 }
 
 void Camera::fly(float u) {
 	if (cameraType == CAMERA_TYPE_FREE) {
-		pos += up * u;
+		originalPos += up * u;
 	}
 }
 
@@ -134,4 +151,16 @@ void Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z) {
 	pOut.x = x_ / vp.MinZ * z;
 	pOut.y = y_ / vp.MinZ * z;
 
+}
+
+void Camera::update(float deltaTime) {
+	for (std::map<CameraState, float>::iterator i = cameraEffect.begin(); i != cameraEffect.end(); i++) {
+		if (i->second > 0.0f)
+			i->second -= deltaTime;
+	}
+}
+
+void Camera::shake(float duration, float intensity) {
+	cameraEffect.at(CS_SHAKE) = duration;
+	shakeIntensity = intensity;
 }

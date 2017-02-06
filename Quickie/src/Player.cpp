@@ -219,6 +219,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 					ps = ParticleSource(100, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
 					ps.init(graphics);
 					cooldown.at(SPAWN_TIME) = 3.0f;
+					graphics->camera->shake(0.25f, 1.0f);
 				}
 			}
 		}

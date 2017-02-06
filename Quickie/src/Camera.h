@@ -3,8 +3,11 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include <map>
+
+#include <random>
+
 enum CameraState {
-	CS_PAN,
 	CS_SHAKE,
 	CS_STATIONARY
 };
@@ -38,19 +41,25 @@ public:
 	void getUp(D3DXVECTOR3&);
 	void getLock(D3DXVECTOR3&);
 
+	void update(float);
+
 	void pointOnScreen(D3DXVECTOR3&, D3DXVECTOR3&, D3DXMATRIX& w);
 	void pointInWorld(D3DXVECTOR3&, D3DXVECTOR2&, float);
 
-	CameraType	cameraType;
-	D3DXVECTOR3	right;
-	D3DXVECTOR3	up;
-	D3DXVECTOR3	look;
-	D3DXVECTOR3	pos;
-	float fov, width, height;
+	void shake(float, float);
 
-	D3DVIEWPORT9 vp;
+	std::map<CameraState, float>	cameraEffect;
 
-	D3DXMATRIX	projection;
+	CameraType						cameraType;
+	D3DXVECTOR3						right;
+	D3DXVECTOR3						up;
+	D3DXVECTOR3						look;
+	D3DXVECTOR3						pos, originalPos;
+	float							fov, width, height, shakeIntensity;
+
+	D3DVIEWPORT9					vp;
+
+	D3DXMATRIX						projection;
 
 };
 
