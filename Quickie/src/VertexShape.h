@@ -1,11 +1,11 @@
 #pragma once
 
 #include "graphics.h"
-#include "game.h"
-
+#include "audio.h"
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
+#include "Input.h"
 
 enum CollisionType {
 	CT_AABB,
@@ -26,13 +26,12 @@ class VertexShape {
 
 public:
 
+	Graphics*				graphics;
+	Input*					input;
+	Audio*					audio;	// pointer to audio system
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
-	Graphics*				graphics;
-	Audio*					audio;	// pointer to audio system
 	int						vertexCount, indicesCount;
-
-	Input*					input;
 
 	ID3DXMesh*				meshPtr;
 
@@ -69,8 +68,7 @@ public:
 
 	VertexShape();
 	virtual ~VertexShape();
-
-	virtual void init(Audio*, Graphics*);
+	virtual void init(Audio*, Graphics*, Input*);
 	virtual void draw(D3DXMATRIX&);
 	virtual void update(float);
 

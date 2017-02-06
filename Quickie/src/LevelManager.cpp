@@ -10,9 +10,9 @@ LevelManager::~LevelManager()
 	
 }
 
-void LevelManager::init(Game* gamePtr)
+void LevelManager::init(Audio* a)
 {
-	audio = gamePtr->audio;
+	audio = a;
 }
 
 void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)

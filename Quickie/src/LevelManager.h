@@ -27,7 +27,7 @@ public:
 	LevelManager();
 	~LevelManager();
 
-	void init(Game*);
+	void init(Audio*);
 
 	void update(float, std::vector<VertexShape*>);
 

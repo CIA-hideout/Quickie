@@ -2,9 +2,10 @@
 
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
+	graphics = nullptr;
+	input = nullptr;
 	static int playerCount = 0;
 	playerId = playerCount++;
-
 	health = 3;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
@@ -48,8 +49,8 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 void Player::init(Graphics* graphics, Input* input) {
 
 	this->input = input;
-
 	this->graphics = graphics;
+  
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);

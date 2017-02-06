@@ -22,7 +22,7 @@ quicky::~quicky() {
 void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
-	lManager->init(this);
+	lManager->init(audio);
 
 	AllocConsole();
 	freopen("conin$", "r", stdin);
@@ -55,7 +55,8 @@ void quicky::initialize(HWND hWnd) {
 	fclose(controlFile);
 
 	for (int i = 0; i < qObstacles.size(); i++) {
-		qObstacles[i]->init(this->audio, this->graphics);
+		Obstacle* temp = (Obstacle*)qObstacles[i];
+	  temp->init(this->audio, this->graphics);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
@@ -89,6 +90,32 @@ void quicky::update() {
 
 	gameState.top()->update();
 	lManager->update(deltaTime, qObstacles);
+
+	if (gameState.top()->getNextState() != nullptr)
+	{
+		printf("NEXT STATE\n");
+		stateNS::NextState pState = *gameState.top()->getNextState();
+		gameState.top()->clearNextState();
+
+		switch (pState)
+		{
+		case stateNS::INSTRUCTIONS:
+		{
+									  Instructions* i = new Instructions();
+
+									  i->initialize(graphics, input);
+									  gameState.push(i);
+		}
+			break;
+
+		case stateNS::GAMEPLAY:
+			break;
+
+		case stateNS::REVERT:
+			gameState.pop();
+			break;
+		}
+	}
 
 	for (int i = 0; i < qObstacles.size(); i++) {
 		if (qObstacles[i]->objectType == OT_QL) {

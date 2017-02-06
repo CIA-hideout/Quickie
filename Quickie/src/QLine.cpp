@@ -19,7 +19,6 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	meshPtr = nullptr;
 
 	color = parent->color;
-
 }
 
 void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
@@ -160,6 +159,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
+	// create all the vertices
 	vertexCount = vertexPoint.size();
 
 	// no need for meshes here. lines can be rendered with primitive indices

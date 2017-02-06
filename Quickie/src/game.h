@@ -13,8 +13,6 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/document.h"
-#include "State.h"
-#include <stack>
 #include <random>
 #include "audio.h"
 
@@ -39,7 +37,6 @@ public:
 	bool						paused;
 	bool						initialized;
 	float						fov;
-	std::stack<State*>			gameState;
 
 	D3DXMATRIX		worldMat;
 

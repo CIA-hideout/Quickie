@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <random>
 
+
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 	static int obstacleCount = 0;
 	obstacleId = obstacleCount++;
@@ -32,6 +33,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 Obstacle::~Obstacle() {
 }
+
 
 void Obstacle::init(Audio* audio, Graphics* graphics) {
 	this->graphics = graphics;
