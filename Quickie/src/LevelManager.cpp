@@ -33,7 +33,7 @@ void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 {
 	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OT_OBS) {
+		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)vS[i];
 			tempObs->setLevel1(levelCount);
 		}
@@ -46,7 +46,7 @@ void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
 {
 	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OT_OBS) {
+		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)vS[i];
 			tempObs->setLevel2(levelCount);
 		}
@@ -60,7 +60,7 @@ void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
 {
 	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OT_OBS) {
+		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)vS[i];
 			tempObs->setLevel3(levelCount);
 		}

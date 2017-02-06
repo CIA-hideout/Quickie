@@ -11,7 +11,7 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	parent = vS;
 	this->rotation_ = rotation_;
 	magnetude = 20;
-	objectType = OT_QL;
+	objectType = OBJECT_TYPE_QLINE;
 	meshPtr = nullptr;
 	color = parent->color;
 }
@@ -27,7 +27,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->objectType == OT_QL && vS[i]->alive == true) {
+			if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true) {
 				QLine* qtemp = (QLine*)vS[i];
 				if (CollisionManager::collidePixelPerfect(intersect, this, qtemp)) {
 					Player* ptemp = (Player*)qtemp->parent;
@@ -78,7 +78,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		// fIntersect will be the point of intersection for that particular bounce
 
 		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->objectType == OT_OBS) {
+			if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 				if (CollisionManager::rayObjectIntersect(intersect, norm, rayStart, rayEnd, vS[i]) && fLatestID != vS[i]->id) {
 					c_++;
 					// since rayObjectIntersect already returns the closest point, we can compare each point

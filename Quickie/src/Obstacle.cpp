@@ -24,7 +24,7 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 	rotation.y = 0;
 	rotation.z = 0;
 
-	objectType = OT_OBS;
+	objectType = OBJECT_TYPE_OBSTACLE;
 
 	velocity.x = 0;
 	velocity.y = 0;

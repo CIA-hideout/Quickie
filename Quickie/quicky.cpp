@@ -117,11 +117,11 @@ void quicky::update() {
 	}
 
 	for (int i = 0; i < qEnvironmentObj.size(); i++) {
-		if (qEnvironmentObj[i]->objectType == OT_QL) {
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {
 			QLine* temp = (QLine*)qEnvironmentObj[i];
 			temp->update(deltaTime, qEnvironmentObj);
 		}
-		else if (qEnvironmentObj[i]->objectType == OT_OBS) {
+		else if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
 			temp->update(deltaTime, qPlayer);
 		}

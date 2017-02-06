@@ -8,11 +8,11 @@
 #include "Input.h"
 
 enum ObjectType {
-	OT_PLY,
-	OT_OBS,
-	OT_QL,
-	OT_P,
-	OT_PS
+	OBJECT_TYPE_PLAYER,
+	OBJECT_TYPE_OBSTACLE,
+	OBJECT_TYPE_QLINE,
+	OBJECT_TYPE_PARTICLE,
+	OBJECT_TYPE_PARTICLES
 };
 
 class VertexShape {

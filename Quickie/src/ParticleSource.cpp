@@ -7,7 +7,7 @@ ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos
 	pos = srcPos;
 	particleCount = count;
 	this->color = color;
-	objectType = OT_PS;
+	objectType = OBJECT_TYPE_PARTICLES;
 	velocity = srcV;
 	duration = 3.0f;
 }
@@ -35,7 +35,7 @@ void ParticleSource::init(Graphics* graphics) {
 
 		vs->color = color;
 
-		vs->objectType = OT_P;
+		vs->objectType = OBJECT_TYPE_PARTICLE;
 
 		// 0
 		vs->vertices[0] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
@@ -98,6 +98,7 @@ void ParticleSource::init(Graphics* graphics) {
 }
 
 void ParticleSource::draw(D3DXMATRIX& worldMat) {
+
 	LPDIRECT3DVERTEXBUFFER9 vBuffer;
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
 
@@ -123,7 +124,7 @@ void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 	for (int i = 0; i < particleCount; i++) {
 		particles[i]->pos.x += particles[i]->velocity.x;
 		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OT_OBS) {
+			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 				if (CollisionManager::collideAABB(particles[i], vS[i])) {
 					if (particles[i]->velocity.x > 0)
 						particles[i]->pos.x = vS[i]->min.x + (particles[i]->min.x - particles[i]->max.x) / 2 - 0.0001;
@@ -136,7 +137,7 @@ void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 
 		particles[i]->pos.y += particles[i]->velocity.y;
 		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OT_OBS) {
+			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 				if (CollisionManager::collideAABB(particles[i], vS[i])) {
 					if (particles[i]->velocity.y > 0)
 						particles[i]->pos.y = vS[i]->min.y + (particles[i]->min.y - particles[i]->max.y) / 2 - 0.0001;
