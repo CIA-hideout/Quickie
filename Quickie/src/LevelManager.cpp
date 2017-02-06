@@ -10,11 +10,16 @@ LevelManager::~LevelManager()
 	
 }
 
+void LevelManager::init(Game* gamePtr)
+{
+	audio = gamePtr->audio;
+}
+
 void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)
 {
 	timer += deltaTime;
 
-	// change level every 60s
+	// change level every 60s 
 	if (timer >= LEVEL_TIME && isRandom)
 	{
 		setRandomLevel(vS);
@@ -26,28 +31,35 @@ void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)
 // set obstacles location for level 1
 void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 {
+	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*) vS[i];
 		tempObs->setLevel1(levelCount);
 	}
+	audio->playCue(BGMRand);
 }
 
 // set obstacles location for level 2
 void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
 {
+	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*)vS[i];
 		tempObs->setLevel2(levelCount);
 	}
+	audio->playCue(BGMRand);
+
 }
 
 // set obstacles location for level 3
 void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
 {
+	audio->stopCue(BGMRand);
 	for (int i = 0; i < vS.size(); i++) {
 		Obstacle* tempObs = (Obstacle*)vS[i];
 		tempObs->setLevel3(levelCount);
 	}
+	audio->playCue(BGMRand);
 }
 
 // set obstacles location for random levels

@@ -29,6 +29,7 @@ public:
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
 	Game*					game;
+	Audio*					audio;	// pointer to audio system
 	int						vertexCount, indicesCount;
 
 	ID3DXMesh*				meshPtr;
@@ -74,6 +75,5 @@ public:
 	void computeBoundingBox();
 	void computeBoundingSphere();
 	bool collidesWith(VertexShape&);
-
 };
 

@@ -17,6 +17,7 @@
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
     <ClCompile Include="src\ParticleSource.cpp" />
+    <ClCompile Include="src\audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionManager.h" />
@@ -71,6 +72,7 @@
     <ClInclude Include="src\State.h" />
     <ClInclude Include="src\VertexShape.h" />
     <ClInclude Include="src\ParticleSource.h" />
+    <ClInclude Include="src\audio.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\data\control.json" />

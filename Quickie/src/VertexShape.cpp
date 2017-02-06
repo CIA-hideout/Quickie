@@ -12,7 +12,7 @@ VertexShape::~VertexShape() {
 }
 
 void VertexShape::init(Game* gamePtr) {
-
+	audio = gamePtr->audio;			// The audio system
 }
 
 void VertexShape::draw(D3DXMATRIX& worldMat) {
