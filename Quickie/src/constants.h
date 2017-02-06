@@ -22,6 +22,7 @@
 #define COLOR_GREEN D3DXVECTOR3(0, 255, 0)
 #define COLOR_BLUE D3DXVECTOR3(0, 0, 255)
 #define COLOR_WHITE D3DXVECTOR3(255, 255, 255)
+#define COLOR_GRAY D3DXVECTOR3(169, 169, 169)
 
 // define dimensions of obstacles
 #define DIMENSION_HORIZONTAL_SMALL	D3DXVECTOR3( 6, 1.5, 0.5)
@@ -32,6 +33,8 @@
 #define DIMENSION_VERTICAL_LARGE	D3DXVECTOR3(1.5, 25, 0.5)
 #define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)			// use if obstacles are not needed
 #define DIMENSION_ALMOST_ZERO		D3DXVECTOR3(0.01, 0.01, 0.01)	// use for scaling as 0 * n = 0
+#define DIMENSION_HORIZONTAL_WALL	D3DXVECTOR3(120, 5, 0.5)			// use as walls to block player from gtfo of the screen
+#define DIMENSION_VERTICAL_WALL		D3DXVECTOR3(5, 50, 0.5)			// use as walls to block player from gtfo of the screen
 
 //-----------------------------------------------
 // Useful macros

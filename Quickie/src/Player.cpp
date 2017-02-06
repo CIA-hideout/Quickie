@@ -186,7 +186,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	this->pos.x += velocity.x;
 
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE || vS[i]->objectType == OBJECT_TYPE_WALL)) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
 				if (velocity.x > 0)
 					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
@@ -199,7 +199,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 	this->pos.y += velocity.y;
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE || vS[i]->objectType == OBJECT_TYPE_WALL)) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
 				if (velocity.y > 0)
 					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
