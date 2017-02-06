@@ -1,15 +1,15 @@
 #include "ParticleSource.h"
 
-ParticleSource::ParticleSource() {
+ParticleSource::ParticleSource() : VertexShape() {
 
 }
 
-ParticleSource::ParticleSource(int count, float angle, D3DXVECTOR3& srcPos, D3DXVECTOR3& color) {
+ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos, D3DXVECTOR3& color) : VertexShape() {
 	pos = srcPos;
 	particleCount = count;
 	this->color = color;
 	objectType = OT_PS;
-
+	velocity = srcV;
 	duration = 3.0f;
 }
 
@@ -17,7 +17,7 @@ ParticleSource::~ParticleSource() {
 
 }
 
-void ParticleSource::init(Game* game) {
+void ParticleSource::init(Graphics* graphics) {
 
 	std::random_device rdev;
 	std::mt19937 generator(rdev());
@@ -25,7 +25,7 @@ void ParticleSource::init(Game* game) {
 	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
 
 
-	this->game = game;
+	this->graphics = graphics;
 
 	// create the particles here
 
@@ -33,7 +33,9 @@ void ParticleSource::init(Game* game) {
 
 		VertexShape* vs = new VertexShape();
 
-		D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, game->getGraphics()->get3Ddevice(), &vs->meshPtr);
+		vs->graphics = graphics;
+
+		D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &vs->meshPtr);
 
 		vs->meshPtr->LockVertexBuffer(0, (void**)&vs->vertices);
 
@@ -92,13 +94,11 @@ void ParticleSource::init(Game* game) {
 
 		static int randCount = 0;
 
-		vs->velocity.x = distribution(generator) / 5.0f / ASPECT_RATIO;
-		vs->velocity.y = distribution(generator) / 5.0f;
-		vs->velocity.z = distribution(generator) / 5.0f;
+		vs->velocity.x = distribution(generator) / 5.0f / ASPECT_RATIO + velocity.x * 10;
+		vs->velocity.y = distribution(generator) / 5.0f + velocity.y * 10;
+		vs->velocity.z = distribution(generator) / 5.0f + velocity.z * 10;
 
 		vs->pos = pos;
-
-		vs->game = game;
 
 		particles.push_back(vs);
 	}
@@ -112,10 +112,10 @@ void ParticleSource::draw(D3DXMATRIX& worldMat) {
 	for (int i = 0; i < particleCount; i++) {
 		particles[i]->meshPtr->GetVertexBuffer(&vBuffer);
 		particles[i]->meshPtr->GetIndexBuffer(&iBuffer);
-		particles[i]->game->getGraphics()->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-		particles[i]->game->getGraphics()->get3Ddevice()->SetIndices(iBuffer);
+		particles[i]->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+		particles[i]->graphics->get3Ddevice()->SetIndices(iBuffer);
 		D3DXMatrixTranslation(&worldMat, particles[i]->pos.x, particles[i]->pos.y, particles[i]->pos.z);
-		particles[i]->game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
+		particles[i]->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
 		particles[i]->meshPtr->DrawSubset(0);
 	}
 }

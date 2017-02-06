@@ -10,7 +10,6 @@ public:
 	float						time;
 	float						magnetude;
 	float						rotation_;
-	int							id;
 	VertexShape*				parent;
 
 	std::vector<D3DXVECTOR3>	vertexPoint;
@@ -22,7 +21,7 @@ public:
 
 	D3DXVECTOR3					startPoint;
 
-	void init(std::vector<VertexShape*>&, Game*);
+	void init(std::vector<VertexShape*>&, Graphics*);
 	void update(float, std::vector<VertexShape*>&);
 	void draw(D3DXMATRIX&);
 

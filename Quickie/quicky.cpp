@@ -54,12 +54,12 @@ void quicky::initialize(HWND hWnd) {
 	fclose(controlFile);
 
 	for (int i = 0; i < qObstacles.size(); i++) {
-		qObstacles[i]->init(this);
+		qObstacles[i]->init(this->graphics);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
-		temp->init(this);
+		temp->init(this->graphics, this->input);
 		temp->assignControl(controlDoc);
 	}
 

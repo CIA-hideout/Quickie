@@ -35,10 +35,10 @@ Obstacle::~Obstacle() {
 
 }
 
-void Obstacle::init(Game* gamePtr)
+void Obstacle::init(Graphics* graphics)
 {
-	this->game = gamePtr;
-	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
+	this->graphics = graphics;
+	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	vertices = 0;
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
@@ -100,8 +100,8 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
 	meshPtr->GetVertexBuffer(&vBuffer);
 	meshPtr->GetIndexBuffer(&iBuffer);
-	this->game->getGraphics()->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-	this->game->getGraphics()->get3Ddevice()->SetIndices(iBuffer);
+	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+	graphics->get3Ddevice()->SetIndices(iBuffer);
 
 	D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 
@@ -109,7 +109,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat)
 
 	matTemp = matRot * worldMat;
 
-	this->game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
+	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &matTemp);
 	meshPtr->DrawSubset(0);
 
 }

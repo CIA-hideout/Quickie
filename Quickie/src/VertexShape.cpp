@@ -11,7 +11,7 @@ VertexShape::VertexShape() {
 VertexShape::~VertexShape() {
 }
 
-void VertexShape::init(Game* gamePtr) {
+void VertexShape::init(Graphics* graphics) {
 
 }
 

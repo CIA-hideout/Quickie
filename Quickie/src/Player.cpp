@@ -45,10 +45,12 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 }
 
-void Player::init(Game* gamePtr) {
+void Player::init(Graphics* graphics, Input* input) {
 
-	this->game = gamePtr;
-	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, gamePtr->getGraphics()->get3Ddevice(), &meshPtr);
+	this->input = input;
+
+	this->graphics = graphics;
+	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
 
@@ -111,13 +113,13 @@ void Player::draw(D3DXMATRIX& worldMat) {
 		LPDIRECT3DINDEXBUFFER9 iBuffer;
 		meshPtr->GetVertexBuffer(&vBuffer);
 		meshPtr->GetIndexBuffer(&iBuffer);
-		this->game->getGraphics()->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-		this->game->getGraphics()->get3Ddevice()->SetIndices(iBuffer);
+		this->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+		this->graphics->get3Ddevice()->SetIndices(iBuffer);
 
 		D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 		D3DXMatrixTranslation(&worldMat, pos.x, pos.y, pos.z);
 
-		this->game->getGraphics()->get3Ddevice()->SetTransform(D3DTS_WORLD, &(matRot * worldMat));
+		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &(matRot * worldMat));
 		meshPtr->DrawSubset(0);
 	}
 
@@ -135,21 +137,21 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	if (alive) {
-		if (game->getInput()->getKeyState(controls.at(CONTROL_UP))) {
+		if (input->getKeyState(controls.at(CONTROL_UP))) {
 			velocity.y += deltaTime * 10;
 		}
-		if (game->getInput()->getKeyState(controls.at(CONTROL_DOWN))) {
+		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
 			velocity.y -= deltaTime * 10;
 		}
-		if (game->getInput()->getKeyState(controls.at(CONTROL_LEFT))) {
+		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
 			velocity.x -= deltaTime * 10 / ASPECT_RATIO;
 		}
-		if (game->getInput()->getKeyState(controls.at(CONTROL_RIGHT))) {
+		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
 			velocity.x += deltaTime * 10 / ASPECT_RATIO;
 		}
 
 		// blink and tp direction
-		if (game->getInput()->getKeyState(controls.at(CONTROL_BL))) {
+		if (input->getKeyState(controls.at(CONTROL_BL))) {
 			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 				cooldown.at(COOLDOWN_BLINK) = 1.0f;
 				float r_;
@@ -213,8 +215,8 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
 					this->alive = false;
 					this->visible = false;
-					ps = ParticleSource(100, D3DX_PI, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
-					ps.init(game);
+					ps = ParticleSource(100, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+					ps.init(graphics);
 					cooldown.at(SPAWN_TIME) = 3.0f;
 				}
 			}
@@ -246,7 +248,7 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 	cooldown.at(COOLDOWN_BLINK) = 1.0f;
 	velocity *= 0;
 	QLine* l = new QLine(this, angle);
-	l->init(vS, game);
+	l->init(vS, graphics);
 
 }
 

@@ -28,8 +28,10 @@ public:
 
 	LPDIRECT3DVERTEXBUFFER9	vertexBuffer;
 	LPDIRECT3DINDEXBUFFER9	indexBuffer;
-	Game*					game;
+	Graphics*				graphics;
 	int						vertexCount, indicesCount;
+
+	Input*					input;
 
 	ID3DXMesh*				meshPtr;
 
@@ -67,7 +69,7 @@ public:
 	VertexShape();
 	virtual ~VertexShape();
 
-	virtual void init(Game*);
+	virtual void init(Graphics*);
 	virtual void draw(D3DXMATRIX&);
 	virtual void update(float);
 
