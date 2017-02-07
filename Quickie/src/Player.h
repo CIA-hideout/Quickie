@@ -16,8 +16,8 @@ public:
 
 	std::map<CooldownType, float>	cooldown;
 	std::map<Control, int>			controls;
-	int								health;
 	bool							controlled = false;
+	bool							controlledTP = false;
 	GUIBar*							healthBar;
 
 	ParticleSource					ps;
