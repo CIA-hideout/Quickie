@@ -176,10 +176,6 @@
     <ClInclude Include="src\VertexShape.h" />
     <ClInclude Include="src\Wall.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="resource\data\control.json" />
-    <None Include="resource\data\obstacles.json" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

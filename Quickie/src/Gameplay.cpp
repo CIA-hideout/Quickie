@@ -73,51 +73,6 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	}
 
 	lManager->setRandom(qEnvironmentObj);
-
-	// add the gui thing here
-
-	VertexShape* player1QBar = new VertexShape();
-
-	player1QBar->graphics = graphics;
-	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &player1QBar->meshPtr);
-	player1QBar->color = D3DXVECTOR3(255, 255, 255);
-	player1QBar->meshPtr->LockVertexBuffer(0, (void**)&player1QBar->vertices);
-	player1QBar->vertices[0] = { -1.0f / ASPECT_RATIO / 2, -1.0f / 2, -1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[1] = { -1.0f / ASPECT_RATIO / 2, +1.0f / 2, -1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[2] = { +1.0f / ASPECT_RATIO / 2, +1.0f / 2, -1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[3] = { +1.0f / ASPECT_RATIO / 2, -1.0f / 2, -1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[4] = { -1.0f / ASPECT_RATIO / 2, -1.0f / 2, +1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[5] = { -1.0f / ASPECT_RATIO / 2, +1.0f / 2, +1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[6] = { +1.0f / ASPECT_RATIO / 2, +1.0f / 2, +1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->vertices[7] = { +1.0f / ASPECT_RATIO / 2, -1.0f / 2, +1.0f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(player1QBar->color.x), (int)(player1QBar->color.y), (int)(player1QBar->color.z)) };
-	player1QBar->meshPtr->UnlockVertexBuffer();
-	player1QBar->vertexCount = 8;
-	player1QBar->meshPtr->LockIndexBuffer(0, (void**)&player1QBar->indices);
-	player1QBar->indices[0] = 0; player1QBar->indices[1] = 1; player1QBar->indices[2] = 2;
-	player1QBar->indices[3] = 0; player1QBar->indices[4] = 2; player1QBar->indices[5] = 3;
-	player1QBar->indices[6] = 4; player1QBar->indices[7] = 6; player1QBar->indices[8] = 5;
-	player1QBar->indices[9] = 4; player1QBar->indices[10] = 7; player1QBar->indices[11] = 6;
-	player1QBar->indices[12] = 4; player1QBar->indices[13] = 5; player1QBar->indices[14] = 1;
-	player1QBar->indices[15] = 4; player1QBar->indices[16] = 1; player1QBar->indices[17] = 0;
-	player1QBar->indices[18] = 3; player1QBar->indices[19] = 2; player1QBar->indices[20] = 6;
-	player1QBar->indices[21] = 3; player1QBar->indices[22] = 6; player1QBar->indices[23] = 7;
-	player1QBar->indices[24] = 1; player1QBar->indices[25] = 5; player1QBar->indices[26] = 6;
-	player1QBar->indices[27] = 1; player1QBar->indices[28] = 6; player1QBar->indices[29] = 2;
-	player1QBar->indices[30] = 4; player1QBar->indices[31] = 0; player1QBar->indices[32] = 3;
-	player1QBar->indices[33] = 4; player1QBar->indices[34] = 3; player1QBar->indices[35] = 7;
-	player1QBar->meshPtr->UnlockIndexBuffer();
-	player1QBar->indicesCount = 36;
-	player1QBar->visible = true;
-	player1QBar->alive = true;
-	// hardcode this first
-	player1QBar->pos.x = -5;
-	player1QBar->pos.y = -3;
-	player1QBar->pos.z = 10;
-	player1QBar->scale.x = 5.0f;
-	player1QBar->scale.y = 1.0f;
-	player1QBar->scale.z = 1.0f;
-
-	qGUIObj.push_back(player1QBar);
 }
 
 void Gameplay::update()
@@ -141,10 +96,6 @@ void Gameplay::update()
 	graphics->camera->update(*deltaTime);
 
 	setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
-
-	for (int i = 0; i < qGUIObj.size(); i++) {
-		qGUIObj[i]->scale.x -= (*deltaTime); 
-	}
 }
 
 void Gameplay::render()
@@ -156,24 +107,5 @@ void Gameplay::render()
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
 		temp->draw(worldMatrix);
-	}
-
-
-	for (int i = 0; i < qGUIObj.size(); i++) {
-		LPDIRECT3DVERTEXBUFFER9 vBuffer;
-		LPDIRECT3DINDEXBUFFER9 iBuffer;
-
-		D3DXMATRIX scaleMat;
-		D3DXMATRIX transMat;
-
-		qGUIObj[i]->meshPtr->GetVertexBuffer(&vBuffer);
-		qGUIObj[i]->meshPtr->GetIndexBuffer(&iBuffer);
-		qGUIObj[i]->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-		qGUIObj[i]->graphics->get3Ddevice()->SetIndices(iBuffer);
-		D3DXMatrixScaling(&scaleMat, qGUIObj[i]->scale.x, qGUIObj[i]->scale.y, qGUIObj[i]->scale.z);
-		D3DXMatrixTranslation(&transMat, qGUIObj[i]->pos.x, qGUIObj[i]->pos.y, qGUIObj[i]->pos.z);
-		worldMatrix = scaleMat * transMat;
-		qGUIObj[i]->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMatrix);
-		qGUIObj[i]->meshPtr->DrawSubset(0);
 	}
 }

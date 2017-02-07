@@ -253,13 +253,8 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 void Player::respawn() {
 
-	if (pos.y <= -25) {
-		pos.y = 20;
-	}
-
-	if (pos.x < -20) {
-		pos.x = 20;
-	}
+	pos.y = 0;
+	pos.x = 0;
 
 	alive = true;
 	visible = true;

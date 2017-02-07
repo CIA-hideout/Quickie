@@ -14,7 +14,6 @@ class Gameplay : public State
 	rapidjson::Document			obstacleDoc;
 	std::vector<VertexShape*>	qEnvironmentObj;
 	std::vector<VertexShape*>	qPlayer;
-	std::vector<VertexShape*>	qGUIObj;
 
 	float*						deltaTime;
 	LevelManager*				lManager;
