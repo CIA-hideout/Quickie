@@ -8,6 +8,7 @@
 
 namespace fontsNS
 {
+
 	enum Fonts
 	{
 		DEFAULT,
@@ -15,7 +16,8 @@ namespace fontsNS
 		HEADING2,
 		INSTRUCTIONS,
 		SUBTITLE,
-		GAME_SELECT
+		GAME_SELECT,
+		END_SCREEN
 	};
 }
 
@@ -26,6 +28,7 @@ namespace stateNS
 	{
 		INSTRUCTIONS,
 		GAMEPLAY,
+		ENDSCREEN,
 		REVERT
 	};
 }

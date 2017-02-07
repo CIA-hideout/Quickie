@@ -301,7 +301,7 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 	float x = randomX(rng);
 	float y = randomY(rng);
 
-	printf("%.2f, %.2f\n", x, y);
+	//printf("%.2f, %.2f\n", x, y);
 
 	return D3DXVECTOR3(x, y, 19.5);
 }
