@@ -8,6 +8,7 @@
 
 namespace fontsNS
 {
+
 	enum Fonts
 	{
 		DEFAULT,

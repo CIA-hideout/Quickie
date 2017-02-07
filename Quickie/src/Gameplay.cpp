@@ -172,7 +172,7 @@ void Gameplay::render()
 
 		f = fonts.at(fontsNS::HEADING2);
 
-		// Set Fonts for Options'
+		// Set Fonts for Options
 		f = fonts.at(fontsNS::GAME_SELECT);
 		int offSetY = 0;
 
