@@ -163,7 +163,6 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 						r_ = atan(velocity.y / velocity.x);
 					else if (velocity.x < 0)
 						r_ = D3DX_PI + atan(velocity.y / velocity.x);
-
 					blink(vS, r_);
 				}
 			}
@@ -197,11 +196,10 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 	}
 
-	healthBar->update(deltaTime);
 	velocity.x *= 0.75;
 	velocity.y *= 0.75;
 	move(vS, deltaTime);
-
+	healthBar->update(deltaTime);
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
@@ -324,6 +322,7 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 		QLine* qline = new QLine(this, angle);
 		qline->init(vS, graphics);
 	}
+  
 }
 
 void Player::assignControl(rapidjson::Document& doc, int i) {
