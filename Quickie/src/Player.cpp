@@ -152,17 +152,14 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 			// blink and tp direction
 			if (input->getKeyState(controls.at(CONTROL_BL))) {
-				if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-					if (velocity.x > 0.0f || velocity.x < 0.0f || velocity.y > 0.0f || velocity.z < 0.0f) {
-						cooldown.at(COOLDOWN_BLINK) = 1.0f;
-						float r_;
-						if (velocity.x >= 0)
-							r_ = atan(velocity.y / velocity.x);
-						else if (velocity.x < 0)
-							r_ = D3DX_PI + atan(velocity.y / velocity.x);
+				if (velocity.x != 0.0f || velocity.y != 0.0f) {
+					float r_;
+					if (velocity.x >= 0)
+						r_ = atan(velocity.y / velocity.x);
+					else if (velocity.x < 0)
+						r_ = D3DX_PI + atan(velocity.y / velocity.x);
 
-						blink(vS, r_);
-					}
+					blink(vS, r_);
 				}
 			}
 		}
@@ -226,6 +223,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 						ps.init(graphics);
 						cooldown.at(SPAWN_TIME) = 3.0f;
 						graphics->camera->shake(0.25f, 1.0f);
+						break;
 					}
 				}
 			}
@@ -254,12 +252,11 @@ void Player::respawn() {
 }
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
-
-	cooldown.at(COOLDOWN_BLINK) = 1.0f;
-	velocity *= 0;
-	QLine* qline = new QLine(this, angle);
-	qline->init(vS, graphics);
-
+	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
+		cooldown.at(COOLDOWN_BLINK) = 1.0f;
+		QLine* qline = new QLine(this, angle);
+		qline->init(vS, graphics);
+	}
 }
 
 void Player::assignControl(rapidjson::Document& doc, int i) {
@@ -270,6 +267,10 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 	controls.at(CONTROL_RIGHT) = doc["player"].GetArray()[i]["right"].GetInt();
 	controls.at(CONTROL_BL) = doc["player"].GetArray()[i]["bl"].GetInt();
 	controls.at(CONTROL_TP) = doc["player"].GetArray()[i]["tp"].GetInt();
+
+}
+
+void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
 
 }
 

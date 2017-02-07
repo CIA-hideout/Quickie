@@ -31,10 +31,8 @@ public:
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
 	void blink(std::vector<VertexShape*>&, float);
-	void teleport();
+	void teleport(std::vector<VertexShape*>&, float);
 	void assignControl(rapidjson::Document&, int player);
-
-	void startDeath();
 	
 	// GET
 	int getHealth(){ return health; }

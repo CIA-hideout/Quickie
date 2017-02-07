@@ -2,6 +2,8 @@
 #include "Player.h"
 #include <comdef.h>
 
+#include <math.h>
+
 #pragma comment(lib, "comsuppw.lib")
 #pragma comment(lib, "comsuppwd.lib")
 
@@ -35,13 +37,11 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					if (vS[i]->id > id && this->parent != qtemp->parent) {
 						ptemp->alive = false;
 						ptemp->visible = false;
-						ptemp->ps = ParticleSource(100, parent->velocity, intersect, qtemp->color);
-
+						ptemp->ps = ParticleSource(200, parent->velocity, intersect, qtemp->color);
 						ptemp->ps.init(graphics);
 						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
 						qtemp->alive = false;
 						vS[i]->pos = intersect;
-
 						graphics->camera->shake(0.25f, 1.0f);
 						break;
 					}
@@ -73,6 +73,10 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 		rayEnd.x = rayStart.x + cos(rotation_) * m_;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
+
+		parent->velocity.x = -cos(rotation_) * 0.0001;
+		parent->velocity.y = -sin(rotation_) * 0.0001;
+
 		dist_ = cDist_ = 999;
 
 		c_ = 0;
@@ -147,6 +151,38 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 			// change the start point here
 			rayStart.x = fIntersect.x;
 			rayStart.y = fIntersect.y;
+		}
+	}
+
+	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
+	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
+
+	// now check if the player collides with anything here
+
+	D3DXVECTOR3 intersect_;
+
+	for (int i = 0; i < vS.size(); i++) {
+		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			if (CollisionManager::collideAABB(parent, vS[i])) {
+				if (fLatestID == vS[i]->id) {
+					// continue the thing until player is free
+					// there is no change in rotation_. use the same variable
+					
+					rayEnd.x += cos(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.y += sin(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
+					vertexPoint.push_back(rayEnd);
+					break;
+				}
+				else {
+					// moves player back
+					rayEnd.x -= cos(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.y -= sin(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
+					vertexPoint.push_back(rayEnd);
+					break;
+					break;
+				}
+
+			}
 		}
 	}
 
