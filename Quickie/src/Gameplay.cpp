@@ -72,7 +72,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->assignControl(controlsDoc, i);
 	}
 
-	lManager->setRandom(qEnvironmentObj);
+	lManager->setRandom(qEnvironmentObj, qPlayer);
 }
 
 void Gameplay::update()
@@ -92,6 +92,8 @@ void Gameplay::update()
 		Player* temp = (Player*)qPlayer[i];
 		temp->update(*deltaTime, qEnvironmentObj);
 	}
+
+	lManager->update(*deltaTime, qEnvironmentObj, qPlayer);
 
 	graphics->camera->update(*deltaTime);
 

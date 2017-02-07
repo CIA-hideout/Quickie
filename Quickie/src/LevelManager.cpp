@@ -15,25 +15,25 @@ void LevelManager::init(Audio* a)
 	audio = a;
 }
 
-void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)
+void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS, std::vector<VertexShape*> players)
 {
-	//timer += deltaTime;
+	timer += deltaTime;
 
-	//// change level every 60s 
-	//if (timer >= LEVEL_TIME && isShuffled)
-	//{
-	//	setShuffle(vS);
-	//	timer = 0;
-	//	levelCount++;
-	//}
-	
-	// change level every 60s 
-	//if (timer >= LEVEL_TIME && isRandomGen)
-	//{
-	//	setShuffle(vS);
-	//	timer = 0;
-	//	levelCount++;
-	//}
+	if (timer >= LEVEL_TIME) {
+		// Run this if shuffled mode is activated
+		if (isShuffled) {
+			setShuffle(vS);
+			timer = 0;
+			levelCount++;
+		}
+		
+		// Run this if random mode is activated
+		if (isRandomGen) {
+			setRandom(vS, players);
+			timer = 0;
+			levelCount++;
+		}
+	}
 }
 
 // set obstacles location for level 1
@@ -84,7 +84,7 @@ void LevelManager::setShuffle(std::vector<VertexShape*> vS)
 		shuffle();
 
 	int level = shuffleLevel[0];
-	shuffleLevel.erase(shuffleLevel.begin()); // clear 1st element 
+	shuffleLevel.erase(shuffleLevel.begin()); // clear 1st element 	   
 
 	switch (level)
 	{
@@ -104,6 +104,7 @@ void LevelManager::setShuffle(std::vector<VertexShape*> vS)
 // shuffle the levels and store into vector
 void LevelManager::shuffle()
 {
+	isRandomGen = false;
 	isShuffled = true;
 	shuffleLevel.push_back(1);
 	shuffleLevel.push_back(2);
@@ -115,17 +116,18 @@ void LevelManager::shuffle()
 }
 
 // pure randomisation of obstacle location and size
-void LevelManager::setRandom(std::vector<VertexShape*> vS)
+void LevelManager::setRandom(std::vector<VertexShape*> vS, std::vector<VertexShape*> players)
 {
 	isRandomGen = true;
+	isShuffled = false;
 	audio->stopCue(BGMRand);
 
 	for (int i = 0; i < vS.size(); i++) {
 		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)vS[i];
-			tempObs->setRandom(levelCount);
+			tempObs->setRandom(levelCount, players);
 		}
 	}
-
+	
 	// audio->playCue(BGMRand);
 }
