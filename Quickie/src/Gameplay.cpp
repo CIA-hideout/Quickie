@@ -153,7 +153,7 @@ void Gameplay::render()
 
 		f = fonts.at(MENU_OPTIONS);
 
-		// Set Fonts for Options'
+		// Set Fonts for Options
 		f = fonts.at(GAME_SELECT);
 		int offSetY = 0;
 

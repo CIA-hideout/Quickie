@@ -18,6 +18,8 @@ public:
 	std::map<Control, int>			controls;
 	bool							locked;
 	GUIBar*							healthBar;
+	bool							isWinner	= false;	// set to true if a winner
+
 
 	ParticleSource					ps;
 
