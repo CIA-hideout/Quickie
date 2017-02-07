@@ -11,11 +11,12 @@ State::State()
 
 State::~State(){};
 
-void State::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc)
+void State::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc, float* dT)
 {
 	graphics = g;
 	input = i;
 	audio = a;
+	deltaTime = dT;
 	initFonts();
 	assignControls(doc);
 }

@@ -14,10 +14,7 @@ Instructions::~Instructions()
 void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc, float* dT)
 {
 	D3DXVECTOR3 pos3D;
-
-	deltaTime = dT;
-	
-	State::initialize(g, i, a, doc);
+	State::initialize(g, i, a, doc, dT);
 
 	graphics->camera->pointInWorld(pos3D, sqr1Pos, instructionsNS::z);
 	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));

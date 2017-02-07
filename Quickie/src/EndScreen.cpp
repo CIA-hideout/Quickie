@@ -13,7 +13,7 @@ EndScreen::~EndScreen()
 void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc, float* dT)
 {
 	deltaTime = dT;
-	State::initialize(g, i, a, doc);
+	State::initialize(g, i, a, doc, dT);
 }
 
 void EndScreen::update()

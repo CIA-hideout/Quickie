@@ -28,9 +28,6 @@ namespace instructionsNS
 
 class Instructions : public State
 {
-	float*			deltaTime;
-	D3DXMATRIX		worldMatrix;
-
 	instructionsNS::Scene					currentScene;
 
 	Player* sqr1;
@@ -43,7 +40,7 @@ public:
 	Instructions();
 	virtual ~Instructions();
 
-	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime);
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;
 	void ai() override{};
 	void render() override;

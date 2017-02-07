@@ -31,12 +31,10 @@ namespace gameplayNS
 
 class Gameplay : public State
 {
-	D3DXMATRIX					worldMatrix;
 	rapidjson::Document			obstacleDoc;
 	std::vector<VertexShape*>	qEnvironmentObj;
 	std::vector<VertexShape*>	qPlayer;
 
-	float*						deltaTime;
 	LevelManager*				lManager;
 	bool						gameplay = false;
 	
@@ -62,7 +60,7 @@ public:
 	Gameplay();
 	virtual ~Gameplay();
 
-	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime);
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;
 	void ai() override{};
 	void render() override;

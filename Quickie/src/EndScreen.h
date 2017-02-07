@@ -12,14 +12,11 @@
 
 class EndScreen : public State
 {
-	D3DXMATRIX					worldMatrix;
-	float*						deltaTime;
-
 public:
 	EndScreen();
 	virtual ~EndScreen();
 
-	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime);
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;
 	void ai() override{}
 	void render() override;
