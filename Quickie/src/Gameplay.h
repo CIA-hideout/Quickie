@@ -4,6 +4,7 @@
 #include "State.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "Wall.h"
 #include "Obstacle.h"
 #include "LevelManager.h"
 
@@ -24,6 +25,11 @@ class Gameplay : public State
 	Obstacle* o4;
 	Obstacle* o5;
 	Obstacle* o6;
+
+	Wall* w1;		// - up
+	Wall* w2; 		// - down
+	Wall* w3; 		// | left
+	Wall* w4;		// | right
 
 	Player* sqr1;
 	Player* sqr2;

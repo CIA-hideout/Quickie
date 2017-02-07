@@ -4,6 +4,8 @@
 
 
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
+	static int obstacleCount = 0;
+	obstacleId = obstacleCount++;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -93,10 +95,8 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 
 	LPDIRECT3DVERTEXBUFFER9 vBuffer;
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
-
 	meshPtr->GetVertexBuffer(&vBuffer);
 	meshPtr->GetIndexBuffer(&iBuffer);
-
 	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
 	graphics->get3Ddevice()->SetIndices(iBuffer);
 
@@ -260,17 +260,43 @@ void Obstacle::setDimension(D3DXVECTOR3 newDimension) {
 
 // generate a random size for the obstructor and returns the size
 D3DXVECTOR3 Obstacle::getRandomDimension() {
+
 	std::vector<D3DXVECTOR3> dimensions;
+
+	// small and medium size to appear more frequently (horizontal)
+	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
 	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
 	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
 	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
-	// medium size to appear more frequently
+	dimensions.push_back(DIMENSION_HORIZONTAL_LARGE);
+
+	// small and medium size to appear more frequently (vertical)
+	dimensions.push_back(DIMENSION_VERTICAL_SMALL);
+	dimensions.push_back(DIMENSION_VERTICAL_SMALL);
+	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
+	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
+	dimensions.push_back(DIMENSION_VERTICAL_LARGE);
 
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(dimensions.begin(), dimensions.end(), rng); //ramdomise vector
 
 	return dimensions.front(); // use first value of random vector
+}
+
+D3DXVECTOR3 Obstacle::getRandomPosition()
+{
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+
+	std::uniform_real_distribution<float> randomX(-18, 18);	// between -18 to 18
+	std::uniform_real_distribution<float> randomY(-14, 14);	// between -14 to 14
+	float x = randomX(rng);
+	float y = randomY(rng);
+
+	printf("%.2f, %.2f\n", x, y);
+
+	return D3DXVECTOR3(x, y, 19.5);
 }
 
 void Obstacle::assignPosition(rapidjson::Document& doc, int i) {
@@ -338,4 +364,13 @@ void Obstacle::setLevel3(int count)
 
 	if (count != 0)
 		currentState = SHRINK;
+}
+
+void Obstacle::setRandom(int count)
+{
+	if (count != 0)
+		currentState = SHRINK;
+
+	newDimension = getRandomDimension();		// get a random direction and set it
+	newPos = getRandomPosition();				// get a random position and set it
 }

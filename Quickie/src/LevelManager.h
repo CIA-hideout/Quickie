@@ -35,9 +35,9 @@ public:
 	void setLevelOne(std::vector<VertexShape*>);		// set Lvl 1
 	void setLevelTwo(std::vector<VertexShape*>);		// set Lvl 2
 	void setLevelThree(std::vector<VertexShape*>);		// set Lvl 3
-	void setRandomLevel(std::vector<VertexShape*>);	// randomly set the levels
-	void assignRandomLevel();	// randomly set the levels
-
+	void setShuffle(std::vector<VertexShape*>);			// set the shuffled levels
+	void shuffle();										// shuffle the exisiting levels
+	void setRandom(std::vector<VertexShape*>);			// set the obstales location really randomly
 
 private:
 	float timer = 0;
@@ -47,13 +47,10 @@ private:
 	int minY = -18;		// min value for Y coordinates
 	int levelCount = 0;
 	double zAxis = 19.5;
-	boolean isRandom = false;
+	boolean isShuffled = false;
+	boolean isRandomGen = false;
 
 	Audio* audio;		// Pointer to audio system
 
-	std::vector<int> randomLevel;
-
-	std::vector<D3DXVECTOR3> lvlOnePos;
-	std::vector<D3DXVECTOR3> lvlTwoPos;
-	std::vector<D3DXVECTOR3> lvlThreePos;
+	std::vector<int> shuffleLevel;	// store the shuffled levels
 };

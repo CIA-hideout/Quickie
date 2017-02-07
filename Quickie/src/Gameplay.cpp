@@ -13,6 +13,11 @@ Gameplay::Gameplay()
 	o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 
+	w1 = new Wall(D3DXVECTOR3(0, 22, 19.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);		// - up
+	w2 = new Wall(D3DXVECTOR3(0, -22, 19.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);	// - down
+	w3 = new Wall(D3DXVECTOR3(-21, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);		// | left
+	w4 = new Wall(D3DXVECTOR3(21, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);		// | right
+	
 	sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 	sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
@@ -37,6 +42,11 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	qEnvironmentObj.push_back(o5);
 	qEnvironmentObj.push_back(o6);
 
+	qEnvironmentObj.push_back(w1);
+	qEnvironmentObj.push_back(w2);
+	qEnvironmentObj.push_back(w3);
+	qEnvironmentObj.push_back(w4);
+	
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
 
@@ -51,7 +61,9 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	for (int i = 0; i < qEnvironmentObj.size(); i++) {
 		Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
 		temp->init(this->audio, this->graphics);
-		temp->assignPosition(obstacleDoc, i);
+			
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE)
+				temp->assignPosition(obstacleDoc, i);
 	}
 
 	for (int i = 0; i < qPlayer.size(); i++) {
@@ -60,7 +72,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->assignControl(controlsDoc, i);
 	}
 
-	lManager->setRandomLevel(qEnvironmentObj);
+	lManager->setRandom(qEnvironmentObj);
 
 	// add the gui thing here
 
@@ -106,7 +118,6 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	player1QBar->scale.z = 1.0f;
 
 	qGUIObj.push_back(player1QBar);
-
 }
 
 void Gameplay::update()

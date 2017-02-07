@@ -85,7 +85,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		// fIntersect will be the point of intersection for that particular bounce
 
 		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE || vS[i]->objectType == OBJECT_TYPE_WALL) {
 				if (CollisionManager::rayObjectIntersect(intersect, norm, rayStart, rayEnd, vS[i]) && fLatestID != vS[i]->id) {
 					c_++;
 					// since rayObjectIntersect already returns the closest point, we can compare each point
