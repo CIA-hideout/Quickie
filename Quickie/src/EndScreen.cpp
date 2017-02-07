@@ -38,6 +38,7 @@ void EndScreen::render()
 		f.print(
 			GAME_WIDTH / 2 - f.getTotalWidth("GAME OVER") / 2,
 			GAME_HEIGHT / 5,
+			fontNS::YELLOW,
 			"Player 1 wins");	
 	}
 	else if (temp.winner == 2)
@@ -45,6 +46,7 @@ void EndScreen::render()
 		f.print(
 			GAME_WIDTH / 2 - f.getTotalWidth("GAME OVER") / 2,
 			GAME_HEIGHT / 5,
+			fontNS::BLUE,
 			"Player 2 wins");
 	}
 
