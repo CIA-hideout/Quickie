@@ -141,24 +141,26 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			i->second -= deltaTime;
 	}
 
-	if (!locked) {
-		if (alive) {
-			if (input->getKeyState(controls.at(CONTROL_UP))) {
-				velocity.y += deltaTime * 10;
-			}
-			if (input->getKeyState(controls.at(CONTROL_DOWN))) {
-				velocity.y -= deltaTime * 10;
-			}
-			if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-				velocity.x -= deltaTime * 10 / ASPECT_RATIO;
-			}
-			if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-				velocity.x += deltaTime * 10 / ASPECT_RATIO;
-			}
+	if (alive) {
+		if (input->getKeyState(controls.at(CONTROL_UP))) {
+			velocity.y += deltaTime * 10;
+		}
+		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
+			velocity.y -= deltaTime * 10;
+		}
+		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
+			velocity.x -= deltaTime * 10 / ASPECT_RATIO;
+		}
+		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
+			velocity.x += deltaTime * 10 / ASPECT_RATIO;
+		}
 
-			// blink and tp direction
-			if (input->getKeyState(controls.at(CONTROL_BL))) {
+		// blink and tp direction
+		if (input->getKeyState(controls.at(CONTROL_BL)) || controlled) {
+
+			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 				if (velocity.x != 0.0f || velocity.y != 0.0f) {
+					cooldown.at(COOLDOWN_BLINK) = 1.0f;
 					float r_;
 					if (velocity.x >= 0)
 						r_ = atan(velocity.y / velocity.x);
@@ -196,14 +198,12 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 				respawn();
 			}
 		}
-
-		velocity.x *= 0.75;
-		velocity.y *= 0.75;
-		move(vS, deltaTime);
 	}
 
+	velocity.x *= 0.75;
+	velocity.y *= 0.75;
+	move(vS, deltaTime);
 	healthBar->update(deltaTime);
-
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
@@ -320,11 +320,13 @@ void Player::respawn() {
 }
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
+  
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
 		QLine* qline = new QLine(this, angle);
 		qline->init(vS, graphics);
 	}
+  
 }
 
 void Player::assignControl(rapidjson::Document& doc, int i) {
