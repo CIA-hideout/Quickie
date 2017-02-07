@@ -108,7 +108,7 @@ void Camera::fly(float u) {
 	}
 }
 
-void Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos, D3DXMATRIX& w) {
+void Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos) {
 
 	D3DXMATRIX v;
 	float x_, y_, z_, w_;

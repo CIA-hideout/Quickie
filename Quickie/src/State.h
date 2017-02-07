@@ -14,9 +14,12 @@ namespace fontsNS
 		MENU_TITLE,
 		HEADING2,
 		INSTRUCTIONS,
-		SUBTITLE
+		SUBTITLE,
+	  GAME_SELECT
 	};
 }
+};
+
 namespace stateNS
 {
 	const int docID = 0;

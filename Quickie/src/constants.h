@@ -22,8 +22,9 @@
 #define COLOR_GREEN D3DXVECTOR3(0, 255, 0)
 #define COLOR_BLUE D3DXVECTOR3(0, 0, 255)
 #define COLOR_WHITE D3DXVECTOR3(255, 255, 255)
+#define COLOR_GRAY D3DXVECTOR3(169, 169, 169)
 
-// define dimensions of obstacles
+// define dimensions of obstacles or walls
 #define DIMENSION_HORIZONTAL_SMALL	D3DXVECTOR3( 6, 1.5, 0.5)
 #define DIMENSION_HORIZONTAL_MEDIUM D3DXVECTOR3(12, 1.5, 0.5)
 #define DIMENSION_HORIZONTAL_LARGE	D3DXVECTOR3(25, 1.5, 0.5)
@@ -32,6 +33,8 @@
 #define DIMENSION_VERTICAL_LARGE	D3DXVECTOR3(1.5, 25, 0.5)
 #define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)			// use if obstacles are not needed
 #define DIMENSION_ALMOST_ZERO		D3DXVECTOR3(0.01, 0.01, 0.01)	// use for scaling as 0 * n = 0
+#define DIMENSION_HORIZONTAL_WALL	D3DXVECTOR3(120, 20, 0.5)			// use as walls to block player from gtfo of the screen
+#define DIMENSION_VERTICAL_WALL		D3DXVECTOR3(20, 50, 0.5)			// use as walls to block player from gtfo of the screen
 
 //-----------------------------------------------
 // Useful macros
@@ -72,8 +75,8 @@ const int SPAWN_LEFT[] = {-15, -5 };	// -15 < pos.x < -5
 const int SPAWN_CENTER[] = {-5, 5};		// - 5 < pos.x <  5
 const int SPAWN_RIGHT[] = {5, 15};		//   5 < pos.x < 15
 
-// game time between each level
-const float LEVEL_TIME = 10.0f;
+// game time between each level (30 secs than shuffle/random)
+const float LEVEL_TIME = 30.0f;
 
 // audio file required by audio.cpp
 // WAVE_BANK must be the location of the xwb file

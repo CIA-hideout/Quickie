@@ -14,7 +14,6 @@ namespace menuNS
 {
 	const std::string				options[] = { "Play!", "Controls" };
 	const int						optionsLength = 2;
-
 }
 
 class Menu : public State

@@ -2,6 +2,7 @@
 
 #include "ParticleSource.h"
 #include "QLine.h"
+#include "GUIBar.h"
 
 enum CooldownType {
 	COOLDOWN_BLINK,
@@ -17,6 +18,7 @@ public:
 	std::map<Control, int>			controls;
 	int								health;
 	bool							controlled = false;
+	GUIBar*							healthBar;
 
 	ParticleSource					ps;
 
@@ -31,7 +33,7 @@ public:
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
 	void blink(std::vector<VertexShape*>&, float);
-	void teleport();
+	void teleport(std::vector<VertexShape*>&, float);
 	void assignControl(rapidjson::Document&, int player);
 	
 	// GET

@@ -4,7 +4,8 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 	graphics = nullptr;
 	input = nullptr;
-	health = 3;
+	health = maxHealth = 3;
+	locked = false;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -100,7 +101,9 @@ void Player::init(Graphics* graphics, Input* input) {
 
 	visible = true;
 	alive = true;
-	health = 3;
+
+	healthBar = new GUIBar(this, D3DXVECTOR3(217, 83, 79));
+	healthBar->init(graphics);
 
 }
 
@@ -119,6 +122,8 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &(matRot * worldMat));
 		meshPtr->DrawSubset(0);
+
+		healthBar->draw(worldMat);
 	}
 
 	if (!alive) {
@@ -128,6 +133,8 @@ void Player::draw(D3DXMATRIX& worldMat) {
 }
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
+
+	printf("%.2f, %.2f\n", pos.x, pos.y);
 
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
@@ -152,60 +159,109 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		if (input->getKeyState(controls.at(CONTROL_BL)) || controlled) {
 
 			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-				if (velocity.x > 0.0f || velocity.x < 0.0f || velocity.y > 0.0f || velocity.z < 0.0f) {
+				if (velocity.x != 0.0f || velocity.y != 0.0f) {
 					cooldown.at(COOLDOWN_BLINK) = 1.0f;
 					float r_;
 					if (velocity.x >= 0)
 						r_ = atan(velocity.y / velocity.x);
 					else if (velocity.x < 0)
-						r_ = atan(velocity.y / velocity.x) + D3DX_PI;
-
+						r_ = D3DX_PI + atan(velocity.y / velocity.x);
 
 					blink(vS, r_);
 				}
 			}
+			if (input->getKeyState(controls.at(CONTROL_TP))) {
+				if (velocity.x != 0.0f || velocity.y != 0.0f) {
+					float r_;
+					if (velocity.x >= 0)
+						r_ = atan(velocity.y / velocity.x);
+					else if (velocity.x < 0)
+						r_ = D3DX_PI + atan(velocity.y / velocity.x);
+
+					teleport(vS, r_);
+				}
+			}
+
+			if (outOfMap()) {
+				this->alive = false;
+				this->visible = false;
+				ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+				ps.init(graphics);
+				cooldown.at(SPAWN_TIME) = 3.0f;
+				graphics->camera->shake(0.25f, 1.0f);
+				health--;
+			}
 		}
-	}
-	else{
-		ps.update(deltaTime, vS);
-		if (cooldown.at(SPAWN_TIME) <= 0.0f) {
-			respawn();
+		else {
+			ps.update(deltaTime, vS);
+			if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
+				respawn();
+			}
 		}
 	}
 
 	velocity.x *= 0.75;
 	velocity.y *= 0.75;
 	move(vS, deltaTime);
-
-
+	healthBar->update(deltaTime);
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 	bool collides;
-	this->pos.x += velocity.x;
 
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			if (CollisionManager::collideAABB(this, vS[i])) {
-				if (velocity.x > 0)
-					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
-				else if (velocity.x < 0)
-					pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
-				velocity.x = 0;
+	// deal with the more predominant velocity
+
+	if (velocity.x >= velocity.y) {
+		this->pos.x += velocity.x;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.x > 0)
+						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
+					else if (velocity.x < 0)
+						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
+					velocity.x = 0;
+				}
+			}
+		}
+
+		this->pos.y += velocity.y;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.y > 0)
+						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
+					else if (velocity.y < 0)
+						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
+					velocity.y = 0;
+				}
 			}
 		}
 	}
-
-	this->pos.y += velocity.y;
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			if (CollisionManager::collideAABB(this, vS[i])) {
-				if (velocity.y > 0)
-					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
-				else if (velocity.y < 0)
-					pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
-				velocity.y = 0;
+	else {
+		this->pos.y += velocity.y;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.y > 0)
+						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
+					else if (velocity.y < 0)
+						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
+					velocity.y = 0;
+				}
+			}
+		}
+		this->pos.x += velocity.x;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.x > 0)
+						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
+					else if (velocity.x < 0)
+						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
+					velocity.x = 0;
+				}
 			}
 		}
 	}
@@ -226,7 +282,22 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 						ps.init(graphics);
 						cooldown.at(SPAWN_TIME) = 3.0f;
 						graphics->camera->shake(0.25f, 1.0f);
+						health--;
+						break;
 					}
+				}
+			}
+			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					this->alive = false;
+					this->visible = false;
+					vS[i]->alive = false;
+					ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+					ps.init(graphics);
+					cooldown.at(SPAWN_TIME) = 3.0f;
+					graphics->camera->shake(0.25f, 1.0f);
+					health--;
+					break;
 				}
 			}
 		}
@@ -236,13 +307,8 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 void Player::respawn() {
 
-	if (pos.y <= -25) {
-		pos.y = 20;
-	}
-
-	if (pos.x < -20) {
-		pos.x = 20;
-	}
+	pos.y = 0;
+	pos.x = 0;
 
 	alive = true;
 	visible = true;
@@ -254,13 +320,13 @@ void Player::respawn() {
 }
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
-
-	printf("BLINKING");
-	cooldown.at(COOLDOWN_BLINK) = 1.0f;
-	velocity *= 0;
-	QLine* qline = new QLine(this, angle);
-	qline->init(vS, graphics);
-
+  
+	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
+		cooldown.at(COOLDOWN_BLINK) = 1.0f;
+		QLine* qline = new QLine(this, angle);
+		qline->init(vS, graphics);
+	}
+  
 }
 
 void Player::assignControl(rapidjson::Document& doc, int i) {
@@ -272,6 +338,15 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 	controls.at(CONTROL_BL) = doc["player"].GetArray()[i]["bl"].GetInt();
 	controls.at(CONTROL_TP) = doc["player"].GetArray()[i]["tp"].GetInt();
 
+}
+
+void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
+	float magnetude = 10.0f;
+	if (cooldown.at(COOLDOWN_TELEPORT) <= 0) {
+		cooldown.at(COOLDOWN_TELEPORT) = 1.0f;
+		pos.x += cos(angle) * magnetude;
+		pos.y += sin(angle) * magnetude;
+	}
 }
 
 Player::~Player() {

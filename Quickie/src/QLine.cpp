@@ -2,6 +2,8 @@
 #include "Player.h"
 #include <comdef.h>
 
+#include <math.h>
+
 #pragma comment(lib, "comsuppw.lib")
 #pragma comment(lib, "comsuppwd.lib")
 
@@ -10,7 +12,7 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
 	parent = vS;
 	this->rotation_ = rotation_;
-	magnetude = 20;
+	magnetude = 15;
 	objectType = OBJECT_TYPE_QLINE;
 	meshPtr = nullptr;
 	color = parent->color;
@@ -26,6 +28,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	D3DXVECTOR3 intersect;
+
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true) {
@@ -35,12 +38,13 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					if (vS[i]->id > id && this->parent != qtemp->parent) {
 						ptemp->alive = false;
 						ptemp->visible = false;
-						ptemp->ps = ParticleSource(100, parent->velocity, intersect, qtemp->color);
+						ptemp->ps = ParticleSource(200, parent->velocity, intersect, qtemp->color);
 						ptemp->ps.init(graphics);
 						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
 						qtemp->alive = false;
 						vS[i]->pos = intersect;
 						graphics->camera->shake(0.25f, 1.0f);
+						ptemp->health--;
 						break;
 					}
 				}
@@ -71,6 +75,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 		rayEnd.x = rayStart.x + cos(rotation_) * m_;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
+
 		dist_ = cDist_ = 999;
 
 		c_ = 0;
@@ -79,7 +84,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		// fIntersect will be the point of intersection for that particular bounce
 
 		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE || vS[i]->objectType == OBJECT_TYPE_WALL) {
 				if (CollisionManager::rayObjectIntersect(intersect, norm, rayStart, rayEnd, vS[i]) && fLatestID != vS[i]->id) {
 					c_++;
 					// since rayObjectIntersect already returns the closest point, we can compare each point
@@ -145,6 +150,34 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 			// change the start point here
 			rayStart.x = fIntersect.x;
 			rayStart.y = fIntersect.y;
+		}
+	}
+
+	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
+	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
+
+	// now check if the player collidesui with anything here
+
+	D3DXVECTOR3 intersect_;
+
+	for (int i = 0; i < vS.size(); i++) {
+		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			if (CollisionManager::collideAABB(parent, vS[i])) {
+				if (fLatestID == vS[i]->id) {
+					// continue the thing until player is free
+					// there is no change in rotation_. use the same variable
+					rayEnd.x += cos(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.y += sin(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
+					vertexPoint.push_back(rayEnd);
+				}
+				else {
+					// moves player back
+					rayEnd.x -= cos(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.y -= sin(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
+					vertexPoint.push_back(rayEnd);
+					break;
+				}
+			}
 		}
 	}
 

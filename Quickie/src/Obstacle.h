@@ -15,10 +15,7 @@ class Obstacle : public VertexShape {
 
 private:
 	int obstacleId;
-	int spawnMinX;
-	int spawnMaxX;
 	float timer = 0;			// a timer to move/change direction
-	boolean isRandom = false;
 	int currentState = INACTIVE;
 
 	D3DXVECTOR3 lvl1Pos;
@@ -44,11 +41,13 @@ public:
 	void setPosition(D3DXVECTOR3);
 	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 getRandomDimension();
+	D3DXVECTOR3 getRandomPosition();
 
 	// set Levels location
 	void setLevel1(int);
 	void setLevel2(int);
 	void setLevel3(int);
+	void setRandom(int, std::vector<VertexShape*>);
 
 	// assign position from json
 	void assignPosition(rapidjson::Document&, int obstacle);

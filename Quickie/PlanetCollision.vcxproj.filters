@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\audio.cpp" />
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Font.cpp" />
+    <ClCompile Include="src\Gameplay.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\Instructions.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\ParticleSource.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -14,18 +18,21 @@
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\QLine.cpp" />
     <ClCompile Include="src\State.cpp" />
+    <ClCompile Include="src\Wall.cpp" />
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
-    <ClCompile Include="src\Instructions.cpp" />
-    <ClCompile Include="src\ParticleSource.cpp" />
-    <ClCompile Include="src\audio.cpp" />
+    <ClCompile Include="src\GUIBar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\audio.h" />
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\Gameplay.h" />
     <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\Instructions.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\ParticleSource.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\Camera.h" />
@@ -72,9 +79,8 @@
     <ClInclude Include="src\rapidjson\writer.h" />
     <ClInclude Include="src\State.h" />
     <ClInclude Include="src\VertexShape.h" />
-    <ClInclude Include="src\Instructions.h" />
-    <ClInclude Include="src\ParticleSource.h" />
-    <ClInclude Include="src\audio.h" />
+    <ClInclude Include="src\Wall.h" />
+    <ClInclude Include="src\GUIBar.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\data\control.json" />

@@ -23,7 +23,7 @@ void quicky::initialize(HWND hWnd) {
 	printf("%s\n", controlDoc["test_string"].GetString());
 	fclose(controlFile);
 
-	// Initialize menu
+	// Initalize menu
 	Menu* menu = new Menu();
 	menu->initialize(graphics, input, audio, controlDoc);
 
