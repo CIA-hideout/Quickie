@@ -27,6 +27,7 @@ namespace gameplayNS
 									"Shuffle Levels",
 									"Really Randomise Levels", };
 	const int optionsLength = 5;
+	const int z = 19.5;
 }
 
 class Gameplay : public State

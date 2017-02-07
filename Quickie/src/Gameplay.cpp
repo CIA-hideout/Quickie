@@ -18,9 +18,6 @@ Gameplay::Gameplay()
 	w3 = new Wall(D3DXVECTOR3(-25, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | left
 	w4 = new Wall(D3DXVECTOR3( 25, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
 
-	sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
-	sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
-
 	gameStack.push(gameplayNS::LEVEL_1);
 }
 
@@ -32,6 +29,17 @@ Gameplay::~Gameplay()
 void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& controlsDoc, float* dT)
 {
 	State::initialize(g, i, a, controlsDoc, dT);
+
+	D3DXVECTOR3 pos3D;
+	D3DXVECTOR2 pos2D;
+
+	pos2D = D3DXVECTOR2(GAME_WIDTH / 4, GAME_HEIGHT / 2);
+	graphics->camera->pointInWorld(pos3D, pos2D, gameplayNS::z);
+	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
+
+	pos2D = D3DXVECTOR2(GAME_WIDTH / 1.5, GAME_HEIGHT / 2);
+	graphics->camera->pointInWorld(pos3D, pos2D, gameplayNS::z);
+	sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
 	lManager->init(audio);
 
