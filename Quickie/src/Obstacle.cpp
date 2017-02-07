@@ -302,30 +302,30 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 void Obstacle::assign(rapidjson::Document& doc) {
 	// store level 1 stuff
 	lvl1Pos = D3DXVECTOR3(
-		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
-		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_y"].GetFloat(),
-		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_z"].GetFloat()
+		doc["obstacle"].GetArray()[i]["lvl_1_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[i]["lvl_1_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[i]["lvl_1_pos_z"].GetFloat()
 		);
 	lvl1Dim = assignDimension(
-		doc["obstacle"].GetArray()[obstacleId]["lvl_1_dim"].GetInt());
+		doc["obstacle"].GetArray()[i]["lvl_1_dim"].GetInt());
 
 	// store level 2 stuff
 	lvl2Pos = D3DXVECTOR3(
-		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_x"].GetFloat(),
-		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_y"].GetFloat(),
-		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_z"].GetFloat()
+		doc["obstacle"].GetArray()[i]["lvl_2_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[i]["lvl_2_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[i]["lvl_2_pos_z"].GetFloat()
 		);
 	lvl2Dim = assignDimension(
-		doc["obstacle"].GetArray()[obstacleId]["lvl_2_dim"].GetInt());
+		doc["obstacle"].GetArray()[i]["lvl_2_dim"].GetInt());
 
 	// store level 3 stuff
 	lvl3Pos = D3DXVECTOR3(
-		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_x"].GetFloat(),
-		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_y"].GetFloat(),
-		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_z"].GetFloat()
+		doc["obstacle"].GetArray()[i]["lvl_3_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[i]["lvl_3_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[i]["lvl_3_pos_z"].GetFloat()
 		);
 	lvl3Dim = assignDimension(
-		doc["obstacle"].GetArray()[obstacleId]["lvl_3_dim"].GetInt());
+		doc["obstacle"].GetArray()[i]["lvl_3_dim"].GetInt());
 }
 
 D3DXVECTOR3 Obstacle::assignDimension(int type){
@@ -374,3 +374,4 @@ void Obstacle::setRandom(int count)
 	newDimension = getRandomDimension();		// get a random direction and set it
 	newPos = getRandomPosition();				// get a random position and set it
 }
+>>>>>>> Walls reflect a Quickie
