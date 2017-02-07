@@ -3,13 +3,14 @@
 ParticleSource::ParticleSource() : VertexShape() {
 }
 
-ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos, D3DXVECTOR3& color) : VertexShape() {
+ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos, D3DXVECTOR3& color, bool inherit) : VertexShape() {
 	pos = srcPos;
 	particleCount = count;
 	this->color = color;
 	objectType = OBJECT_TYPE_PARTICLES;
 	velocity = srcV;
 	duration = 3.0f;
+	this->inherit = inherit;
 }
 
 ParticleSource::~ParticleSource() {
@@ -92,10 +93,17 @@ void ParticleSource::init(Graphics* graphics) {
 
 		rotation.z = distribution(generator);
 
-		vs->velocity.x = (v_ * cos(rotation.z) + velocity.x * 15) / ASPECT_RATIO;
-		vs->velocity.y = v_ * sin(rotation.z) + velocity.y * 15;
-		vs->velocity.z = distribution(generator) / 5.0f + velocity.z * 15;
-
+		if (this->inherit) {
+			vs->velocity.x = (v_ * cos(rotation.z) + velocity.x * 15) / ASPECT_RATIO;
+			vs->velocity.y = v_ * sin(rotation.z) + velocity.y * 15;
+			vs->velocity.z = distribution(generator) / 5.0f + velocity.z * 15;
+		}
+		else {
+			vs->velocity.x = (v_ * cos(rotation.z))/ ASPECT_RATIO;
+			vs->velocity.y = v_ * sin(rotation.z);
+			vs->velocity.z = distribution(generator) / 5.0f;
+		}
+		
 		vs->pos = pos;
 
 		particles.push_back(vs);

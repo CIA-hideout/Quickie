@@ -134,6 +134,8 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
+	printf("%.2f, %.2f\n", pos.x, pos.y);
+
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
 			i->second -= deltaTime;
@@ -166,6 +168,17 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					blink(vS, r_);
 				}
 			}
+			if (input->getKeyState(controls.at(CONTROL_TP))) {
+				if (velocity.x != 0.0f || velocity.y != 0.0f) {
+					float r_;
+					if (velocity.x >= 0)
+						r_ = atan(velocity.y / velocity.x);
+					else if (velocity.x < 0)
+						r_ = D3DX_PI + atan(velocity.y / velocity.x);
+
+					teleport(vS, r_);
+				}
+			}
 		}
 		else {
 			ps.update(deltaTime, vS);
@@ -178,6 +191,8 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
 	}
+
+	printf("%d\n", outOfMap());
 
 	healthBar->update(deltaTime);
 
@@ -239,7 +254,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 					this->alive = false;
 					this->visible = false;
 					vS[i]->alive = false;
-					ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+					ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
 					ps.init(graphics);
 					cooldown.at(SPAWN_TIME) = 3.0f;
 					graphics->camera->shake(0.25f, 1.0f);
@@ -249,6 +264,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 			}
 		}
 	}
+
 }
 
 void Player::respawn() {
@@ -285,9 +301,12 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 }
 
 void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
-
-	// float magnetude = ;
-
+	float magnetude = 10.0f;
+	if (cooldown.at(COOLDOWN_TELEPORT) <= 0) {
+		cooldown.at(COOLDOWN_TELEPORT) = 1.0f;
+		pos.x += cos(angle) * magnetude;
+		pos.y += sin(angle) * magnetude;
+	}
 }
 
 Player::~Player() {

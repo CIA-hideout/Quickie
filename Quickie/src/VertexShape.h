@@ -68,7 +68,6 @@ public:
 	virtual void draw(D3DXMATRIX&);
 	virtual void update(float);
 
-	void computeBoundingBox();
-	void computeBoundingSphere();
-	bool collidesWith(VertexShape&);
+	bool outOfMap();
+
 };

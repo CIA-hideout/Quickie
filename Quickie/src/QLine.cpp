@@ -247,8 +247,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	vS.push_back(this);
 
 	initialized = true;
-
-	printf("init end\n");
 }
 
 void QLine::draw(D3DXMATRIX& worldMat) {
