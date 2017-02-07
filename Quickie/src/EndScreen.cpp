@@ -48,12 +48,13 @@ void EndScreen::render()
 	
 
 	f.print(
-		GAME_WIDTH / 2 - f.getTotalWidth(("> " + endscreenNS::options[i])) / 2,
+		GAME_WIDTH / 2 - f.getTotalWidth(("> " + endscreenNS::options[0])) / 2,
 		GAME_HEIGHT / 2 + offSetY,
-		"> " + endscreenNS::options[i]);
+		"> " + endscreenNS::options[0]);
 }
 
-void EndScreen::setWinner(std::vector<VertexShape*> players)			// get Winner of the game
+// get Winner of the game
+void EndScreen::setWinner(std::vector<VertexShape*> players)			
 {
 	for (int i = 0; i < players.size(); i++)
 	{
