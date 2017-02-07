@@ -1,12 +1,33 @@
 #pragma once
 
 #include <vector>
+#include <stack>
+
 #include "State.h"
 #include "CollisionManager.h"
 #include "Player.h"
 #include "Wall.h"
 #include "Obstacle.h"
 #include "LevelManager.h"
+
+namespace gameplayNS
+{
+	enum Mode {
+		LEVEL_1,
+		LEVEL_2,
+		LEVEL_3,
+		LEVEL_SHUFFLE,
+		LEVEL_RANDOM,
+		REVERT
+	};
+
+	const std::string options[] = { "Level 1",
+									"Level 2",
+									"Level 3",
+									"Shuffle Levels",
+									"Really Randomise Levels", };
+	const int optionsLength = 5;
+}
 
 class Gameplay : public State
 {
@@ -17,6 +38,10 @@ class Gameplay : public State
 
 	float*						deltaTime;
 	LevelManager*				lManager;
+	bool						gameplay = false;
+	
+	gameplayNS::Mode						selectedMode;
+	std::stack<gameplayNS::Mode>			gameStack;
 
 	Obstacle* o1;
 	Obstacle* o2;
@@ -44,4 +69,6 @@ public:
 	void collisions() override{};
 	void releaseAll() override{};
 	void resetAll() override{};
+	void Gameplay::setCurrentSceneByInput(gameplayNS::Mode, int);
+	void Gameplay::selectMode(gameplayNS::Mode, int);
 };

@@ -39,12 +39,12 @@ public:
 	void shuffle();										// shuffle the exisiting levels
 	void setRandom(std::vector<VertexShape*>, std::vector<VertexShape*>);			// set the obstales location really randomly
 
+	// setters
+	void setShuffledBool(boolean newCon)	{ isShuffled = newCon; }
+	void setRandomBool(boolean newCon)		{ isRandomGen = newCon; }
+
 private:
 	float timer = 0;
-	int maxX = 15;		// max value for X coordinates
-	int minX = -15;		// min value for X coordinates
-	int maxY = 18;		// max value for Y coordinates
-	int minY = -18;		// min value for Y coordinates
 	int levelCount = 0;
 	double zAxis = 19.5;
 	boolean isShuffled = false;

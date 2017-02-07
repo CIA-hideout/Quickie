@@ -291,7 +291,7 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 
 	D3DXVECTOR3 high, low;		// high = point(0,0)/ low = point(1280,720)
 	D3DXVECTOR2 topleft = D3DXVECTOR2(0, 0);
-	D3DXVECTOR2 bottomright = D3DXVECTOR2(1280, 720);	// resolution of game is 1280 x 720
+	D3DXVECTOR2 bottomright = D3DXVECTOR2(GAME_WIDTH, GAME_HEIGHT);	// resolution of game is 1280 x 720
 
 	graphics->camera->pointInWorld(high, topleft, 19.5);
 	graphics->camera->pointInWorld(low, bottomright, 19.5);
@@ -382,10 +382,10 @@ void Obstacle::setRandom(int count, std::vector<VertexShape*> players)
 		newDimension = getRandomDimension();		// get a random direction and set it
 		newPos = getRandomPosition();				// get a random position and set it
 
-		while (players[i]->pos == newPos)
+		if (CollisionManager::collideAABB(players[i], this))
 		{
-			newDimension = getRandomDimension();
 			newPos = getRandomPosition();
+			newDimension = getRandomDimension();
 		}
 	
 	}

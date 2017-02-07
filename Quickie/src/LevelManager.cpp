@@ -22,16 +22,16 @@ void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS, std::ve
 	if (timer >= LEVEL_TIME) {
 		// Run this if shuffled mode is activated
 		if (isShuffled) {
+			levelCount++;
 			setShuffle(vS);
 			timer = 0;
-			levelCount++;
 		}
 		
 		// Run this if random mode is activated
 		if (isRandomGen) {
+			levelCount++;
 			setRandom(vS, players);
 			timer = 0;
-			levelCount++;
 		}
 	}
 }
@@ -104,7 +104,6 @@ void LevelManager::setShuffle(std::vector<VertexShape*> vS)
 // shuffle the levels and store into vector
 void LevelManager::shuffle()
 {
-	isRandomGen = false;
 	isShuffled = true;
 	shuffleLevel.push_back(1);
 	shuffleLevel.push_back(2);
@@ -119,7 +118,6 @@ void LevelManager::shuffle()
 void LevelManager::setRandom(std::vector<VertexShape*> vS, std::vector<VertexShape*> players)
 {
 	isRandomGen = true;
-	isShuffled = false;
 	audio->stopCue(BGMRand);
 
 	for (int i = 0; i < vS.size(); i++) {

@@ -11,7 +11,8 @@ enum Fonts
 	DEFAULT,
 	MENU_TITLE,
 	MENU_OPTIONS,
-	GAME
+	GAME,
+	GAME_SELECT
 };
 
 namespace stateNS

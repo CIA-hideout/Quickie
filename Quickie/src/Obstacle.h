@@ -15,10 +15,7 @@ class Obstacle : public VertexShape {
 
 private:
 	int obstacleId;
-	int spawnMinX;
-	int spawnMaxX;
 	float timer = 0;			// a timer to move/change direction
-	boolean isRandom = false;
 	int currentState = INACTIVE;
 
 	D3DXVECTOR3 lvl1Pos;

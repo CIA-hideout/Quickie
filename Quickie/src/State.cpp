@@ -26,6 +26,7 @@ void State::initFonts()
 	addFont(MENU_TITLE, fontNS::FONT_HEIGHT * 1.5, fontNS::FONT_WIDTH * 1.5, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
 	addFont(MENU_OPTIONS, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "yorkbailehill");
 	addFont(GAME, fontNS::FONT_HEIGHT / 2, fontNS::FONT_WIDTH / 20, fontNS::FONT_WEIGHT / 5, fontNS::FONT_ITALICS, "HeartFont");
+	addFont(GAME_SELECT, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "yorkbailehill");
 }
 
 void State::assignControls(rapidjson::Document& doc)
