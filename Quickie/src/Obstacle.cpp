@@ -4,6 +4,8 @@
 
 
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
+	static int obstacleCount = 0;
+	obstacleId = obstacleCount++;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -93,10 +95,8 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 
 	LPDIRECT3DVERTEXBUFFER9 vBuffer;
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
-
 	meshPtr->GetVertexBuffer(&vBuffer);
 	meshPtr->GetIndexBuffer(&iBuffer);
-
 	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
 	graphics->get3Ddevice()->SetIndices(iBuffer);
 
@@ -284,9 +284,6 @@ D3DXVECTOR3 Obstacle::getRandomDimension() {
 	return dimensions.front(); // use first value of random vector
 }
 
-<<<<<<< HEAD
-void Obstacle::assignPosition(rapidjson::Document& doc, int i) {
-=======
 D3DXVECTOR3 Obstacle::getRandomPosition()
 {
 	std::random_device rd;     // only used once to initialise (seed) engine
@@ -303,33 +300,32 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 }
 
 void Obstacle::assign(rapidjson::Document& doc) {
->>>>>>> Obstacles can be randomised
 	// store level 1 stuff
 	lvl1Pos = D3DXVECTOR3(
-		doc["obstacle"].GetArray()[i]["lvl_1_pos_x"].GetFloat(),
-		doc["obstacle"].GetArray()[i]["lvl_1_pos_y"].GetFloat(),
-		doc["obstacle"].GetArray()[i]["lvl_1_pos_z"].GetFloat()
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_pos_z"].GetFloat()
 		);
 	lvl1Dim = assignDimension(
-		doc["obstacle"].GetArray()[i]["lvl_1_dim"].GetInt());
+		doc["obstacle"].GetArray()[obstacleId]["lvl_1_dim"].GetInt());
 
 	// store level 2 stuff
 	lvl2Pos = D3DXVECTOR3(
-		doc["obstacle"].GetArray()[i]["lvl_2_pos_x"].GetFloat(),
-		doc["obstacle"].GetArray()[i]["lvl_2_pos_y"].GetFloat(),
-		doc["obstacle"].GetArray()[i]["lvl_2_pos_z"].GetFloat()
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_pos_z"].GetFloat()
 		);
 	lvl2Dim = assignDimension(
-		doc["obstacle"].GetArray()[i]["lvl_2_dim"].GetInt());
+		doc["obstacle"].GetArray()[obstacleId]["lvl_2_dim"].GetInt());
 
 	// store level 3 stuff
 	lvl3Pos = D3DXVECTOR3(
-		doc["obstacle"].GetArray()[i]["lvl_3_pos_x"].GetFloat(),
-		doc["obstacle"].GetArray()[i]["lvl_3_pos_y"].GetFloat(),
-		doc["obstacle"].GetArray()[i]["lvl_3_pos_z"].GetFloat()
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_x"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_y"].GetFloat(),
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_pos_z"].GetFloat()
 		);
 	lvl3Dim = assignDimension(
-		doc["obstacle"].GetArray()[i]["lvl_3_dim"].GetInt());
+		doc["obstacle"].GetArray()[obstacleId]["lvl_3_dim"].GetInt());
 }
 
 D3DXVECTOR3 Obstacle::assignDimension(int type){
@@ -369,8 +365,6 @@ void Obstacle::setLevel3(int count)
 	if (count != 0)
 		currentState = SHRINK;
 }
-<<<<<<< HEAD
-=======
 
 void Obstacle::setRandom(int count)
 {
@@ -380,4 +374,3 @@ void Obstacle::setRandom(int count)
 	newDimension = getRandomDimension();		// get a random direction and set it
 	newPos = getRandomPosition();				// get a random position and set it
 }
->>>>>>> Obstacles can be randomised
