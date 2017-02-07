@@ -20,7 +20,7 @@ void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Docume
 	State::initialize(g, i, a, doc);
 
 	graphics->camera->pointInWorld(pos3D, sqr1Pos, instructionsNS::z);
-	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
+	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 	graphics->camera->pointInWorld(pos3D, sqr2Pos, instructionsNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
@@ -192,11 +192,13 @@ void Instructions::render()
 	f.print(
 		instructionsNS::sqr1X - f.getTotalWidth("Player 1") / 2,
 		GAME_HEIGHT / 1.5,
+		fontNS::YELLOW,
 		"Player 1");
 
 	f.print(
 		instructionsNS::sqr2X - f.getTotalWidth("Player 2") / 2,
 		GAME_HEIGHT / 1.5,
+		fontNS::BLUE,
 		"Player 2");
 
 	tempF = fonts.at(fontsNS::HEADING2);
@@ -209,11 +211,13 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("w a s D"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::YELLOW,
 			"w a s D");
 
 		f.print(
 			instructionsNS::sqr2X - tempF.getTotalWidth("u l e R"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::BLUE,
 			"u l e R");
 		break;
 
@@ -222,11 +226,13 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("w A s d"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::YELLOW,
 			"w A s d");
 
 		f.print(
 			instructionsNS::sqr2X - tempF.getTotalWidth("u L e r"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::BLUE,
 			"u L e r");
 		break;
 
@@ -235,11 +241,13 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("W a s d"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::YELLOW,
 			"W a s d");
 
 		f.print(
 			instructionsNS::sqr2X - tempF.getTotalWidth("U l e r"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::BLUE,
 			"U l e r");
 		break;
 
@@ -248,11 +256,13 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("w a S d"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::YELLOW,
 			"w a S d");
 
 		f.print(
 			instructionsNS::sqr2X - tempF.getTotalWidth("u l E r"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::BLUE,
 			"u l E r");
 		break;
 
@@ -266,6 +276,7 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("V b"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::YELLOW,
 			"V b");
 
 		tempF.print(
@@ -276,6 +287,7 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr2X - tempF.getTotalWidth("C f"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::BLUE,
 			"C f");
 		break;
 
@@ -289,6 +301,7 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("v B"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::YELLOW,
 			"v B");
 
 		tempF.print(
@@ -299,6 +312,7 @@ void Instructions::render()
 		f.print(
 			instructionsNS::sqr2X - tempF.getTotalWidth("c F"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::BLUE,
 			"c F");
 		break;
 
@@ -309,6 +323,7 @@ void Instructions::render()
 		f.print(
 			GAME_WIDTH / 2 - f.getTotalWidth("Do not touch the line or the borders!") / 2,
 			GAME_HEIGHT - tempF.getHeight() * 3,
+			fontNS::RED,
 			"Do not touch the line or the borders!");
 		break;
 	}
