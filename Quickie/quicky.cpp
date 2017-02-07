@@ -1,4 +1,5 @@
 #include "quicky.h"
+#include "src/EndScreen.h"
 
 quicky::quicky() {
 }
@@ -37,7 +38,6 @@ void quicky::update() {
 
 	if (gameState.top()->getNextState() != nullptr)
 	{
-		printf("NEXT STATE\n");
 		stateNS::NextState pState = *gameState.top()->getNextState();
 		gameState.top()->clearNextState();
 
@@ -45,7 +45,6 @@ void quicky::update() {
 		{
 		case stateNS::INSTRUCTIONS:
 		{
-			printf("INSTRUCTIONS\n");
 			Instructions* i = new Instructions();
 
 			i->initialize(graphics, input, audio, controlDoc, &deltaTime);
@@ -55,7 +54,6 @@ void quicky::update() {
 
 		case stateNS::GAMEPLAY:
 		{
-			printf("GAMEPLAY\n");
 			Gameplay* g = new Gameplay();
 
 			g->initialize(graphics, input, audio, controlDoc, &deltaTime);
@@ -63,9 +61,17 @@ void quicky::update() {
 		}
 			break;
 
+		case stateNS::ENDSCREEN:
+		{
+			EndScreen* e = new EndScreen();
+
+			e->initialize(graphics, input, audio, controlDoc, &deltaTime);
+			gameState.push(e);
+		}
+			break;
+
 		case stateNS::REVERT:
 		{
-			printf("REVERT\n");
 			gameState.pop();
 		}
 			break;

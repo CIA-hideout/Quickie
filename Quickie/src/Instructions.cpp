@@ -42,6 +42,11 @@ void Instructions::update()
 		nextState = stateNS::REVERT;
 		pNextState = &nextState;
 	}
+	if (input->getKeyState(controls.at(CONTROL_ENTER)))
+	{
+		nextState = stateNS::REVERT;
+		pNextState = &nextState;
+	}
 	setNextStateByInput(stateNS::GAMEPLAY, controls.at(CONTROL_SPACEBAR));
 
 	switch (currentScene)

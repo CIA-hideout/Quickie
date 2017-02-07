@@ -18,7 +18,7 @@ void LevelManager::init(Audio* a)
 void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS, std::vector<VertexShape*> players)
 {
 	timer += deltaTime;
-	printf("%.2f\n", timer);
+	//printf("%.2f\n", timer);
 	if (timer >= LEVEL_TIME) {
 		// Run this if shuffled mode is activated
 		if (isShuffled) {

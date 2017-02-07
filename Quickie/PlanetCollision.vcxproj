@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="src\audio.cpp" />
     <ClCompile Include="src\CollisionManager.cpp" />
+    <ClCompile Include="src\EndScreen.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Gameplay.cpp" />
     <ClCompile Include="src\GUIBar.cpp" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="src\audio.h" />
     <ClInclude Include="src\CollisionManager.h" />
+    <ClInclude Include="src\EndScreen.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Gameplay.h" />
     <ClInclude Include="src\GUIBar.h" />

@@ -5,6 +5,7 @@
 #include "src/Menu.h"
 #include "src/Instructions.h"
 #include "src/Gameplay.h"
+#include "src/EndScreen.h"
 
 class quicky : public Game {
 

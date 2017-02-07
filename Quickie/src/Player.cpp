@@ -1,5 +1,7 @@
 #include "Player.h"
 
+int Player::winner = 0;
+
 Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
 	graphics = nullptr;
