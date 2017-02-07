@@ -28,6 +28,7 @@ namespace stateNS
 	{
 		INSTRUCTIONS,
 		GAMEPLAY,
+		ENDSCREEN,
 		REVERT
 	};
 }

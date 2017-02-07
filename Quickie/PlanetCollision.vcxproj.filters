@@ -22,6 +22,7 @@
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
     <ClCompile Include="src\GUIBar.cpp" />
+    <ClCompile Include="src\EndScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio.h" />
@@ -81,9 +82,6 @@
     <ClInclude Include="src\VertexShape.h" />
     <ClInclude Include="src\Wall.h" />
     <ClInclude Include="src\GUIBar.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="resource\data\control.json" />
-    <None Include="resource\data\obstacles.json" />
+    <ClInclude Include="src\EndScreen.h" />
   </ItemGroup>
 </Project>

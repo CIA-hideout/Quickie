@@ -10,31 +10,20 @@
 #include "Obstacle.h"
 #include "LevelManager.h"
 
-namespace endscreenNS {
-	enum Mode	{
-		RETURN_MAIN,
-		REVERT
-	};
-
-	const std::string		options[] = { "Return" };
-	const int				optionsLength = 1;
-}
-
 class EndScreen : public State
 {
 	D3DXMATRIX					worldMatrix;
-	int							winnerID;
+	float*						deltaTime;
 
 public:
 	EndScreen();
 	virtual ~EndScreen();
 
-	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc) override;
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime);
 	void update() override;
 	void ai() override{}
 	void render() override;
 	void collisions() override{}
 	void releaseAll() override{}
 	void resetAll() override{}
-	void setWinner(std::vector<VertexShape*>);			// get Winner of the game
 };

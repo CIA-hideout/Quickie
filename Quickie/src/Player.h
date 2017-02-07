@@ -19,9 +19,7 @@ public:
 	bool							controlled = false;
 	bool							controlledTP = false;
 	GUIBar*							healthBar;
-	bool							isWinner	= false;	// set to true if a winner
-
-
+	static int						winner;
 	ParticleSource					ps;
 
 	Player() = default;

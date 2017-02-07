@@ -110,7 +110,6 @@ void Gameplay::update()
 				break;
 		}
 	}
-
 	else
 	{
 		for (int i = 0; i < qEnvironmentObj.size(); i++) {
@@ -134,6 +133,26 @@ void Gameplay::update()
 		graphics->camera->update(*deltaTime);
 
 		setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
+		if (input->getKeyState(controls.at(CONTROL_ENTER)))
+		{
+			nextState = stateNS::REVERT;
+			pNextState = &nextState;
+		}
+		else
+		{
+			if (sqr1->health <= 0)
+			{
+				sqr2->winner = 2;
+				nextState = stateNS::ENDSCREEN;
+				pNextState = &nextState;
+			}
+			else if (sqr2->health <= 0)
+			{
+				sqr1->winner = 1;
+				nextState = stateNS::ENDSCREEN;
+				pNextState = &nextState;
+			}
+		}
 	}
 }
 
