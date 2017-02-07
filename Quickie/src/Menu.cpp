@@ -45,7 +45,13 @@ void Menu::update()
 		{
 			sqr1->velocity.x -= *deltaTime * menuNS::speed;
 			sqr2->velocity.x += *deltaTime * menuNS::speed;
+			
 			currentScene = menuNS::BLINK;
+		}
+		else
+		{
+			sqr1->health = 3;
+			sqr2->health = 3;
 		}
 		break;
 	}
