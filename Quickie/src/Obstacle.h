@@ -50,7 +50,7 @@ public:
 	void setLevel1(int);
 	void setLevel2(int);
 	void setLevel3(int);
-	void setRandom(int);
+	void setRandom(int, std::vector<VertexShape*>);
 
 	// assign position from json
 	void assignPosition(rapidjson::Document&, int obstacle);

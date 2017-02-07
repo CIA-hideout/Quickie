@@ -72,8 +72,6 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->assignControl(controlsDoc, i);
 	}
 
-	lManager->setRandom(qEnvironmentObj);
-
 	// add the gui thing here
 
 	VertexShape* player1QBar = new VertexShape();
@@ -118,6 +116,8 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	player1QBar->scale.z = 1.0f;
 
 	qGUIObj.push_back(player1QBar);
+
+	lManager->setRandom(qEnvironmentObj, qPlayer);
 }
 
 void Gameplay::update()
@@ -137,6 +137,8 @@ void Gameplay::update()
 		Player* temp = (Player*)qPlayer[i];
 		temp->update(*deltaTime, qEnvironmentObj);
 	}
+
+	lManager->update(*deltaTime, qEnvironmentObj, qPlayer);
 
 	graphics->camera->update(*deltaTime);
 

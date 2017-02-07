@@ -366,11 +366,20 @@ void Obstacle::setLevel3(int count)
 		currentState = SHRINK;
 }
 
-void Obstacle::setRandom(int count)
+void Obstacle::setRandom(int count, std::vector<VertexShape*> players)
 {
 	if (count != 0)
 		currentState = SHRINK;
 
-	newDimension = getRandomDimension();		// get a random direction and set it
-	newPos = getRandomPosition();				// get a random position and set it
+	for (int i = 0; i < players.size(); i++) {
+		newDimension = getRandomDimension();		// get a random direction and set it
+		newPos = getRandomPosition();				// get a random position and set it
+
+		while (players[i]->pos == newPos)
+		{
+			newDimension = getRandomDimension();
+			newPos = getRandomPosition();
+		}
+	
+	}
 }
