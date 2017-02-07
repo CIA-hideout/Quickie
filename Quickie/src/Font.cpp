@@ -15,6 +15,9 @@ Font::Font()
 
 Font::~Font()
 {
+	//RemoveFontResource(FONT1);
+	//RemoveFontResource(FONT2);
+	//RemoveFontResource(FONT3);
 }
 
 
@@ -22,6 +25,9 @@ bool Font::initialize(Graphics* g)
 {
 	try{
 		graphics = g;                               // the graphics object
+		//AddFontResource(FONT1);
+		//AddFontResource(FONT2);
+		//AddFontResource(FONT3);
 	}
 	catch (...) { return false; }
 	return true;
@@ -122,6 +128,23 @@ void Font::print(int x, int y, std::string s)
 		DT_LEFT | DT_NOCLIP,				//	Format
 
 		0xffffffff);						//	Color
+}
+
+void Font::print(int x, int y, D3DXCOLOR c, std::string s)
+{
+	SetRect(font_rect, x, y, x, y);			//	left, top, right, bottom
+
+	font->DrawText(nullptr,					//	pointer to Sprite
+
+		s.c_str(),							//	pointer to String
+
+		-1,									//	Count
+
+		font_rect,							//	pointer to Rect
+
+		DT_LEFT | DT_NOCLIP,				//	Format
+
+		c);									//	Color
 }
 
 int Font::getTotalWidth(std::string s)

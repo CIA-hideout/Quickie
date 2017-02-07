@@ -31,9 +31,8 @@ Gameplay::~Gameplay()
 
 void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& controlsDoc, float* dT)
 {
-	State::initialize(g, i, a, controlsDoc);
+	State::initialize(g, i, a, controlsDoc, dT);
 
-	deltaTime = dT;
 	lManager->init(audio);
 
 	qEnvironmentObj.push_back(o1);

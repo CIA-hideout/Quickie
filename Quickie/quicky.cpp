@@ -26,7 +26,7 @@ void quicky::initialize(HWND hWnd) {
 
 	// Initalize menu
 	Menu* menu = new Menu();
-	menu->initialize(graphics, input, audio, controlDoc);
+	menu->initialize(graphics, input, audio, controlDoc, &deltaTime);
 
 	// Start game state in menu
 	gameState.push(menu);

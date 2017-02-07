@@ -43,6 +43,9 @@ protected:
 	Graphics*				graphics;
 	Input*					input;
 	Audio*					audio;
+	float*					deltaTime;
+
+	D3DXMATRIX		worldMatrix;
 	std::map<fontsNS::Fonts, Font>	fonts;
 	std::map<Control, int>	controls;
 	stateNS::NextState		nextState;
@@ -57,7 +60,7 @@ public:
 	void					setNextStateByInput(stateNS::NextState nS, int key);
 	void					clearNextState(){ pNextState = nullptr; }
 
-	virtual void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc);
+	virtual void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime);
 	virtual void update() = 0;
 	virtual void ai() = 0;
 	virtual void render() = 0;

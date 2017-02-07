@@ -12,6 +12,10 @@ namespace fontNS
 	const UINT						FONT_WEIGHT = 500;
 	const bool						FONT_ITALICS = false;
 	const std::string				FONT_NAME = "Air Americana";
+	
+	const D3DXCOLOR					YELLOW = D3DCOLOR_XRGB(240, 240, 0);
+	const D3DXCOLOR					BLUE = D3DCOLOR_XRGB(0, 240, 240);
+	const D3DXCOLOR					RED = D3DCOLOR_XRGB(240, 0, 0);
 }
 
 class Font
@@ -34,6 +38,7 @@ public:
 	bool createFont();
 	bool createFont(int height, UINT width, UINT weight, bool i, std::string fN);
 	void print(int x, int y, std::string sentence);						// prints the text on screen given the coordinates
+	void print(int x, int y, D3DXCOLOR color, std::string sentence);						// prints the text on screen with color
 	int getTotalWidth(std::string text);
 
 	// GET Methods
