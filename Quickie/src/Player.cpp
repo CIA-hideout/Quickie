@@ -5,7 +5,6 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	graphics = nullptr;
 	input = nullptr;
 	health = maxHealth = 3;
-	locked = false;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -170,6 +169,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					blink(vS, r_);
 				}
 			}
+		}
 			if (input->getKeyState(controls.at(CONTROL_TP))) {
 				if (velocity.x != 0.0f || velocity.y != 0.0f) {
 					float r_;
@@ -192,11 +192,10 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 				health--;
 			}
 		}
-		else {
-			ps.update(deltaTime, vS);
-			if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
-				respawn();
-			}
+	else {
+		ps.update(deltaTime, vS);
+		if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
+			respawn();
 		}
 	}
 
