@@ -15,6 +15,9 @@ Font::Font()
 
 Font::~Font()
 {
+	//RemoveFontResource(FONT1);
+	//RemoveFontResource(FONT2);
+	//RemoveFontResource(FONT3);
 }
 
 
@@ -22,6 +25,9 @@ bool Font::initialize(Graphics* g)
 {
 	try{
 		graphics = g;                               // the graphics object
+		//AddFontResource(FONT1);
+		//AddFontResource(FONT2);
+		//AddFontResource(FONT3);
 	}
 	catch (...) { return false; }
 	return true;
