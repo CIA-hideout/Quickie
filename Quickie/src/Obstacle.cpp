@@ -258,15 +258,6 @@ void Obstacle::setDimension(D3DXVECTOR3 newDimension) {
 	meshPtr->UnlockVertexBuffer();
 }
 
-void Obstacle::setRandomDimension(int count)
-{
-	if (count != 0)
-		currentState = SHRINK;
-
-	setDimension(getRandomDimension());		// get a random direction and set it
-
-}
-
 // generate a random size for the obstructor and returns the size
 D3DXVECTOR3 Obstacle::getRandomDimension() {
 
@@ -293,7 +284,26 @@ D3DXVECTOR3 Obstacle::getRandomDimension() {
 	return dimensions.front(); // use first value of random vector
 }
 
+<<<<<<< HEAD
 void Obstacle::assignPosition(rapidjson::Document& doc, int i) {
+=======
+D3DXVECTOR3 Obstacle::getRandomPosition()
+{
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+
+	std::uniform_real_distribution<float> randomX(-18, 18);	// between -18 to 18
+	std::uniform_real_distribution<float> randomY(-14, 14);	// between -14 to 14
+	float x = randomX(rng);
+	float y = randomY(rng);
+
+	printf("%.2f, %.2f\n", x, y);
+
+	return D3DXVECTOR3(x, y, 19.5);
+}
+
+void Obstacle::assign(rapidjson::Document& doc) {
+>>>>>>> Obstacles can be randomised
 	// store level 1 stuff
 	lvl1Pos = D3DXVECTOR3(
 		doc["obstacle"].GetArray()[i]["lvl_1_pos_x"].GetFloat(),
@@ -359,3 +369,15 @@ void Obstacle::setLevel3(int count)
 	if (count != 0)
 		currentState = SHRINK;
 }
+<<<<<<< HEAD
+=======
+
+void Obstacle::setRandom(int count)
+{
+	if (count != 0)
+		currentState = SHRINK;
+
+	newDimension = getRandomDimension();		// get a random direction and set it
+	newPos = getRandomPosition();				// get a random position and set it
+}
+>>>>>>> Obstacles can be randomised

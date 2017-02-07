@@ -42,14 +42,15 @@ public:
 	void setColor(D3DXVECTOR3);
 	void setDimension(D3DXVECTOR3);
 	void setPosition(D3DXVECTOR3);
-	void setRandomDimension(int);
 	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 getRandomDimension();
+	D3DXVECTOR3 getRandomPosition();
 
 	// set Levels location
 	void setLevel1(int);
 	void setLevel2(int);
 	void setLevel3(int);
+	void setRandom(int);
 
 	// assign position from json
 	void assignPosition(rapidjson::Document&, int obstacle);

@@ -26,8 +26,14 @@ void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS)
 	//	timer = 0;
 	//	levelCount++;
 	//}
-	//
-	//
+	
+	// change level every 60s 
+	//if (timer >= LEVEL_TIME && isRandomGen)
+	//{
+	//	setShuffle(vS);
+	//	timer = 0;
+	//	levelCount++;
+	//}
 }
 
 // set obstacles location for level 1
@@ -117,7 +123,7 @@ void LevelManager::setRandom(std::vector<VertexShape*> vS)
 	for (int i = 0; i < vS.size(); i++) {
 		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)vS[i];
-			tempObs->setRandomDimension(levelCount);
+			tempObs->setRandom(levelCount);
 		}
 	}
 
