@@ -6,14 +6,18 @@
 
 #include "rapidjson/document.h"
 
-enum Fonts
+namespace fontsNS
 {
-	DEFAULT,
-	MENU_TITLE,
-	MENU_OPTIONS,
-	GAME,
-	GAME_SELECT
-};
+	enum Fonts
+	{
+		DEFAULT,
+		HEADING1,
+		HEADING2,
+		INSTRUCTIONS,
+		SUBTITLE,
+		GAME_SELECT
+	};
+}
 
 namespace stateNS
 {
@@ -30,13 +34,13 @@ class State
 {
 
 	void initFonts();
-	void addFont(Fonts font, int height, UINT width, UINT weight, bool italics, std::string fontName);
+	void addFont(fontsNS::Fonts font, int height, UINT width, UINT weight, bool italics, std::string fontName);
 
 protected:
 	Graphics*				graphics;
 	Input*					input;
 	Audio*					audio;
-	std::map<Fonts, Font>	fonts;
+	std::map<fontsNS::Fonts, Font>	fonts;
 	std::map<Control, int>	controls;
 	stateNS::NextState		nextState;
 	stateNS::NextState*		pNextState = nullptr;

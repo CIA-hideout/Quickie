@@ -22,14 +22,7 @@ void Menu::update()
 
 	case PLAY:
 		setCurrentSceneByInput(CONTROLS, controls.at(CONTROL_DOWN));
-		
-		if (input->getKeyState(controls.at(CONTROL_RIGHT)) && firstGame)
-		{
-			setNextStateByInput(stateNS::INSTRUCTIONS, controls.at(CONTROL_RIGHT));
-			firstGame = false;
-		}
-		else
-			setNextStateByInput(stateNS::GAMEPLAY, controls.at(CONTROL_RIGHT));
+		setNextStateByInput(stateNS::INSTRUCTIONS, controls.at(CONTROL_RIGHT));
 		break;
 
 	case CONTROLS:
@@ -43,14 +36,14 @@ void Menu::render()
 {
 	Font f;
 
-	f = fonts.at(MENU_TITLE);
+	f = fonts.at(fontsNS::HEADING1);
 
 	f.print(
 		GAME_WIDTH / 2 - f.getTotalWidth("QUICKIE") / 2,
 		GAME_HEIGHT / 5,
 		"QUICKIE");
 
-	f = fonts.at(MENU_OPTIONS);
+	f = fonts.at(fontsNS::HEADING2);
 	int offSetY = 0;
 
 	for (int i = 0; i < menuNS::optionsLength; ++i)

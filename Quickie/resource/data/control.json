@@ -8,14 +8,14 @@
 				"left": 203,
 				"right": 205,
 				"bl": 52,
-				"tp": 53
+				"tp": 51
 			},
 			{
 				"up": 17,
 				"down": 31,
 				"left": 30,
 				"right": 32,
-				"bl": 57,
+				"bl": 48,
 				"tp": 47
 			}
 	],
@@ -27,7 +27,8 @@
 			"left": 203,
 			"right": 205,
 			"enter": 	28,
-			"escape": 1
+			"escape": 1,
+			"spacebar": 57
 		}
 	]
 }

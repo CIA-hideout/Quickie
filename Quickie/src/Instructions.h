@@ -4,20 +4,46 @@
 #include "State.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include <stack>
+
+namespace instructionsNS
+{
+	enum Scene
+	{
+		MOVE_RIGHT,
+		MOVE_LEFT,
+		MOVE_UP,
+		MOVE_DOWN,
+		TELEPORT,
+		BLINK,
+		RESPAWN
+	};
+
+	const UINT	sqr1X	= GAME_WIDTH / 5;
+	const UINT	sqr2X	= GAME_WIDTH / 1.5;
+	const UINT	sqrY	= GAME_HEIGHT / 2.5;
+	const int	z		= 19.5;
+	const int	speed	= 10;
+}
 
 class Instructions : public State
 {
-	bool			blink = false;
+	float*			deltaTime;
 	D3DXMATRIX		worldMatrix;
 
-	Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
-	Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+	instructionsNS::Scene					currentScene;
+
+	Player* sqr1;
+	Player* sqr2;
+	D3DXVECTOR2		sqr1Pos = D3DXVECTOR2(instructionsNS::sqr1X, instructionsNS::sqrY);
+	D3DXVECTOR2		sqr2Pos = D3DXVECTOR2(instructionsNS::sqr2X, instructionsNS::sqrY);
+	std::vector<VertexShape*>	qEnvironmentObj;
 
 public:
 	Instructions();
 	virtual ~Instructions();
 
-	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc) override;
+	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime);
 	void update() override;
 	void ai() override{};
 	void render() override;
