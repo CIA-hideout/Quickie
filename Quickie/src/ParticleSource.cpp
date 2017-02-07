@@ -85,10 +85,15 @@ void ParticleSource::init(Graphics* graphics) {
 		vs->visible = true;
 		vs->alive = true;
 
-		static int randCount = 0;
+		float v_;
 
-		vs->velocity.x = distribution(generator) / 5.0f / ASPECT_RATIO + velocity.x * 10;
-		vs->velocity.y = distribution(generator) / 5.0f + velocity.y * 10;
+		v_ = distribution(generator) / 5.0f;
+		distribution = std::uniform_real_distribution<float>(0, 2 * D3DX_PI);
+
+		rotation.z = distribution(generator);
+
+		vs->velocity.x = (v_ * cos(rotation.z) + velocity.x) / ASPECT_RATIO;
+		vs->velocity.y = v_ * sin(rotation.z) + velocity.y;
 		vs->velocity.z = distribution(generator) / 5.0f + velocity.z * 10;
 
 		vs->pos = pos;
@@ -121,28 +126,31 @@ void ParticleSource::update(float deltaTime, std::vector<VertexShape*>& vS) {
 }
 
 void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
+
+	printf("moving\n");
+
 	for (int i = 0; i < particleCount; i++) {
 		particles[i]->pos.x += particles[i]->velocity.x;
-		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-				if (CollisionManager::collideAABB(particles[i], vS[i])) {
+		for (int j = 0; j < vS.size(); j++) {
+			if (vS[j]->objectType == OBJECT_TYPE_OBSTACLE) {
+				if (CollisionManager::collideAABB(particles[i], vS[j])) {
 					if (particles[i]->velocity.x > 0)
-						particles[i]->pos.x = vS[i]->min.x + (particles[i]->min.x - particles[i]->max.x) / 2 - 0.0001;
+						particles[i]->pos.x = vS[j]->min.x + (particles[i]->min.x - particles[i]->max.x) / 2 - 0.0001;
 					else if (particles[i]->velocity.x < 0)
-						particles[i]->pos.x = vS[i]->max.x - (particles[i]->min.x - particles[i]->max.x) / 2 + 0.0001;
+						particles[i]->pos.x = vS[j]->max.x - (particles[i]->min.x - particles[i]->max.x) / 2 + 0.0001;
 					particles[i]->velocity.x = 0;
 				}
 			}
 		}
 
 		particles[i]->pos.y += particles[i]->velocity.y;
-		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != particles[i]->id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-				if (CollisionManager::collideAABB(particles[i], vS[i])) {
+		for (int j = 0; j < vS.size(); j++) {
+			if (vS[j]->objectType == OBJECT_TYPE_OBSTACLE) {
+				if (CollisionManager::collideAABB(particles[i], vS[j])) {
 					if (particles[i]->velocity.y > 0)
-						particles[i]->pos.y = vS[i]->min.y + (particles[i]->min.y - particles[i]->max.y) / 2 - 0.0001;
+						particles[i]->pos.y = vS[j]->min.y + (particles[i]->min.y - particles[i]->max.y) / 2 - 0.0001;
 					else if (particles[i]->velocity.y < 0)
-						particles[i]->pos.y = vS[i]->max.y - (particles[i]->min.y - particles[i]->max.y) / 2 + 0.0001;
+						particles[i]->pos.y = vS[j]->max.y - (particles[i]->min.y - particles[i]->max.y) / 2 + 0.0001;
 					particles[i]->velocity.y = 0;
 				}
 			}

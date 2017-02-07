@@ -43,6 +43,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 						vS[i]->pos = intersect;
 
 						graphics->camera->shake(0.25f, 1.0f);
+						break;
 					}
 				}
 			}

@@ -48,7 +48,7 @@ void Player::init(Graphics* graphics, Input* input) {
 
 	this->input = input;
 	this->graphics = graphics;
-	
+
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
 	meshPtr->LockVertexBuffer(0, (void**)&vertices);
@@ -135,8 +135,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			i->second -= deltaTime;
 	}
 
-	if (!locked)
-	{
+	if (!locked) {
 		if (alive) {
 			if (input->getKeyState(controls.at(CONTROL_UP))) {
 				velocity.y += deltaTime * 10;
@@ -154,36 +153,38 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			// blink and tp direction
 			if (input->getKeyState(controls.at(CONTROL_BL))) {
 				if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-					cooldown.at(COOLDOWN_BLINK) = 1.0f;
-					float r_;
-					if (velocity.x >= 0)
-						r_ = atan(velocity.y / velocity.x);
-					else if (velocity.x < 0)
-						r_ = D3DX_PI + atan(velocity.y / velocity.x);
+					if (velocity.x > 0.0f || velocity.x < 0.0f || velocity.y > 0.0f || velocity.z < 0.0f) {
+						cooldown.at(COOLDOWN_BLINK) = 1.0f;
+						float r_;
+						if (velocity.x >= 0)
+							r_ = atan(velocity.y / velocity.x);
+						else if (velocity.x < 0)
+							r_ = D3DX_PI + atan(velocity.y / velocity.x);
 
-					blink(vS, r_);
+						blink(vS, r_);
+					}
 				}
 			}
-	}
+		}
+		else {
+			ps.update(deltaTime, vS);
+			if (cooldown.at(SPAWN_TIME) <= 0.0f) {
+				respawn();
+			}
+		}
 
 		velocity.x *= 0.75;
-		// velocity.x *= 0.0f;
-		// velocity.y *= 0.75;
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
-	}
-	else {
-		ps.update(deltaTime, vS);
-		if (cooldown.at(SPAWN_TIME) <= 0.0f) {
-			respawn();
-		}
 	}
 
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
+
 	bool collides;
 	this->pos.x += velocity.x;
+
 	for (int i = 0; i < vS.size(); i++) {
 		if (vS[i]->id != id && vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
@@ -212,21 +213,25 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	QLine* qTemp;
 	D3DXVECTOR3 poi;
 
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true && cooldown.at(INVULNERABLE) <= 0) {
-			qTemp = (QLine*)vS[i];
-			if (qTemp->parent != this) {
-				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-					this->alive = false;
-					this->visible = false;
-					ps = ParticleSource(100, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
-					ps.init(graphics);
-					cooldown.at(SPAWN_TIME) = 3.0f;
-					graphics->camera->shake(0.25f, 1.0f);
+	if (alive) {
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true && cooldown.at(INVULNERABLE) <= 0) {
+				qTemp = (QLine*)vS[i];
+				if (qTemp->parent != this) {
+					if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
+						this->alive = false;
+						this->visible = false;
+						vS[i]->alive = false;
+						ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+						ps.init(graphics);
+						cooldown.at(SPAWN_TIME) = 3.0f;
+						graphics->camera->shake(0.25f, 1.0f);
+					}
 				}
 			}
 		}
 	}
+
 }
 
 void Player::respawn() {
