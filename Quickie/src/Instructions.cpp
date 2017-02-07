@@ -130,7 +130,6 @@ void Instructions::update()
 	sqr1->update(*deltaTime, qEnvironmentObj);
 	sqr2->update(*deltaTime, qEnvironmentObj);
 	
-	printf("%d\n", qEnvironmentObj.size());
 	for (int i = 0; i < qEnvironmentObj.size(); ++i)
 	{ 
 		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {
@@ -144,8 +143,8 @@ void Instructions::render()
 {
 	Font f, tempF;
 
-	tempF = fonts.at(fontsNS::MENU_TITLE);
-	f = fonts.at(fontsNS::MENU_TITLE);
+	tempF = fonts.at(fontsNS::HEADING1);
+	f = fonts.at(fontsNS::HEADING1);
 	f.print(
 		GAME_WIDTH / 2 - f.getTotalWidth("CONTROLS") / 2,
 		f.getHeight(),

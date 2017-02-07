@@ -11,7 +11,7 @@ namespace fontsNS
 	enum Fonts
 	{
 		DEFAULT,
-		MENU_TITLE,
+		HEADING1,
 		HEADING2,
 		INSTRUCTIONS,
 		SUBTITLE,

@@ -144,7 +144,7 @@ void Gameplay::render()
 		Font f;
 
 		// Set Fonts for Level Select Title
-		f = fonts.at(fontsNS::MENU_TITLE);
+		f = fonts.at(fontsNS::HEADING1);
 
 		f.print(
 			GAME_WIDTH / 2 - f.getTotalWidth("LEVEL SELECT") / 2,

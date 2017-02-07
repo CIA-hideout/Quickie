@@ -23,7 +23,7 @@ void State::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc
 void State::initFonts()
 {
 	addFont(fontsNS::DEFAULT, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
-	addFont(fontsNS::MENU_TITLE, fontNS::FONT_HEIGHT * 1.5, fontNS::FONT_WIDTH * 1.5, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
+	addFont(fontsNS::HEADING1, fontNS::FONT_HEIGHT * 1.5, fontNS::FONT_WIDTH * 1.5, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
 	addFont(fontsNS::HEADING2, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "yorkbailehill");
 	addFont(fontsNS::INSTRUCTIONS, fontNS::FONT_HEIGHT / 1.5, fontNS::FONT_WIDTH / 2, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "instructionsFont");
 	addFont(fontsNS::SUBTITLE, fontNS::FONT_HEIGHT / 2, fontNS::FONT_WIDTH / 2, fontNS::FONT_WEIGHT, true, "yorkbailehill");
