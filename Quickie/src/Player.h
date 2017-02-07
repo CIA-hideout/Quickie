@@ -19,7 +19,7 @@ public:
 	bool							controlled = false;
 	bool							controlledTP = false;
 	GUIBar*							healthBar;
-
+	static int						winner;
 	ParticleSource					ps;
 
 	Player() = default;
