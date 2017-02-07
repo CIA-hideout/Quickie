@@ -48,7 +48,7 @@ void quicky::update() {
 			printf("INSTRUCTIONS\n");
 			Instructions* i = new Instructions();
 
-			i->initialize(graphics, input, audio, controlDoc);
+			i->initialize(graphics, input, audio, controlDoc, &deltaTime);
 			gameState.push(i);
 		}
 			break;

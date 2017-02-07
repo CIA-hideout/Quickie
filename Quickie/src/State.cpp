@@ -3,7 +3,7 @@
 State::State()
 {
 	input = nullptr;
-	fonts = std::map<Fonts, Font>();
+	fonts = std::map<fontsNS::Fonts, Font>();
 	graphics = nullptr;
 	pNextState = nullptr;
 };
@@ -22,10 +22,11 @@ void State::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc
 
 void State::initFonts()
 {
-	addFont(DEFAULT, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
-	addFont(MENU_TITLE, fontNS::FONT_HEIGHT * 1.5, fontNS::FONT_WIDTH * 1.5, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
-	addFont(MENU_OPTIONS, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "yorkbailehill");
-	addFont(GAME, fontNS::FONT_HEIGHT / 2, fontNS::FONT_WIDTH / 20, fontNS::FONT_WEIGHT / 5, fontNS::FONT_ITALICS, "HeartFont");
+	addFont(fontsNS::DEFAULT, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
+	addFont(fontsNS::MENU_TITLE, fontNS::FONT_HEIGHT * 1.5, fontNS::FONT_WIDTH * 1.5, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, fontNS::FONT_NAME);
+	addFont(fontsNS::HEADING2, fontNS::FONT_HEIGHT, fontNS::FONT_WIDTH, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "yorkbailehill");
+	addFont(fontsNS::INSTRUCTIONS, fontNS::FONT_HEIGHT / 1.5, fontNS::FONT_WIDTH / 2, fontNS::FONT_WEIGHT, fontNS::FONT_ITALICS, "instructionsFont");
+	addFont(fontsNS::SUBTITLE, fontNS::FONT_HEIGHT / 2, fontNS::FONT_WIDTH / 2, fontNS::FONT_WEIGHT, true, "yorkbailehill");
 }
 
 void State::assignControls(rapidjson::Document& doc)
@@ -36,6 +37,7 @@ void State::assignControls(rapidjson::Document& doc)
 	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, 0.1f));
 	controls.insert(std::pair<Control, int>(CONTROL_ENTER, 0.1f));
 	controls.insert(std::pair<Control, int>(CONTROL_ESC, 0.1f));
+	controls.insert(std::pair<Control, int>(CONTROL_SPACEBAR, 0.1f));
 
 	controls.at(CONTROL_UP) = doc["state"].GetArray()[stateNS::docID]["up"].GetInt();
 	controls.at(CONTROL_DOWN) = doc["state"].GetArray()[stateNS::docID]["down"].GetInt();
@@ -43,9 +45,10 @@ void State::assignControls(rapidjson::Document& doc)
 	controls.at(CONTROL_RIGHT) = doc["state"].GetArray()[stateNS::docID]["right"].GetInt();
 	controls.at(CONTROL_ENTER) = doc["state"].GetArray()[stateNS::docID]["enter"].GetInt();
 	controls.at(CONTROL_ESC) = doc["state"].GetArray()[stateNS::docID]["escape"].GetInt();
+	controls.at(CONTROL_SPACEBAR) = doc["state"].GetArray()[stateNS::docID]["spacebar"].GetInt();
 }
 
-void State::addFont(Fonts f, int h, UINT wid, UINT wei, bool i, std::string fN)
+void State::addFont(fontsNS::Fonts f, int h, UINT wid, UINT wei, bool i, std::string fN)
 {
 	Font tempFont;
 

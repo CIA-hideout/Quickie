@@ -127,8 +127,6 @@ void ParticleSource::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 
-	printf("moving\n");
-
 	for (int i = 0; i < particleCount; i++) {
 		particles[i]->pos.x += particles[i]->velocity.x;
 		for (int j = 0; j < vS.size(); j++) {

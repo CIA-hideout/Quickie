@@ -16,7 +16,7 @@
 				"left": 30,
 				"right": 32,
 				"bl": 57,
-				"tp": 47
+				"tp": 48
 			}
 	],
 	"state":
@@ -27,7 +27,8 @@
 			"left": 203,
 			"right": 205,
 			"enter": 	28,
-			"escape": 1
+			"escape": 1,
+			"spacebar": 57
 		}
 	]
 }

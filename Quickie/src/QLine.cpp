@@ -36,12 +36,10 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 						ptemp->alive = false;
 						ptemp->visible = false;
 						ptemp->ps = ParticleSource(100, parent->velocity, intersect, qtemp->color);
-
 						ptemp->ps.init(graphics);
 						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
 						qtemp->alive = false;
 						vS[i]->pos = intersect;
-
 						graphics->camera->shake(0.25f, 1.0f);
 						break;
 					}
@@ -216,8 +214,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	vS.push_back(this);
 
 	initialized = true;
-
-	printf("init end\n");
 }
 
 void QLine::draw(D3DXMATRIX& worldMat) {

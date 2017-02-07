@@ -22,7 +22,8 @@ enum Control {
 	CONTROL_BL,
 	CONTROL_TP,
 	CONTROL_ENTER,
-	CONTROL_ESC
+	CONTROL_ESC,
+	CONTROL_SPACEBAR
 };
 
 class Input {
