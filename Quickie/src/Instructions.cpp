@@ -26,8 +26,7 @@ void Instructions::update()
 	setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 	setNextStateByInput(stateNS::GAMEPLAY, controls.at(CONTROL_RIGHT));
 
-	if (blink)
-	{
+	if (blink) {
 		float r;
 		r = atan(sqr1->velocity.y / sqr1->velocity.x);
 		sqr1->blink(tempVector, r);

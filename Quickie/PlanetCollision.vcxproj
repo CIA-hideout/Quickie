@@ -99,6 +99,7 @@
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Gameplay.cpp" />
+    <ClCompile Include="src\GUIBar.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\Instructions.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Gameplay.h" />
+    <ClInclude Include="src\GUIBar.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\Instructions.h" />
     <ClInclude Include="src\LevelManager.h" />

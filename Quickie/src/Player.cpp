@@ -4,7 +4,7 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 	graphics = nullptr;
 	input = nullptr;
-	health = 3;
+	health = maxHealth = 3;
 	locked = false;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
@@ -101,7 +101,9 @@ void Player::init(Graphics* graphics, Input* input) {
 
 	visible = true;
 	alive = true;
-	health = 3;
+
+	healthBar = new GUIBar(this, D3DXVECTOR3(217, 83, 79));
+	healthBar->init(graphics);
 
 }
 
@@ -120,6 +122,8 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &(matRot * worldMat));
 		meshPtr->DrawSubset(0);
+
+		healthBar->draw(worldMat);
 	}
 
 	if (!alive) {
@@ -165,7 +169,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 		else {
 			ps.update(deltaTime, vS);
-			if (cooldown.at(SPAWN_TIME) <= 0.0f) {
+			if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
 				respawn();
 			}
 		}
@@ -175,6 +179,8 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		move(vS, deltaTime);
 	}
 
+	healthBar->update(deltaTime);
+
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
@@ -183,7 +189,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	this->pos.x += velocity.x;
 
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE || vS[i]->objectType == OBJECT_TYPE_WALL)) {
+		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
 				if (velocity.x > 0)
 					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
@@ -196,7 +202,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 	this->pos.y += velocity.y;
 	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE || vS[i]->objectType == OBJECT_TYPE_WALL)) {
+		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
 			if (CollisionManager::collideAABB(this, vS[i])) {
 				if (velocity.y > 0)
 					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
@@ -223,13 +229,26 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 						ps.init(graphics);
 						cooldown.at(SPAWN_TIME) = 3.0f;
 						graphics->camera->shake(0.25f, 1.0f);
+						health--;
 						break;
 					}
 				}
 			}
+			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					this->alive = false;
+					this->visible = false;
+					vS[i]->alive = false;
+					ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+					ps.init(graphics);
+					cooldown.at(SPAWN_TIME) = 3.0f;
+					graphics->camera->shake(0.25f, 1.0f);
+					health--;
+					break;
+				}
+			}
 		}
 	}
-
 }
 
 void Player::respawn() {
@@ -271,6 +290,8 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 }
 
 void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
+
+	// float magnetude = ;
 
 }
 

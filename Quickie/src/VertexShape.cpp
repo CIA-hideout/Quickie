@@ -6,6 +6,8 @@ VertexShape::VertexShape() {
 	this->id = id_++;
 	meshPtr = nullptr;
 	spawntime = timeGetTime();
+	vertices = 0;
+	indices = 0;
 }
 
 VertexShape::~VertexShape() {

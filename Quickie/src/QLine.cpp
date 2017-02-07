@@ -12,7 +12,7 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
 	parent = vS;
 	this->rotation_ = rotation_;
-	magnetude = 20;
+	magnetude = 15;
 	objectType = OBJECT_TYPE_QLINE;
 	meshPtr = nullptr;
 	color = parent->color;
@@ -28,6 +28,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	D3DXVECTOR3 intersect;
+
 	if (alive) {
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->objectType == OBJECT_TYPE_QLINE && vS[i]->alive == true) {
@@ -43,6 +44,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 						qtemp->alive = false;
 						vS[i]->pos = intersect;
 						graphics->camera->shake(0.25f, 1.0f);
+						ptemp->health--;
 						break;
 					}
 				}
@@ -73,9 +75,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 		rayEnd.x = rayStart.x + cos(rotation_) * m_;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
-
-		parent->velocity.x = -cos(rotation_) * 0.0001;
-		parent->velocity.y = -sin(rotation_) * 0.0001;
 
 		dist_ = cDist_ = 999;
 
@@ -157,7 +156,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
-	// now check if the player collides with anything here
+	// now check if the player collidesui with anything here
 
 	D3DXVECTOR3 intersect_;
 
@@ -167,21 +166,17 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 				if (fLatestID == vS[i]->id) {
 					// continue the thing until player is free
 					// there is no change in rotation_. use the same variable
-					
-					rayEnd.x += cos(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
-					rayEnd.y += sin(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.x += cos(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.y += sin(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
 					vertexPoint.push_back(rayEnd);
-					break;
 				}
 				else {
 					// moves player back
-					rayEnd.x -= cos(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
-					rayEnd.y -= sin(rotation_) * sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.x -= cos(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
+					rayEnd.y -= sin(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
 					vertexPoint.push_back(rayEnd);
 					break;
-					break;
 				}
-
 			}
 		}
 	}

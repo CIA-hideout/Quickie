@@ -14,7 +14,8 @@ enum ObjectType {
 	OBJECT_TYPE_QLINE,
 	OBJECT_TYPE_PARTICLE,
 	OBJECT_TYPE_PARTICLES,
-	OBJECT_TYPE_WALL
+	OBJECT_TYPE_WALL,
+	OBJECT_TYPE_GUI_BAR
 };
 
 class VertexShape {
@@ -54,7 +55,7 @@ public:
 
 	ObjectType				objectType;
 
-	int						id;
+	int						id, health, maxHealth;
 	bool					visible, alive, initialized;
 
 	D3DPRIMITIVETYPE		primitiveType;
