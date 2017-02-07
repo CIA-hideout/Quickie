@@ -201,29 +201,59 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 	bool collides;
-	this->pos.x += velocity.x;
 
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
-			if (CollisionManager::collideAABB(this, vS[i])) {
-				if (velocity.x > 0)
-					pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
-				else if (velocity.x < 0)
-					pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
-				velocity.x = 0;
+	// deal with the more predominant velocity
+
+	if (velocity.x >= velocity.y) {
+		this->pos.x += velocity.x;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.x > 0)
+						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
+					else if (velocity.x < 0)
+						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
+					velocity.x = 0;
+				}
+			}
+		}
+
+		this->pos.y += velocity.y;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.y > 0)
+						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
+					else if (velocity.y < 0)
+						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
+					velocity.y = 0;
+				}
 			}
 		}
 	}
-
-	this->pos.y += velocity.y;
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
-			if (CollisionManager::collideAABB(this, vS[i])) {
-				if (velocity.y > 0)
-					pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
-				else if (velocity.y < 0)
-					pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
-				velocity.y = 0;
+	else {
+		this->pos.y += velocity.y;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.y > 0)
+						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
+					else if (velocity.y < 0)
+						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
+					velocity.y = 0;
+				}
+			}
+		}
+		this->pos.x += velocity.x;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.x > 0)
+						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
+					else if (velocity.x < 0)
+						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
+					velocity.x = 0;
+				}
 			}
 		}
 	}
