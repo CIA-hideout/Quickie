@@ -179,6 +179,16 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					teleport(vS, r_);
 				}
 			}
+
+			if (outOfMap()) {
+				this->alive = false;
+				this->visible = false;
+				ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+				ps.init(graphics);
+				cooldown.at(SPAWN_TIME) = 3.0f;
+				graphics->camera->shake(0.25f, 1.0f);
+				health--;
+			}
 		}
 		else {
 			ps.update(deltaTime, vS);
@@ -191,8 +201,6 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		velocity.y *= 0.75;
 		move(vS, deltaTime);
 	}
-
-	printf("%d\n", outOfMap());
 
 	healthBar->update(deltaTime);
 
