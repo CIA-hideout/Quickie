@@ -133,7 +133,7 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
-	printf("%.2f, %.2f\n", pos.x, pos.y);
+	//printf("%.2f, %.2f\n", pos.x, pos.y);
 
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
@@ -156,17 +156,19 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 		// blink and tp direction
 		if (input->getKeyState(controls.at(CONTROL_BL)) || controlled) {
-			if (velocity.x != 0.0f || velocity.y != 0.0f) {
-				float r_;
-				if (velocity.x >= 0)
-					r_ = atan(velocity.y / velocity.x);
-				else if (velocity.x < 0)
-					r_ = D3DX_PI + atan(velocity.y / velocity.x);
+			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
+				if (velocity.x != 0.0f || velocity.y != 0.0f) {
+					float r_;
+					if (velocity.x >= 0)
+						r_ = atan(velocity.y / velocity.x);
+					else if (velocity.x < 0)
+						r_ = D3DX_PI + atan(velocity.y / velocity.x);
 
-				blink(vS, r_);
+					blink(vS, r_);
+				}
 			}
 		}
-		if (input->getKeyState(controls.at(CONTROL_TP))) {
+		if (input->getKeyState(controls.at(CONTROL_TP)) || controlledTP) {
 			if (velocity.x != 0.0f || velocity.y != 0.0f) {
 				float r_;
 				if (velocity.x >= 0)
@@ -305,7 +307,7 @@ void Player::respawn() {
 
 	pos.y = 0;
 	pos.x = 0;
-
+	
 	alive = true;
 	visible = true;
 
@@ -332,7 +334,6 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 	controls.at(CONTROL_RIGHT) = doc["player"].GetArray()[i]["right"].GetInt();
 	controls.at(CONTROL_BL) = doc["player"].GetArray()[i]["bl"].GetInt();
 	controls.at(CONTROL_TP) = doc["player"].GetArray()[i]["tp"].GetInt();
-
 }
 
 void Player::teleport(std::vector<VertexShape*>& vS, float angle) {

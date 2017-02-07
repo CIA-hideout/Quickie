@@ -30,6 +30,7 @@ void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Docume
 
 void Instructions::update()
 {
+	UINT border = 50;
 	D3DXVECTOR3 sqr1_3D;
 	D3DXVECTOR3 sqr2_3D;
 	
@@ -48,10 +49,10 @@ void Instructions::update()
 	case instructionsNS::MOVE_RIGHT:
 
 		// move right if sqr2 not touching right screen
-		if (sqr2_3D.x < GAME_WIDTH)
+		if (sqr2_3D.x < GAME_WIDTH - border)
 		{
-			sqr1->pos.x += *deltaTime * 10;
-			sqr2->pos.x += *deltaTime * 10;
+			sqr1->pos.x += *deltaTime * instructionsNS::speed;
+			sqr2->pos.x += *deltaTime * instructionsNS::speed;
 		}
 		else
 			currentScene = instructionsNS::MOVE_LEFT;
@@ -62,8 +63,8 @@ void Instructions::update()
 		// move left if sqr 1 has not return to original position
 		if (sqr1_3D.x > instructionsNS::sqr1X)
 		{
-			sqr1->pos.x -= *deltaTime * 10;
-			sqr2->pos.x -= *deltaTime * 10;
+			sqr1->pos.x -= *deltaTime * instructionsNS::speed;
+			sqr2->pos.x -= *deltaTime * instructionsNS::speed;
 		}
 
 		// change scene when sqr 1 returns to original position
@@ -73,10 +74,10 @@ void Instructions::update()
 
 	case instructionsNS::MOVE_UP:
 		
-		if (sqr1_3D.y > 0)
+		if (sqr1_3D.y > border)
 		{
-			sqr1->pos.y += *deltaTime * 10;
-			sqr2->pos.y += *deltaTime * 10;
+			sqr1->pos.y += *deltaTime * instructionsNS::speed;
+			sqr2->pos.y += *deltaTime * instructionsNS::speed;
 		}
 		else
 			currentScene = instructionsNS::MOVE_DOWN;
@@ -86,43 +87,75 @@ void Instructions::update()
 
 		if (sqr1_3D.y < instructionsNS::sqrY)
 		{
-			sqr1->pos.y -= *deltaTime * 10;
-			sqr2->pos.y -= *deltaTime * 10;
+			sqr1->pos.y -= *deltaTime * instructionsNS::speed;
+			sqr2->pos.y -= *deltaTime * instructionsNS::speed;
 		}
 		else
 			currentScene = instructionsNS::TELEPORT;
 		break;
 
 	case instructionsNS::TELEPORT:
-		currentScene = instructionsNS::BLINK;
+
+		if (sqr1_3D.x < GAME_WIDTH / 2 && !sqr1->controlledTP)
+		{
+			sqr1->pos.x += *deltaTime * instructionsNS::speed;
+		}
+		else if (!sqr1->controlledTP)
+		{
+			sqr1->velocity.x -= *deltaTime * instructionsNS::speed;
+			sqr1->controlledTP = true;
+		}
+		else if (sqr1_3D.x > border)
+		{
+			sqr1->pos.x -= *deltaTime * instructionsNS::speed;
+		}
+		else
+		{
+			sqr1->controlledTP = false;
+			currentScene = instructionsNS::BLINK;
+		}
 		break;
 
 	case instructionsNS::BLINK:
 
-		
 		if (sqr1_3D.x < GAME_WIDTH / 2)
 		{
-			sqr1->pos.x += *deltaTime * 10;
+			sqr1->pos.x += *deltaTime * instructionsNS::speed;
 		}
 		else if (!sqr1->controlled)
 		{
-			sqr1->velocity.x += *deltaTime * 10;
+			sqr1->velocity.x += *deltaTime * instructionsNS::speed;
 			sqr1->controlled = true;
-			blink = true;
 		}
-		else if (sqr1_3D.x > sqr2_3D.x)
+		else if (sqr1->alive)
 		{
-			sqr1->pos.x -= *deltaTime * 10;
+			sqr1->pos.x += *deltaTime * instructionsNS::speed;
 		}
 		else
+		{
+			sqr1->controlled = false;
+			currentScene = instructionsNS::RESPAWN;
+		}
+			
+		break;
+
+	case instructionsNS::RESPAWN:
+
+		if (sqr1->alive && sqr2->alive)
 		{
 			D3DXVECTOR3 pos3D;
 
 			graphics->camera->pointInWorld(pos3D, sqr1Pos, instructionsNS::z);
 			sqr1->pos.x = pos3D.x;
+			sqr1->pos.y = pos3D.y;
+
+			graphics->camera->pointInWorld(pos3D, sqr2Pos, instructionsNS::z);
+			sqr2->pos.x = pos3D.x;
+			sqr2->pos.y = pos3D.y;
+
 			currentScene = instructionsNS::MOVE_RIGHT;
 		}
-			
+
 		break;
 	}
 
@@ -225,27 +258,58 @@ void Instructions::render()
 
 	case instructionsNS::TELEPORT:
 
+		tempF.print(
+			instructionsNS::sqr1X - tempF.getTotalWidth("Teleport"),
+			GAME_HEIGHT - tempF.getHeight() * 4,
+			"Teleport");
+
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("V b"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
 			"V b");
 
+		tempF.print(
+			instructionsNS::sqr2X - tempF.getTotalWidth("Teleport"),
+			GAME_HEIGHT - tempF.getHeight() * 4,
+			"Teleport");
+
 		f.print(
-			instructionsNS::sqr2X - tempF.getTotalWidth("C ."),
+			instructionsNS::sqr2X - tempF.getTotalWidth("C f"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
-			"C .");
+			"C f");
+		break;
 
 	case instructionsNS::BLINK:
+
+		tempF.print(
+			instructionsNS::sqr1X + tempF.getTotalWidth("Blink") / 2,
+			GAME_HEIGHT - tempF.getHeight() * 4,
+			"Blink");
 
 		f.print(
 			instructionsNS::sqr1X - tempF.getTotalWidth("v B"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
 			"v B");
 
+		tempF.print(
+			instructionsNS::sqr2X + tempF.getTotalWidth("Blink") / 2,
+			GAME_HEIGHT - tempF.getHeight() * 4,
+			"Blink");
+
 		f.print(
-			instructionsNS::sqr2X - tempF.getTotalWidth(", F"),
+			instructionsNS::sqr2X - tempF.getTotalWidth("c F"),
 			GAME_HEIGHT - tempF.getHeight() * 3,
-			", F");
+			"c F");
+		break;
+
+	case instructionsNS::RESPAWN:
+
+		f = fonts.at(fontsNS::HEADING2);
+
+		f.print(
+			GAME_WIDTH / 2 - f.getTotalWidth("Do not touch the line or the borders!") / 2,
+			GAME_HEIGHT - tempF.getHeight() * 3,
+			"Do not touch the line or the borders!");
 		break;
 	}
 

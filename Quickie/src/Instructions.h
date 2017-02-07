@@ -15,18 +15,19 @@ namespace instructionsNS
 		MOVE_UP,
 		MOVE_DOWN,
 		TELEPORT,
-		BLINK
+		BLINK,
+		RESPAWN
 	};
 
-	const UINT				sqr1X = GAME_WIDTH / 4;
-	const UINT				sqr2X = GAME_WIDTH / 1.5;
-	const UINT				sqrY = GAME_HEIGHT / 2.5;
-	const int				z = 19.5;
+	const UINT	sqr1X	= GAME_WIDTH / 5;
+	const UINT	sqr2X	= GAME_WIDTH / 1.5;
+	const UINT	sqrY	= GAME_HEIGHT / 2.5;
+	const int	z		= 19.5;
+	const int	speed	= 10;
 }
 
 class Instructions : public State
 {
-	bool			blink = false;
 	float*			deltaTime;
 	D3DXMATRIX		worldMatrix;
 
