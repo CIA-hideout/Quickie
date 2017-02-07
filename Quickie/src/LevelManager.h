@@ -29,7 +29,7 @@ public:
 
 	void init(Audio*);
 
-	void update(float, std::vector<VertexShape*>);
+	void update(float, std::vector<VertexShape*>, std::vector<VertexShape*>);
 
 	// Set Different Levels during the Gameplay
 	void setLevelOne(std::vector<VertexShape*>);		// set Lvl 1
@@ -37,7 +37,7 @@ public:
 	void setLevelThree(std::vector<VertexShape*>);		// set Lvl 3
 	void setShuffle(std::vector<VertexShape*>);			// set the shuffled levels
 	void shuffle();										// shuffle the exisiting levels
-	void setRandom(std::vector<VertexShape*>);			// set the obstales location really randomly
+	void setRandom(std::vector<VertexShape*>, std::vector<VertexShape*>);			// set the obstales location really randomly
 
 private:
 	float timer = 0;
