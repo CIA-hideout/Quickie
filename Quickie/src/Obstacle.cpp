@@ -286,11 +286,18 @@ D3DXVECTOR3 Obstacle::getRandomDimension() {
 
 D3DXVECTOR3 Obstacle::getRandomPosition()
 {
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::random_device rd;		// only used once to initialise (seed) engine
+	std::mt19937 rng(rd());		// random-number engine used (Mersenne-Twister in this case)
 
-	std::uniform_real_distribution<float> randomX(-18, 18);	// between -18 to 18
-	std::uniform_real_distribution<float> randomY(-14, 14);	// between -14 to 14
+	D3DXVECTOR3 high, low;		// high = point(0,0)/ low = point(1280,720)
+	D3DXVECTOR2 topleft = D3DXVECTOR2(0, 0);
+	D3DXVECTOR2 bottomright = D3DXVECTOR2(1280, 720);	// resolution of game is 1280 x 720
+
+	graphics->camera->pointInWorld(high, topleft, 19.5);
+	graphics->camera->pointInWorld(low, bottomright, 19.5);
+
+	std::uniform_real_distribution<float> randomX(high.x, low.x);	// between -18 to 18
+	std::uniform_real_distribution<float> randomY(low.y, high.y);	// between -14 to 14
 	float x = randomX(rng);
 	float y = randomY(rng);
 
