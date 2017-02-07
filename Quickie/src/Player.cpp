@@ -5,7 +5,6 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	graphics = nullptr;
 	input = nullptr;
 	health = maxHealth = 3;
-	locked = false;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -134,76 +133,73 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
-	printf("%.2f, %.2f\n", pos.x, pos.y);
+	//printf("%.2f, %.2f\n", pos.x, pos.y);
 
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
 			i->second -= deltaTime;
 	}
 
-	if (!locked) {
-		if (alive) {
-			if (input->getKeyState(controls.at(CONTROL_UP))) {
-				velocity.y += deltaTime * 10;
-			}
-			if (input->getKeyState(controls.at(CONTROL_DOWN))) {
-				velocity.y -= deltaTime * 10;
-			}
-			if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-				velocity.x -= deltaTime * 10 / ASPECT_RATIO;
-			}
-			if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-				velocity.x += deltaTime * 10 / ASPECT_RATIO;
-			}
+	if (alive) {
+		if (input->getKeyState(controls.at(CONTROL_UP))) {
+			velocity.y += deltaTime * 10;
+		}
+		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
+			velocity.y -= deltaTime * 10;
+		}
+		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
+			velocity.x -= deltaTime * 10 / ASPECT_RATIO;
+		}
+		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
+			velocity.x += deltaTime * 10 / ASPECT_RATIO;
+		}
 
-			// blink and tp direction
-			if (input->getKeyState(controls.at(CONTROL_BL))) {
+		// blink and tp direction
+		if (input->getKeyState(controls.at(CONTROL_BL)) || controlled) {
+			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 				if (velocity.x != 0.0f || velocity.y != 0.0f) {
 					float r_;
 					if (velocity.x >= 0)
 						r_ = atan(velocity.y / velocity.x);
 					else if (velocity.x < 0)
 						r_ = D3DX_PI + atan(velocity.y / velocity.x);
-
 					blink(vS, r_);
 				}
 			}
-			if (input->getKeyState(controls.at(CONTROL_TP))) {
-				if (velocity.x != 0.0f || velocity.y != 0.0f) {
-					float r_;
-					if (velocity.x >= 0)
-						r_ = atan(velocity.y / velocity.x);
-					else if (velocity.x < 0)
-						r_ = D3DX_PI + atan(velocity.y / velocity.x);
-
-					teleport(vS, r_);
-				}
-			}
-
-			if (outOfMap()) {
-				this->alive = false;
-				this->visible = false;
-				ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
-				ps.init(graphics);
-				cooldown.at(SPAWN_TIME) = 3.0f;
-				graphics->camera->shake(0.25f, 1.0f);
-				health--;
-			}
 		}
-		else {
-			ps.update(deltaTime, vS);
-			if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
-				respawn();
+		if (input->getKeyState(controls.at(CONTROL_TP)) || controlledTP) {
+			if (velocity.x != 0.0f || velocity.y != 0.0f) {
+				float r_;
+				if (velocity.x >= 0)
+					r_ = atan(velocity.y / velocity.x);
+				else if (velocity.x < 0)
+					r_ = D3DX_PI + atan(velocity.y / velocity.x);
+
+				teleport(vS, r_);
 			}
 		}
 
-		velocity.x *= 0.75;
-		velocity.y *= 0.75;
-		move(vS, deltaTime);
+		if (outOfMap()) {
+			this->alive = false;
+			this->visible = false;
+			ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+			ps.init(graphics);
+			cooldown.at(SPAWN_TIME) = 3.0f;
+			graphics->camera->shake(0.25f, 1.0f);
+			health--;
+		}
+	}
+	else {
+		ps.update(deltaTime, vS);
+		if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
+			respawn();
+		}
 	}
 
+	velocity.x *= 0.75;
+	velocity.y *= 0.75;
+	move(vS, deltaTime);
 	healthBar->update(deltaTime);
-
 }
 
 void Player::move(std::vector<VertexShape*>& vS, float dt) {
@@ -309,7 +305,7 @@ void Player::respawn() {
 
 	pos.y = 0;
 	pos.x = 0;
-
+	
 	alive = true;
 	visible = true;
 
@@ -320,11 +316,13 @@ void Player::respawn() {
 }
 
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
+
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
 		QLine* qline = new QLine(this, angle);
 		qline->init(vS, graphics);
 	}
+  
 }
 
 void Player::assignControl(rapidjson::Document& doc, int i) {
@@ -335,7 +333,6 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 	controls.at(CONTROL_RIGHT) = doc["player"].GetArray()[i]["right"].GetInt();
 	controls.at(CONTROL_BL) = doc["player"].GetArray()[i]["bl"].GetInt();
 	controls.at(CONTROL_TP) = doc["player"].GetArray()[i]["tp"].GetInt();
-
 }
 
 void Player::teleport(std::vector<VertexShape*>& vS, float angle) {

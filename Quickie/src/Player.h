@@ -16,7 +16,8 @@ public:
 
 	std::map<CooldownType, float>	cooldown;
 	std::map<Control, int>			controls;
-	bool							locked;
+	bool							controlled = false;
+	bool							controlledTP = false;
 	GUIBar*							healthBar;
 	bool							isWinner	= false;	// set to true if a winner
 
@@ -36,8 +37,4 @@ public:
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport(std::vector<VertexShape*>&, float);
 	void assignControl(rapidjson::Document&, int player);
-	
-	bool getLocked(){ return locked; }
-	void setLocked(bool l){ locked = l; }
-
 };
