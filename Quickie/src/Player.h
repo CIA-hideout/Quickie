@@ -16,8 +16,8 @@ public:
 
 	std::map<CooldownType, float>	cooldown;
 	std::map<Control, int>			controls;
-	bool							locked;
 	GUIBar*							healthBar;
+	bool							controlled = false;
 
 	ParticleSource					ps;
 
@@ -34,8 +34,4 @@ public:
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport(std::vector<VertexShape*>&, float);
 	void assignControl(rapidjson::Document&, int player);
-	
-	bool getLocked(){ return locked; }
-	void setLocked(bool l){ locked = l; }
-
 };
