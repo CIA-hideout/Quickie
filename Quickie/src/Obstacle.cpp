@@ -299,7 +299,7 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 	return D3DXVECTOR3(x, y, 19.5);
 }
 
-void Obstacle::assign(rapidjson::Document& doc) {
+void Obstacle::assignPosition(rapidjson::Document& doc, int i) {
 	// store level 1 stuff
 	lvl1Pos = D3DXVECTOR3(
 		doc["obstacle"].GetArray()[i]["lvl_1_pos_x"].GetFloat(),
@@ -374,4 +374,3 @@ void Obstacle::setRandom(int count)
 	newDimension = getRandomDimension();		// get a random direction and set it
 	newPos = getRandomPosition();				// get a random position and set it
 }
->>>>>>> Walls reflect a Quickie

@@ -1,24 +1,5 @@
 #include "quicky.h"
 
-<<<<<<< HEAD
-=======
-
-Obstacle* o1 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-Obstacle* o2 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-Obstacle* o3 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-Obstacle* o4 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-Obstacle* o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-Obstacle* o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-
-Wall* w1 = new Wall(D3DXVECTOR3(0, 22, 19.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);		// - up
-Wall* w2 = new Wall(D3DXVECTOR3(0, -22, 19.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);	// - down
-Wall* w3 = new Wall(D3DXVECTOR3(-21, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);		// | left
-Wall* w4 = new Wall(D3DXVECTOR3(21, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_GRAY);		// | right
-
-Player* sqr1 = new Player(D3DXVECTOR3(0, 0, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(255, 255, 255));
-Player* sqr2 = new Player(D3DXVECTOR3(10, 10, 20 - 1), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
-
->>>>>>> Add randomiseDimension function for Obstacles
 quicky::quicky() {
 }
 
@@ -41,6 +22,10 @@ void quicky::initialize(HWND hWnd) {
 	controlDoc.ParseStream(is);
 	printf("%s\n", controlDoc["test_string"].GetString());
 	fclose(controlFile);
+
+	// Initalize menu
+	Menu* menu = new Menu();
+	menu->initialize(graphics, input, audio, controlDoc);
 
 	// Start game state in menu
 	gameState.push(menu);
