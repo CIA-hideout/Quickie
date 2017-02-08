@@ -25,7 +25,7 @@ void quicky::initialize(HWND hWnd) {
 	fclose(controlFile);
 
 	// Initalize menu
-	Menu* menu = new Menu();
+	menu = new Menu();
 	menu->initialize(graphics, input, audio, controlDoc, &deltaTime);
 
 	// Start game state in menu
@@ -55,7 +55,7 @@ void quicky::update() {
 		case stateNS::GAMEPLAY:
 		{
 			Gameplay* g = new Gameplay();
-
+			g->menu = menu;
 			g->initialize(graphics, input, audio, controlDoc, &deltaTime);
 			gameState.push(g);
 		}
@@ -64,7 +64,7 @@ void quicky::update() {
 		case stateNS::ENDSCREEN:
 		{
 			EndScreen* e = new EndScreen();
-
+			e->menu = menu;
 			e->initialize(graphics, input, audio, controlDoc, &deltaTime);
 			gameState.push(e);
 		}

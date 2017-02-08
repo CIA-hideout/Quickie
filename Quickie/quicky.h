@@ -8,6 +8,7 @@
 #include "src/EndScreen.h"
 
 class quicky : public Game {
+	Menu *menu;
 
 public:
 
