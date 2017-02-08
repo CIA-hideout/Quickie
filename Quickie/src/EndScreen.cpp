@@ -30,6 +30,7 @@ void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document&
 
 	sqr1->init(g, i);
 	sqr2->init(g, i);
+	audio->stopCue(BGMRand);
 	State::initialize(g, i, a, doc, dT);
 }
 
