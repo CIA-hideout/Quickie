@@ -97,7 +97,7 @@ void EndScreen::render()
 	if (sqr1->winner == 1)
 	{
 		f.print(
-			GAME_WIDTH / 2 - f.getTotalWidth("GAME OVER") / 2,
+			GAME_WIDTH / 2 - f.getTotalWidth("Player 1 wins") / 2,
 			GAME_HEIGHT / 5,
 			fontNS::YELLOW,
 			"Player 1 wins");	
@@ -105,19 +105,20 @@ void EndScreen::render()
 	else if (sqr2->winner == 2)
 	{
 		f.print(
-			GAME_WIDTH / 2 - f.getTotalWidth("GAME OVER") / 2,
+			GAME_WIDTH / 2 - f.getTotalWidth("Player 2 wins") / 2,
 			GAME_HEIGHT / 5,
 			fontNS::BLUE,
 			"Player 2 wins");
 	}
 
+
 	// Set Fonts for Options
 	f = fonts.at(fontsNS::END_SCREEN);
 	
 	f.print(
-		GAME_WIDTH / 2 - f.getTotalWidth(("> Return")) / 2,
+		GAME_WIDTH / 2 - f.getTotalWidth(("Press Enter to Exit")) / 2,
 		GAME_HEIGHT / 2,
-		"> Return");
+		"Press Enter to Exit");
 
 	for (int i = 0; i < qEnvironmentObj.size(); i++) {
 		qEnvironmentObj[i]->draw(worldMatrix);
