@@ -147,13 +147,13 @@ void Gameplay::update()
 		}
 		else
 		{
-			if (sqr1->health <= 0)
+			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f)
 			{
 				sqr2->winner = 2;
 				nextState = stateNS::ENDSCREEN;
 				pNextState = &nextState;
 			}
-			else if (sqr2->health <= 0)
+			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f)
 			{
 				sqr1->winner = 1;
 				nextState = stateNS::ENDSCREEN;
@@ -278,9 +278,4 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 		else
 			input->clearKeyPress(c);
 	}
-}
-
-void Gameplay::selectMode(gameplayNS::Mode, int)
-{
-
 }
