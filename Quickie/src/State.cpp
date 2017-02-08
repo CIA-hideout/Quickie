@@ -72,9 +72,11 @@ void State::setNextStateByInput(stateNS::NextState nS, int c)
 			{
 				nextState = nS;
 				pNextState = &nextState;
+
 				input->keysPressed[c] = true;
 			}
 		}
 		else
 			input->clearKeyPress(c);
+
 }
