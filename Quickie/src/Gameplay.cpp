@@ -89,30 +89,30 @@ void Gameplay::update()
 		{
 			case gameplayNS::LEVEL_1:
 				setCurrentSceneByInput(gameplayNS::LEVEL_2, controls.at(CONTROL_DOWN));
-				setCurrentSceneByInput(gameplayNS::LEVEL_1, controls.at(CONTROL_RIGHT));
+				setCurrentSceneByInput(gameplayNS::LEVEL_1, controls.at(CONTROL_SPACEBAR));
 				break;
 
 			case gameplayNS::LEVEL_2:
 				setCurrentSceneByInput(gameplayNS::REVERT, controls.at(CONTROL_UP));
 				setCurrentSceneByInput(gameplayNS::LEVEL_3, controls.at(CONTROL_DOWN));
-				setCurrentSceneByInput(gameplayNS::LEVEL_2, controls.at(CONTROL_RIGHT));
+				setCurrentSceneByInput(gameplayNS::LEVEL_2, controls.at(CONTROL_SPACEBAR));
 				break;
 
 			case gameplayNS::LEVEL_3:
 				setCurrentSceneByInput(gameplayNS::REVERT, controls.at(CONTROL_UP));
 				setCurrentSceneByInput(gameplayNS::LEVEL_SHUFFLE, controls.at(CONTROL_DOWN));
-				setCurrentSceneByInput(gameplayNS::LEVEL_3, controls.at(CONTROL_RIGHT));
+				setCurrentSceneByInput(gameplayNS::LEVEL_3, controls.at(CONTROL_SPACEBAR));
 				break;
 
 			case gameplayNS::LEVEL_SHUFFLE:
 				setCurrentSceneByInput(gameplayNS::REVERT, controls.at(CONTROL_UP));
 				setCurrentSceneByInput(gameplayNS::LEVEL_RANDOM, controls.at(CONTROL_DOWN));
-				setCurrentSceneByInput(gameplayNS::LEVEL_SHUFFLE, controls.at(CONTROL_RIGHT));
+				setCurrentSceneByInput(gameplayNS::LEVEL_SHUFFLE, controls.at(CONTROL_SPACEBAR));
 				break;
 
 			case gameplayNS::LEVEL_RANDOM:
 				setCurrentSceneByInput(gameplayNS::REVERT, controls.at(CONTROL_UP));
-				setCurrentSceneByInput(gameplayNS::LEVEL_RANDOM, controls.at(CONTROL_RIGHT));
+				setCurrentSceneByInput(gameplayNS::LEVEL_RANDOM, controls.at(CONTROL_SPACEBAR));
 
 				break;
 		}
@@ -230,7 +230,7 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 			input->clearKeyPress(c);
 	}
 	// IF Player SELECTS
-	else if (c == controls.at(CONTROL_RIGHT)) {
+	else if (c == controls.at(CONTROL_SPACEBAR)) {
 		if (input->getKeyState(c)) {
 			if (!input->wasKeyPressed(c)) {
 				selectedMode = m;
