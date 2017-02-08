@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "Player.h"
 #include "LevelManager.h"
+#include "Menu.h"
 
 namespace endscreenNS
 {
@@ -34,6 +35,7 @@ class EndScreen : public State
 public:
 	EndScreen();
 	virtual ~EndScreen();
+	Menu* menu;
 
 	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;

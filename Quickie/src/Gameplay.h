@@ -9,6 +9,7 @@
 #include "Wall.h"
 #include "Obstacle.h"
 #include "LevelManager.h"
+#include "Menu.h"
 
 namespace gameplayNS
 {
@@ -60,6 +61,7 @@ class Gameplay : public State
 public:
 	Gameplay();
 	virtual ~Gameplay();
+	Menu* menu;
 
 	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;

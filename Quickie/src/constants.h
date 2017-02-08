@@ -93,6 +93,7 @@ const char BGM3[] = "bgm3";
 const char BGM4[] = "bgm4";
 const char BGM5[] = "bgm5";
 const char BGMRand[] = "bgmRandom";	// play random sound BGM1 - BGM5
+const char menuBGM[] = "menuBGM";
 
 // Font file locations
 const LPCTSTR FONT1 = "Air Americana.ttf";

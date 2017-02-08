@@ -119,6 +119,9 @@ void Gameplay::update()
 	}
 	else
 	{
+		audio->stopCue(menuBGM);
+		menu->canPlaySound = true;
+
 		for (int i = 0; i < qEnvironmentObj.size(); i++) {
 			if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {
 				QLine* temp = (QLine*)qEnvironmentObj[i];
