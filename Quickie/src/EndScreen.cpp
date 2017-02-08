@@ -38,6 +38,7 @@ void EndScreen::update()
 {
 	if (input->getKeyState(controls.at(CONTROL_ENTER)))
 	{
+		sqr1->winner = 0;
 		nextState = stateNS::REVERT;
 		pNextState = &nextState;
 	}
