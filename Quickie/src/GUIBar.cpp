@@ -68,11 +68,6 @@ void GUIBar::init(Graphics* graphics) {
 }
 
 void GUIBar::update(float deltaTime) {
-
-	this->percent = (float)parent->health / (float)parent->maxHealth;
-	this->scale.x = percent;
-	this->pos = parent->pos;
-	this->pos.y = parent->pos.y + parent->dimension.y;
 	
 }
 

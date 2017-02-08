@@ -198,6 +198,11 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 	}
 
+	healthBar->percent = (float)health / (float)maxHealth;
+	healthBar->scale.x = healthBar->percent;
+	healthBar->pos = pos;
+	healthBar->pos.y = pos.y + dimension.y;
+
 	velocity.x *= 0.75;
 	velocity.y *= 0.75;
 	move(vS, deltaTime);
