@@ -28,8 +28,8 @@ void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document&
 	else
 		sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 
-	sqr1->init(g, i);
-	sqr2->init(g, i);
+	sqr1->init(g, i, a);
+	sqr2->init(g, i, a);
 	audio->stopCue(BGMRand);
 	audio->playCue(menuBGM);
 	menu->canPlaySound = false;
@@ -64,12 +64,10 @@ void EndScreen::update()
 				graphics->camera->pointInWorld(pos3D, sqr1Pos, endscreenNS::z);
 				sqr1->pos.x = pos3D.x;
 				sqr1->pos.y = pos3D.y;
-				sqr1->health++;
 
 				graphics->camera->pointInWorld(pos3D, sqr2Pos, endscreenNS::z);
 				sqr2->pos.x = pos3D.x;
 				sqr2->pos.y = pos3D.y;
-				sqr2->health++;
 				
 				currentScene = endscreenNS::EXPLODE;
 			}

@@ -14,16 +14,14 @@ void Menu::initialize(Graphics* g, Input* i, Audio* a , rapidjson::Document& doc
 	State::initialize(g, i, a, doc, dT);
 
 	D3DXVECTOR3 pos3D;
-	Player temp = Player();
 
 	graphics->camera->pointInWorld(pos3D, sqr1Pos, menuNS::z);
 	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 	graphics->camera->pointInWorld(pos3D, sqr2Pos, menuNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
-	sqr1->init(g, i);
-	sqr2->init(g, i);
-	audio = a;
+	sqr1->init(g, i, a);
+	sqr2->init(g, i, a);
 }
 
 
@@ -53,11 +51,6 @@ void Menu::update()
 			sqr2->velocity.x += *deltaTime * menuNS::speed;
 			
 			currentScene = menuNS::BLINK;
-		}
-		else
-		{
-			sqr1->health = 3;
-			sqr2->health = 3;
 		}
 		break;
 	}

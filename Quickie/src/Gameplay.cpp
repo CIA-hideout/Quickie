@@ -76,7 +76,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 	for (int i = 0; i < qPlayer.size(); i++) {
 		Player* temp = (Player*)qPlayer[i];
-		temp->init(this->graphics, this->input);
+		temp->init(this->graphics, this->input, this->audio);
 		temp->assignControl(controlsDoc, i);
 	}
 }

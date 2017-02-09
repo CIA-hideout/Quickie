@@ -28,7 +28,6 @@ class Menu : public State
 	D3DXVECTOR2					sqr2Pos = D3DXVECTOR2(menuNS::sqr2X, menuNS::sqrY);
 	std::vector<VertexShape*>	qEnvironmentObj;
 	menuNS::Scene				currentScene;
-	Audio* audio;
 
 public:
 	Menu();
