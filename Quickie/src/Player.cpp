@@ -184,7 +184,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		if (outOfMap()) {
 			this->alive = false;
 			this->visible = false;
-			ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+			ps = ParticleSource(2000, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
 			ps.init(graphics);
 			cooldown.at(SPAWN_TIME) = 3.0f;
 			graphics->camera->shake(0.25f, 1.0f);
@@ -281,7 +281,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 						this->alive = false;
 						this->visible = false;
 						vS[i]->alive = false;
-						ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
+						ps = ParticleSource(2000, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
 						ps.init(graphics);
 						cooldown.at(SPAWN_TIME) = 3.0f;
 						graphics->camera->shake(0.25f, 1.0f);
@@ -295,7 +295,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 					this->alive = false;
 					this->visible = false;
 					vS[i]->alive = false;
-					ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+					ps = ParticleSource(2000, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
 					ps.init(graphics);
 					cooldown.at(SPAWN_TIME) = 3.0f;
 					graphics->camera->shake(0.25f, 1.0f);

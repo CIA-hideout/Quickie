@@ -11,103 +11,99 @@ ParticleSource::ParticleSource(int count, D3DXVECTOR3& srcV, D3DXVECTOR3& srcPos
 	velocity = srcV;
 	duration = 3.0f;
 	this->inherit = inherit;
+	particles = 0;
 }
 
 ParticleSource::~ParticleSource() {
 }
 
 void ParticleSource::init(Graphics* graphics) {
+
 	std::random_device rdev;
 	std::mt19937 generator(rdev());
 	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
 
 	this->graphics = graphics;
 
-	// create the particles here
+	particles = (ParticleData*)std::malloc(sizeof(ParticleData)* particleCount);
 
-	for (int i = 0; i < particleCount; i++) {
-		VertexShape* vs = new VertexShape();
+	vShape = new VertexShape();
 
-		vs->graphics = graphics;
+	vShape->graphics = graphics;
+	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &vShape->meshPtr);
+	vShape->color = color;
+	vShape->objectType = OBJECT_TYPE_PARTICLE;
+	vShape->meshPtr->LockVertexBuffer(0, (void**)&vShape->vertices);
 
-		D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &vs->meshPtr);
+	// 0
+	vShape->vertices[0] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 1
+	vShape->vertices[1] = { -0.5f / ASPECT_RATIO / 2, +0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 2
+	vShape->vertices[2] = { +0.5f / ASPECT_RATIO / 2, +0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 3
+	vShape->vertices[3] = { +0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 4
+	vShape->vertices[4] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 5
+	vShape->vertices[5] = { -0.5f / ASPECT_RATIO / 2, +0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 6
+	vShape->vertices[6] = { +0.5f / ASPECT_RATIO / 2, +0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
+	// 7
+	vShape->vertices[7] = { +0.5f / ASPECT_RATIO / 2, -0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vShape->color.x), (int)(vShape->color.y), (int)(vShape->color.z)) };
 
-		vs->color = color;
+	vShape->meshPtr->UnlockVertexBuffer();
+	vShape->vertexCount = 8;
+	vShape->meshPtr->LockIndexBuffer(0, (void**)&vShape->indices);
 
-		vs->objectType = OBJECT_TYPE_PARTICLE;
+	vShape->indices[0] = 0; vShape->indices[1] = 1; vShape->indices[2] = 2;
+	vShape->indices[3] = 0; vShape->indices[4] = 2; vShape->indices[5] = 3;
+	// back
+	vShape->indices[6] = 4; vShape->indices[7] = 6; vShape->indices[8] = 5;
+	vShape->indices[9] = 4; vShape->indices[10] = 7; vShape->indices[11] = 6;
+	// left
+	vShape->indices[12] = 4; vShape->indices[13] = 5; vShape->indices[14] = 1;
+	vShape->indices[15] = 4; vShape->indices[16] = 1; vShape->indices[17] = 0;
+	// right
+	vShape->indices[18] = 3; vShape->indices[19] = 2; vShape->indices[20] = 6;
+	vShape->indices[21] = 3; vShape->indices[22] = 6; vShape->indices[23] = 7;
+	// top
+	vShape->indices[24] = 1; vShape->indices[25] = 5; vShape->indices[26] = 6;
+	vShape->indices[27] = 1; vShape->indices[28] = 6; vShape->indices[29] = 2;
+	// bottom
+	vShape->indices[30] = 4; vShape->indices[31] = 0; vShape->indices[32] = 3;
+	vShape->indices[33] = 4; vShape->indices[34] = 3; vShape->indices[35] = 7;
 
-		vs->meshPtr->LockVertexBuffer(0, (void**)&vs->vertices);
+	vShape->meshPtr->UnlockIndexBuffer();
+	vShape->indicesCount = 36;
+	vShape->visible = true;
+	vShape->alive = true;
 
-		// 0
-		vs->vertices[0] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 1
-		vs->vertices[1] = { -0.5f / ASPECT_RATIO / 2, +0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 2
-		vs->vertices[2] = { +0.5f / ASPECT_RATIO / 2, +0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 3
-		vs->vertices[3] = { +0.5f / ASPECT_RATIO / 2, -0.5f / 2, -0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 4
-		vs->vertices[4] = { -0.5f / ASPECT_RATIO / 2, -0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 5
-		vs->vertices[5] = { -0.5f / ASPECT_RATIO / 2, +0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 6
-		vs->vertices[6] = { +0.5f / ASPECT_RATIO / 2, +0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
-		// 7
-		vs->vertices[7] = { +0.5f / ASPECT_RATIO / 2, -0.5f / 2, +0.5f / ASPECT_RATIO / 2, D3DCOLOR_XRGB((int)(vs->color.x), (int)(vs->color.y), (int)(vs->color.z)) };
+	float v_;
 
-		vs->meshPtr->UnlockVertexBuffer();
+	distribution = std::uniform_real_distribution<float>(0, 2 * D3DX_PI);
 
-		vs->vertexCount = 8;
-
-		vs->meshPtr->LockIndexBuffer(0, (void**)&vs->indices);
-
-		vs->indices[0] = 0; vs->indices[1] = 1; vs->indices[2] = 2;
-		vs->indices[3] = 0; vs->indices[4] = 2; vs->indices[5] = 3;
-		// back
-		vs->indices[6] = 4; vs->indices[7] = 6; vs->indices[8] = 5;
-		vs->indices[9] = 4; vs->indices[10] = 7; vs->indices[11] = 6;
-		// left
-		vs->indices[12] = 4; vs->indices[13] = 5; vs->indices[14] = 1;
-		vs->indices[15] = 4; vs->indices[16] = 1; vs->indices[17] = 0;
-		// right
-		vs->indices[18] = 3; vs->indices[19] = 2; vs->indices[20] = 6;
-		vs->indices[21] = 3; vs->indices[22] = 6; vs->indices[23] = 7;
-		// top
-		vs->indices[24] = 1; vs->indices[25] = 5; vs->indices[26] = 6;
-		vs->indices[27] = 1; vs->indices[28] = 6; vs->indices[29] = 2;
-		// bottom
-		vs->indices[30] = 4; vs->indices[31] = 0; vs->indices[32] = 3;
-		vs->indices[33] = 4; vs->indices[34] = 3; vs->indices[35] = 7;
-
-		vs->meshPtr->UnlockIndexBuffer();
-
-		vs->indicesCount = 36;
-
-		vs->visible = true;
-		vs->alive = true;
-
-		float v_;
+	for (int i = 0; i < particleCount; i++)  {
 
 		v_ = distribution(generator) / 5.0f;
-		distribution = std::uniform_real_distribution<float>(0, 2 * D3DX_PI);
-
 		rotation.z = distribution(generator);
 
 		if (this->inherit) {
-			vs->velocity.x = (v_ * cos(rotation.z) + velocity.x * 15) / ASPECT_RATIO;
-			vs->velocity.y = v_ * sin(rotation.z) + velocity.y * 15;
-			vs->velocity.z = distribution(generator) / 5.0f + velocity.z * 15;
+			particles[i].velocity.x = (v_ * cos(rotation.z) + velocity.x * 15) / ASPECT_RATIO;
+			particles[i].velocity.y = v_ * sin(rotation.z) + velocity.y * 15;
+			particles[i].velocity.z = distribution(generator) / 5.0f + velocity.z * 15;
 		}
 		else {
-			vs->velocity.x = (v_ * cos(rotation.z))/ ASPECT_RATIO;
-			vs->velocity.y = v_ * sin(rotation.z);
-			vs->velocity.z = distribution(generator) / 5.0f;
+			particles[i].velocity.x = (v_ * cos(rotation.z)) / ASPECT_RATIO;
+			particles[i].velocity.y = v_ * sin(rotation.z);
+			particles[i].velocity.z = distribution(generator) / 5.0f;
 		}
-		
-		vs->pos = pos;
 
-		particles.push_back(vs);
+		particles[i].pos = pos;
+
+		// printf("particle %d, pos.x = %.2f, %.2f\n", i + 1, particles[i].pos.x, particles[i].pos.y);
 	}
+
 }
 
 void ParticleSource::draw(D3DXMATRIX& worldMat) {
@@ -116,19 +112,19 @@ void ParticleSource::draw(D3DXMATRIX& worldMat) {
 	LPDIRECT3DINDEXBUFFER9 iBuffer;
 
 	for (int i = 0; i < particleCount; i++) {
-		particles[i]->meshPtr->GetVertexBuffer(&vBuffer);
-		particles[i]->meshPtr->GetIndexBuffer(&iBuffer);
-		particles[i]->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-		particles[i]->graphics->get3Ddevice()->SetIndices(iBuffer);
-		D3DXMatrixTranslation(&worldMat, particles[i]->pos.x, particles[i]->pos.y, particles[i]->pos.z);
-		particles[i]->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
-		particles[i]->meshPtr->DrawSubset(0);
+		vShape->meshPtr->GetVertexBuffer(&vBuffer);
+		vShape->meshPtr->GetIndexBuffer(&iBuffer);
+		vShape->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+		vShape->graphics->get3Ddevice()->SetIndices(iBuffer);
+		D3DXMatrixTranslation(&worldMat, particles[i].pos.x, particles[i].pos.y, particles[i].pos.z);
+		vShape->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
+		vShape->meshPtr->DrawSubset(0);
 	}
 }
 
 void ParticleSource::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	for (int i = 0; i < particleCount; i++) {
-		particles[i]->velocity *= 0.95f;
+		particles[i].velocity *= 0.95f;
 	}
 	move(vS, deltaTime);
 }
@@ -136,39 +132,14 @@ void ParticleSource::update(float deltaTime, std::vector<VertexShape*>& vS) {
 void ParticleSource::move(std::vector<VertexShape*>& vS, float deltaTime) {
 
 	for (int i = 0; i < particleCount; i++) {
-		particles[i]->pos.x += particles[i]->velocity.x;
-		//for (int j = 0; j < vS.size(); j++) {
-		//	if (vS[j]->objectType == OBJECT_TYPE_OBSTACLE) {
-		//		if (CollisionManager::collideAABB(particles[i], vS[j])) {
-		//			if (particles[i]->velocity.x > 0)
-		//				particles[i]->pos.x = vS[j]->min.x + (particles[i]->min.x - particles[i]->max.x) / 2 - 0.0001;
-		//			else if (particles[i]->velocity.x < 0)
-		//				particles[i]->pos.x = vS[j]->max.x - (particles[i]->min.x - particles[i]->max.x) / 2 + 0.0001;
-		//			particles[i]->velocity.x = 0;
-		//		}
-		//	}
-		//}
-
-		particles[i]->pos.y += particles[i]->velocity.y;
-		//for (int j = 0; j < vS.size(); j++) {
-		//	if (vS[j]->objectType == OBJECT_TYPE_OBSTACLE) {
-		//		if (CollisionManager::collideAABB(particles[i], vS[j])) {
-		//			if (particles[i]->velocity.y > 0)
-		//				particles[i]->pos.y = vS[j]->min.y + (particles[i]->min.y - particles[i]->max.y) / 2 - 0.0001;
-		//			else if (particles[i]->velocity.y < 0)
-		//				particles[i]->pos.y = vS[j]->max.y - (particles[i]->min.y - particles[i]->max.y) / 2 + 0.0001;
-		//			particles[i]->velocity.y = 0;
-		//		}
-		//	}
-		//}
+		particles[i].pos.x += particles[i].velocity.x;
+		particles[i].pos.y += particles[i].velocity.y;
 	}
 }
 
 void ParticleSource::clean() {
 	for (int i = 0; i < particleCount; i++) {
-		delete particles[i];
-		particles[i] = nullptr;
+		delete particles;
+		particles = 0;
 	}
-
-	particles.clear();
 }

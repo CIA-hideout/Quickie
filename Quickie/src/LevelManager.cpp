@@ -48,7 +48,7 @@ void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 			tempObs->setLevel1(levelCount);
 		}
 	}
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 }
 
 // set obstacles location for level 2
@@ -61,7 +61,7 @@ void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
 			tempObs->setLevel2(levelCount);
 		}
 	}
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 
 }
 
@@ -75,7 +75,7 @@ void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
 			tempObs->setLevel3(levelCount);
 		}
 	}
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 }
 
 // set obstacles location for the shuffled levels
@@ -129,5 +129,5 @@ void LevelManager::setRandom(std::vector<VertexShape*> vS, std::vector<VertexSha
 		}
 	}
 	
-	audio->playCue(BGMRand);
+	// audio->playCue(BGMRand);
 }
