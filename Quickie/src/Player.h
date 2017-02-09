@@ -27,11 +27,12 @@ public:
 
 	Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);
 
-	void init(Graphics*, Input*);
+	void init(Graphics*, Input*, Audio*);
 	void draw(D3DXMATRIX&);
 	void update(float, std::vector<VertexShape*>&);
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn();
+	void die();
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport(std::vector<VertexShape*>&, float);
 	void assignControl(rapidjson::Document&, int player);

@@ -45,10 +45,11 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 
 }
 
-void Player::init(Graphics* graphics, Input* input) {
+void Player::init(Graphics* graphics, Input* input, Audio* audio) {
 
 	this->input = input;
 	this->graphics = graphics;
+	this->audio = audio;
 
 	D3DXCreateMeshFVF(12, 24, D3DXMESH_MANAGED, CUSTOMFVF, graphics->get3Ddevice(), &meshPtr);
 
@@ -182,13 +183,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 
 		if (outOfMap()) {
-			this->alive = false;
-			this->visible = false;
-			ps = ParticleSource(2000, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
-			ps.init(graphics);
-			cooldown.at(SPAWN_TIME) = 3.0f;
-			graphics->camera->shake(0.25f, 1.0f);
-			health--;
+			die();
 		}
 	}
 	else {
@@ -198,6 +193,8 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 	}
 
+	if (controlled || controlledTP)
+		healthBar->visible = false;
 	healthBar->percent = (float)health / (float)maxHealth;
 	healthBar->scale.x = healthBar->percent;
 	healthBar->pos = pos;
@@ -278,28 +275,14 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 				qTemp = (QLine*)vS[i];
 				if (qTemp->parent != this) {
 					if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-						this->alive = false;
-						this->visible = false;
-						vS[i]->alive = false;
-						ps = ParticleSource(2000, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z));
-						ps.init(graphics);
-						cooldown.at(SPAWN_TIME) = 3.0f;
-						graphics->camera->shake(0.25f, 1.0f);
-						health--;
+						die();
 						break;
 					}
 				}
 			}
 			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
-					this->alive = false;
-					this->visible = false;
-					vS[i]->alive = false;
-					ps = ParticleSource(2000, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
-					ps.init(graphics);
-					cooldown.at(SPAWN_TIME) = 3.0f;
-					graphics->camera->shake(0.25f, 1.0f);
-					health--;
+					die();
 					break;
 				}
 			}
@@ -325,6 +308,9 @@ void Player::respawn() {
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
+
+		if (!controlled)
+			audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
 		QLine* qline = new QLine(this, angle);
 		qline->init(vS, graphics);
@@ -343,11 +329,35 @@ void Player::assignControl(rapidjson::Document& doc, int i) {
 }
 
 void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
-	float magnetude = 10.0f;
+
+	float magnitude = 10.0f;
 	if (cooldown.at(COOLDOWN_TELEPORT) <= 0) {
+
+		if (!controlledTP)
+			audio->playCue(FX_TP);
+
 		cooldown.at(COOLDOWN_TELEPORT) = 1.0f;
-		pos.x += cos(angle) * magnetude;
-		pos.y += sin(angle) * magnetude;
+		pos.x += cos(angle) * magnitude;
+		pos.y += sin(angle) * magnitude;
+	}
+}
+
+void Player::die()
+{
+	this->alive = false;
+	this->visible = false;
+	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+	ps.init(graphics);
+	cooldown.at(SPAWN_TIME) = 3.0f;
+	graphics->camera->shake(0.25f, 1.0f);
+
+	if (controlledTP || controlled)
+	{
+	}
+	else
+	{
+		health--;
+		audio->playCue(FX_DEATH);
 	}
 }
 

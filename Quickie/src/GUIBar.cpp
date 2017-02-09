@@ -73,22 +73,24 @@ void GUIBar::update(float deltaTime) {
 
 void GUIBar::draw(D3DXMATRIX& worldMat) {
 
-	LPDIRECT3DVERTEXBUFFER9 vBuffer;
-	LPDIRECT3DINDEXBUFFER9 iBuffer;
+	if (visible)
+	{
+		LPDIRECT3DVERTEXBUFFER9 vBuffer;
+		LPDIRECT3DINDEXBUFFER9 iBuffer;
 
-	D3DXMATRIX scaleMat;
-	D3DXMATRIX transMat;
+		D3DXMATRIX scaleMat;
+		D3DXMATRIX transMat;
 
-	meshPtr->GetVertexBuffer(&vBuffer);
-	meshPtr->GetIndexBuffer(&iBuffer);
-	graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
-	graphics->get3Ddevice()->SetIndices(iBuffer);
-	D3DXMatrixScaling(&scaleMat, this->scale.x, this->scale.y, this->scale.z);
-	D3DXMatrixTranslation(&transMat, this->pos.x, this->pos.y, this->pos.z);
-	worldMat = scaleMat * transMat;
-	graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
-	this->meshPtr->DrawSubset(0);
-
+		meshPtr->GetVertexBuffer(&vBuffer);
+		meshPtr->GetIndexBuffer(&iBuffer);
+		graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
+		graphics->get3Ddevice()->SetIndices(iBuffer);
+		D3DXMatrixScaling(&scaleMat, this->scale.x, this->scale.y, this->scale.z);
+		D3DXMatrixTranslation(&transMat, this->pos.x, this->pos.y, this->pos.z);
+		worldMat = scaleMat * transMat;
+		graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
+		this->meshPtr->DrawSubset(0);
+	}	
 }
 
 GUIBar::~GUIBar() {

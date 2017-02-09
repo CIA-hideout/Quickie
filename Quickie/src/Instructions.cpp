@@ -21,8 +21,8 @@ void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Docume
 	graphics->camera->pointInWorld(pos3D, sqr2Pos, instructionsNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
-	sqr1->init(g, i);
-	sqr2->init(g, i);
+	sqr1->init(g, i, a);
+	sqr2->init(g, i, a);
 }
 
 void Instructions::update()
