@@ -34,12 +34,12 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	D3DXVECTOR2 pos2D;
 
 	pos2D = D3DXVECTOR2(GAME_WIDTH / 4, GAME_HEIGHT / 2);
-	graphics->camera->pointInWorld(pos3D, pos2D, gameplayNS::z);
-	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	sqr1 = new Player(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 
 	pos2D = D3DXVECTOR2(GAME_WIDTH / 1.5, GAME_HEIGHT / 2);
-	graphics->camera->pointInWorld(pos3D, pos2D, gameplayNS::z);
-	sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	sqr2 = new Player(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
 	lManager->init(audio);
 
@@ -78,6 +78,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		Player* temp = (Player*)qPlayer[i];
 		temp->init(this->graphics, this->input, this->audio);
 		temp->assignControl(controlsDoc, i);
+		temp->respawn(qEnvironmentObj);
 	}
 }
 
