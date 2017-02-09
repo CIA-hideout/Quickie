@@ -31,6 +31,10 @@ namespace stateNS
 		ENDSCREEN,
 		REVERT
 	};
+
+	const UINT	sqr1X = GAME_WIDTH / 5;
+	const UINT	sqr2X = GAME_WIDTH / 1.5;
+	const UINT	sqrY = GAME_HEIGHT / 2.5;
 }
 
 class State

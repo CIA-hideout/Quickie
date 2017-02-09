@@ -17,12 +17,12 @@ void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document&
 	State::initialize(g, i, a, doc, dT);
 	Player temp = Player();
 
-	graphics->camera->pointInWorld(pos3D, sqr1Pos, endscreenNS::z);
+	graphics->camera->pointInWorld(pos3D, sqr1Pos, playerNS::z);
 	if (temp.winner == 1)
 		sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 	else
 		sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
-	graphics->camera->pointInWorld(pos3D, sqr2Pos, endscreenNS::z);
+	graphics->camera->pointInWorld(pos3D, sqr2Pos, playerNS::z);
 	if (temp.winner == 2)
 		sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 	else
@@ -49,9 +49,9 @@ void EndScreen::update()
 		switch (currentScene)
 		{
 		case endscreenNS::EXPLODE:
-			sqr1->velocity.x -= *deltaTime * endscreenNS::speed;
+			sqr1->velocity.x -= *deltaTime * playerNS::speed;
 			sqr1->controlled = true;
-			sqr2->velocity.x += *deltaTime * endscreenNS::speed;
+			sqr2->velocity.x += *deltaTime * playerNS::speed;
 			sqr2->controlled = true;
 			currentScene = endscreenNS::RESPAWN;
 			break;
@@ -61,11 +61,11 @@ void EndScreen::update()
 			{
 				D3DXVECTOR3 pos3D;
 
-				graphics->camera->pointInWorld(pos3D, sqr1Pos, endscreenNS::z);
+				graphics->camera->pointInWorld(pos3D, sqr1Pos, playerNS::z);
 				sqr1->pos.x = pos3D.x;
 				sqr1->pos.y = pos3D.y;
 
-				graphics->camera->pointInWorld(pos3D, sqr2Pos, endscreenNS::z);
+				graphics->camera->pointInWorld(pos3D, sqr2Pos, playerNS::z);
 				sqr2->pos.x = pos3D.x;
 				sqr2->pos.y = pos3D.y;
 				

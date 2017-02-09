@@ -106,7 +106,6 @@ void Player::init(Graphics* graphics, Input* input, Audio* audio) {
 
 	healthBar = new GUIBar(this, D3DXVECTOR3(217, 83, 79));
 	healthBar->init(graphics);
-
 }
 
 void Player::draw(D3DXMATRIX& worldMat) {
@@ -189,7 +188,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	else {
 		ps.update(deltaTime, vS);
 		if (cooldown.at(SPAWN_TIME) <= 0.0f && health > 0) {
-			respawn();
+			respawn(vS);
 		}
 	}
 
@@ -213,57 +212,12 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 	// deal with the more predominant velocity
 
 	if (velocity.x >= velocity.y) {
-		this->pos.x += velocity.x;
-		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
-				if (CollisionManager::collideAABB(this, vS[i])) {
-					if (velocity.x > 0)
-						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
-					else if (velocity.x < 0)
-						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
-					velocity.x = 0;
-				}
-			}
-		}
-
-		this->pos.y += velocity.y;
-		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
-				if (CollisionManager::collideAABB(this, vS[i])) {
-					if (velocity.y > 0)
-						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
-					else if (velocity.y < 0)
-						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
-					velocity.y = 0;
-				}
-			}
-		}
+		checkObstaclesCollision(vS, true);			// true, check for x-axis
+		checkObstaclesCollision(vS, false);			// false, check for y-axis
 	}
 	else {
-		this->pos.y += velocity.y;
-		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
-				if (CollisionManager::collideAABB(this, vS[i])) {
-					if (velocity.y > 0)
-						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
-					else if (velocity.y < 0)
-						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
-					velocity.y = 0;
-				}
-			}
-		}
-		this->pos.x += velocity.x;
-		for (int i = 0; i < vS.size(); i++) {
-			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
-				if (CollisionManager::collideAABB(this, vS[i])) {
-					if (velocity.x > 0)
-						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
-					else if (velocity.x < 0)
-						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
-					velocity.x = 0;
-				}
-			}
-		}
+		checkObstaclesCollision(vS, false);			// y
+		checkObstaclesCollision(vS, true);			// x
 	}
 
 	QLine* qTemp;
@@ -282,7 +236,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 			}
 			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
-					die();
+					//die();
 					break;
 				}
 			}
@@ -291,16 +245,34 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 }
 
-void Player::respawn() {
+void Player::respawn(std::vector<VertexShape*>& vS) {
 
-	pos.y = 0;
-	pos.x = 0;
-	
+	D3DXVECTOR2 pos2D = D3DXVECTOR2(randX_2D(), randY_2D());;
+	D3DXVECTOR3 pos3D;
+
 	alive = true;
 	visible = true;
 
-	cooldown.at(INVULNERABLE) = 2.0f;
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	pos.x = pos3D.x;
+	pos.y = pos3D.y;
 
+	for (int i = 0; i < vS.size(); i++)
+	{
+		if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE))
+		{
+			if (CollisionManager::collideAABB(this, vS[i]))
+			{
+				pos2D = D3DXVECTOR2(randX_2D(), randY_2D());
+				graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+				pos.x = pos3D.x;
+				pos.y = pos3D.y;
+				i = 0;
+			}
+		}
+	}
+
+	cooldown.at(INVULNERABLE) = 2.0f;
 	ps.clean();
 
 }
@@ -360,6 +332,43 @@ void Player::die()
 		audio->playCue(FX_DEATH);
 	}
 }
+
+void Player::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
+{
+	if (x)
+	{
+		this->pos.x += velocity.x;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.x > 0)
+						pos.x = vS[i]->min.x + (this->min.x - this->max.x) / 2 - 0.0001;
+					else if (velocity.x < 0)
+						pos.x = vS[i]->max.x - (this->min.x - this->max.x) / 2 + 0.0001;
+					velocity.x = 0;
+				}
+			}
+		}
+	}
+	else
+	{
+		this->pos.y += velocity.y;
+		for (int i = 0; i < vS.size(); i++) {
+			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					if (velocity.y > 0)
+						pos.y = vS[i]->min.y + (this->min.y - this->max.y) / 2 - 0.0001;
+					else if (velocity.y < 0)
+						pos.y = vS[i]->max.y - (this->min.y - this->max.y) / 2 + 0.0001;
+					velocity.y = 0;
+				}
+			}
+		}
+	}
+	
+
+}
+
 
 Player::~Player() {
 }
