@@ -68,6 +68,11 @@ void Game::initialize(HWND hw)
 				"Failed to initialize sound system."));
 		}
 	}
+
+	AddFontResource(FONT1);
+	AddFontResource(FONT2);
+	int i = AddFontResource(FONT3);
+	printf("%d\n", i);
 }
 
 //=============================================================================
@@ -158,6 +163,9 @@ void Game::run(HWND hwnd) {
 }
 
 void Game::releaseAll() {
+	RemoveFontResource(FONT1);
+	RemoveFontResource(FONT2);
+	RemoveFontResource(FONT3);
 }
 
 void Game::resetAll()

@@ -99,6 +99,6 @@ const char FX_BLINK[] = "blink";
 const char FX_DEATH[] = "death";
 
 // Font file locations
-const LPCTSTR FONT1 = "Air Americana.ttf";
-const LPCTSTR FONT2 = "instructionsFont.ttf";
-const LPCTSTR FONT3 = "yorkbailehill.otf";
+const LPCTSTR FONT1 = "resource\\fonts\\Air Americana.ttf";
+const LPCTSTR FONT2 = "resource\\fonts\\instructionsFont.ttf";
+const LPCTSTR FONT3 = "resource\\fonts\\yorkbailehill.otf";

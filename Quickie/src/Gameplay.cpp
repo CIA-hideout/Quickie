@@ -42,6 +42,8 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	pos2D = D3DXVECTOR2(GAME_WIDTH / 1.5, GAME_HEIGHT / 2);
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+	
+	sqr2->winner = 0;
 
 	lManager->init(audio);
 
@@ -160,13 +162,13 @@ void Gameplay::update()
 		}
 		else
 		{
-			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f)
+			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f && sqr1->winner != 1)
 			{
 				sqr2->winner = 2;
 				nextState = stateNS::ENDSCREEN;
 				pNextState = &nextState;
 			}
-			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f)
+			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f && sqr2->winner != 2)
 			{
 				sqr1->winner = 1;
 				nextState = stateNS::ENDSCREEN;

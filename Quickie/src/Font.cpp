@@ -27,7 +27,8 @@ bool Font::initialize(Graphics* g)
 		graphics = g;                               // the graphics object
 		//AddFontResource(FONT1);
 		//AddFontResource(FONT2);
-		//AddFontResource(FONT3);
+		//int i = AddFontResource(FONT3);
+		//printf("%d\n", i);
 	}
 	catch (...) { return false; }
 	return true;
