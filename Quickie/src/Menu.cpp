@@ -30,7 +30,7 @@ void Menu::update()
 	setNextStateByInput(stateNS::INSTRUCTIONS, controls.at(CONTROL_SPACEBAR));
 
 	if (canPlaySound) {
-		audio->playCue(menuBGM);
+		// audio->playCue(menuBGM);
 		canPlaySound = false;
 	}
 

@@ -38,7 +38,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					if (vS[i]->id > id && this->parent != qtemp->parent) {
 						ptemp->alive = false;
 						ptemp->visible = false;
-						ptemp->ps = ParticleSource(200, parent->velocity, intersect, qtemp->color);
+						ptemp->ps = ParticleSource(2000, parent->velocity, intersect, qtemp->color);
 						ptemp->ps.init(graphics);
 						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
 						qtemp->alive = false;

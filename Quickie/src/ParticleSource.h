@@ -7,6 +7,11 @@
 #ifndef _PARTICLE_SOURCE_
 #define _PARTICLE_SOURCE_
 
+struct ParticleData {
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 velocity;
+};
+
 class ParticleSource : public VertexShape {
 
 public:
@@ -17,7 +22,8 @@ public:
 
 	int							particleCount;
 	float						direction, duration;
-	std::vector<VertexShape*>	particles;
+	VertexShape*				vShape;
+	ParticleData*				particles;
 	bool						inherit;
 
 	void init(Graphics*);
