@@ -70,6 +70,8 @@ void State::setNextStateByInput(stateNS::NextState nS, int c)
 		{
 			if (!input->wasKeyPressed(c))
 			{
+				audio->playCue(menuSelect);
+
 				nextState = nS;
 				pNextState = &nextState;
 

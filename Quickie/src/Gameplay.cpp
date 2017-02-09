@@ -239,11 +239,13 @@ void Gameplay::render()
 
 void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 	// IF Player goes up
+
 	if (m == gameplayNS::REVERT && m != gameplayNS::LEVEL_1) {
 		if (input->getKeyState(c)) {
 			if (!input->wasKeyPressed(c)) {
 				gameStack.pop();
 				input->keysPressed[c] = true;
+				audio->playCue(menuSelect);
 			}
 		}
 		else
@@ -256,6 +258,7 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 				selectedMode = m;
 				gameplay = true;
 				input->keysPressed[c] = true;
+				audio->playCue(menuSelect);
 
 				// levels are init here because if there are init in the init(),
 				// selectedMode is empty
@@ -293,6 +296,7 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 				if (gameStack.top() != m)
 					gameStack.push(m);
 				input->keysPressed[c] = true;
+				audio->playCue(menuSelect);
 			}
 		}
 		else

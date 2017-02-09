@@ -94,6 +94,8 @@ const char BGM4[] = "bgm4";
 const char BGM5[] = "bgm5";
 const char BGMRand[] = "bgmRandom";	// play random sound BGM1 - BGM5
 const char menuBGM[] = "menuBGM";
+const char menuSelect[] = "menuSelect";	// play sound when player moves the selection
+
 const char FX_TP[] = "teleport";
 const char FX_BLINK[] = "blink";
 const char FX_DEATH[] = "death";
