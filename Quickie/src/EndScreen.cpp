@@ -48,11 +48,13 @@ void EndScreen::update()
 		switch (currentScene)
 		{
 		case endscreenNS::EXPLODE:
-			sqr1->velocity.x -= *deltaTime * playerNS::speed;
+			sqr1->velocity.y += *deltaTime * playerNS::speed;
 			sqr1->controlled = true;
-			sqr2->velocity.x += *deltaTime * playerNS::speed;
+			sqr2->velocity.y += *deltaTime * playerNS::speed;
 			sqr2->controlled = true;
-			currentScene = endscreenNS::RESPAWN;
+
+			if (!sqr1->alive && !sqr2->alive)
+				currentScene = endscreenNS::RESPAWN;
 			break;
 
 		case endscreenNS::RESPAWN:
