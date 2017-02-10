@@ -28,7 +28,7 @@ void VertexShape::update(float deltaTime) {
 
 bool VertexShape::outOfMap() {
 
-	D3DXVECTOR3 out;
+	D3DXVECTOR2 out;
 	graphics->camera->pointOnScreen(out, pos);
 	if (out.x > graphics->camera->vp.Width || out.x < 0 || out.y > graphics->camera->vp.Height || out.y < 0) {
 		return true;

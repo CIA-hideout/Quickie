@@ -31,7 +31,7 @@ void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document&
 	sqr1->init(g, i, a);
 	sqr2->init(g, i, a);
 	audio->stopCue(BGMRand);
-	// audio->playCue(menuBGM);
+	audio->playCue(menuBGM);
 	menu->canPlaySound = false;
 	State::initialize(g, i, a, doc, dT);
 }

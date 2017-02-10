@@ -24,6 +24,8 @@ public:
 	// constructor
 	Audio();
 
+	bool mute;
+
 	// destructor 
 	virtual ~Audio();
 

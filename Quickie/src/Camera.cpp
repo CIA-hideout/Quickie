@@ -108,7 +108,7 @@ void Camera::fly(float u) {
 	}
 }
 
-void Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos) {
+D3DXVECTOR2 Camera::pointOnScreen(D3DXVECTOR2& pOut, D3DXVECTOR3& pos) {
 
 	D3DXMATRIX v;
 	float x_, y_, z_, w_;
@@ -133,11 +133,17 @@ void Camera::pointOnScreen(D3DXVECTOR3& pOut, D3DXVECTOR3& pos) {
 
 	pOut.x = vp.Width * v4.x / 2 / projection(0, 0) + (vp.Width / 2);
 	pOut.y = vp.Height / 2 - vp.Height * v4.y / 2 / projection(1, 1);
-	pOut.z = vp.MinZ;
+
+	D3DXVECTOR2 retVal;
+
+	retVal.x = pOut.x;
+	retVal.y = pOut.y;
+
+	return retVal;
 
 }
 
-void Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z) {
+D3DXVECTOR3 Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z) {
 
 	// R2 -> R3 | z
 
@@ -150,6 +156,14 @@ void Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z) {
 
 	pOut.x = x_ / vp.MinZ * z;
 	pOut.y = y_ / vp.MinZ * z;
+
+	D3DXVECTOR3 retVal;
+
+	retVal.x = pOut.x;
+	retVal.y = pOut.y;
+	retVal.z = pOut.z;
+
+	return retVal;
 
 }
 

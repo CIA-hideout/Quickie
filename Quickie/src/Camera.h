@@ -43,8 +43,8 @@ public:
 
 	void update(float);
 
-	void pointOnScreen(D3DXVECTOR3&, D3DXVECTOR3&);
-	void pointInWorld(D3DXVECTOR3&, D3DXVECTOR2&, float);
+	D3DXVECTOR2 pointOnScreen(D3DXVECTOR2&, D3DXVECTOR3&);
+	D3DXVECTOR3 pointInWorld(D3DXVECTOR3&, D3DXVECTOR2&, float);
 
 	void shake(float, float);
 

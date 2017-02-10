@@ -10,7 +10,9 @@
 //=================================================
 Audio::Audio()
 {
-	
+	mute = false;
+	// remove this line in release
+	mute = true;
 }
 
 //==================================================
@@ -24,16 +26,16 @@ Audio::~Audio()
 		xactEngine->Release();
 	}
 
-	if (soundBankData) 
+	if (soundBankData)
 		delete[] soundBankData;
-	
+
 	soundBankData = NULL;
 
 	// After xactEngine->ShutDown() returns, release memory mapped files
 	if (mapWaveBank)
 		UnmapViewOfFile(mapWaveBank);
 	mapWaveBank = NULL;
-	
+
 	if (coInitialized) // If CoInitializeEx succeeded
 		CoUninitialize();
 }
@@ -93,10 +95,10 @@ HRESULT Audio::initialise()
 
 	// Create an "in memory" XACT wave bank file using memory mapped file IO result = E_FAIL; // Default to failure code, replaced on success
 	hFile = CreateFile(WAVE_BANK, GENERIC_READ, FILE_SHARE_READ, NULL,
-		OPEN_EXISTING, 0, NULL); 
+		OPEN_EXISTING, 0, NULL);
 	if (hFile != INVALID_HANDLE_VALUE) {
-		fileSize = GetFileSize(hFile, NULL); 
-			
+		fileSize = GetFileSize(hFile, NULL);
+
 		if (fileSize != -1) {
 			hMapFile = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0,
 				fileSize, NULL);
@@ -122,14 +124,14 @@ HRESULT Audio::initialise()
 	// Read and register the sound bank file with XACT
 	result = E_FAIL;    // Default to failure code, replaced on success
 	hFile = CreateFile(SOUND_BANK, GENERIC_READ, FILE_SHARE_READ, NULL,
-		OPEN_EXISTING, 0, NULL); 
+		OPEN_EXISTING, 0, NULL);
 	if (hFile != INVALID_HANDLE_VALUE) {
-		fileSize = GetFileSize(hFile, NULL); 
+		fileSize = GetFileSize(hFile, NULL);
 
 		if (fileSize != -1) {
-			
+
 			soundBankData = new BYTE[fileSize];
-			
+
 			if (soundBankData)
 				// Reserve memory for
 				// sound bank
@@ -142,7 +144,7 @@ HRESULT Audio::initialise()
 		CloseHandle(hFile);
 	}
 
-		
+
 	if (FAILED(result))
 		return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	return S_OK;
@@ -168,7 +170,8 @@ void Audio::playCue(const char cue[])
 		return;
 
 	cueI = soundBank->GetCueIndex(cue); // Get cue index from sound bank 
-	soundBank->Play( cueI, 0, 0, NULL );
+	if (!mute)
+		soundBank->Play(cueI, 0, 0, NULL);
 }
 
 //======================================================================== 
@@ -181,6 +184,6 @@ void Audio::stopCue(const char cue[])
 		return;
 
 	cueI = soundBank->GetCueIndex(cue); // Get cue index from sound bank 
-	soundBank->Stop( cueI, XACT_FLAG_SOUNDBANK_STOP_IMMEDIATE);
+	soundBank->Stop(cueI, XACT_FLAG_SOUNDBANK_STOP_IMMEDIATE);
 }
 

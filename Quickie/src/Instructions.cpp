@@ -28,8 +28,8 @@ void Instructions::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Docume
 void Instructions::update()
 {
 	UINT border = 50;
-	D3DXVECTOR3 sqr1_3D;
-	D3DXVECTOR3 sqr2_3D;
+	D3DXVECTOR2 sqr1_3D;
+	D3DXVECTOR2 sqr2_3D;
 	
 	graphics->camera->pointOnScreen(sqr1_3D, sqr1->pos);
 	graphics->camera->pointOnScreen(sqr2_3D, sqr2->pos);

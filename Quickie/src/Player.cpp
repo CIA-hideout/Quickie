@@ -329,7 +329,7 @@ void Player::die()
 	else
 	{
 		health--;
-		// audio->playCue(FX_DEATH);
+		audio->playCue(FX_DEATH);
 	}
 }
 
