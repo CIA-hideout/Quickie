@@ -105,6 +105,7 @@
     <ClCompile Include="src\Instructions.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\ParticleSource.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="src\Instructions.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\ParticleSource.h" />
     <ClInclude Include="src\PathFinder.h" />
     <ClInclude Include="src\Player.h" />

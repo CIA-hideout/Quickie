@@ -24,6 +24,7 @@
     <ClCompile Include="src\GUIBar.cpp" />
     <ClCompile Include="src\EndScreen.cpp" />
     <ClCompile Include="src\Random.cpp" />
+    <ClCompile Include="src\Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio.h" />
@@ -86,5 +87,6 @@
     <ClInclude Include="src\EndScreen.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\PathFinder.h" />
+    <ClInclude Include="src\Node.h" />
   </ItemGroup>
 </Project>

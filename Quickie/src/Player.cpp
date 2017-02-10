@@ -17,10 +17,6 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	min.y = 0;
 	min.z = 0;
 
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
 	rotation.x = 0;
 	rotation.y = 0;
 	rotation.z = 0;
