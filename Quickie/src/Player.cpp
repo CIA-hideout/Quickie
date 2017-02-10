@@ -144,16 +144,16 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 	if (alive) {
 		if (input->getKeyState(controls.at(CONTROL_UP))) {
-			velocity.y += deltaTime * 10;
+			velocity.y += deltaTime * playerNS::speed;
 		}
 		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
-			velocity.y -= deltaTime * 10;
+			velocity.y -= deltaTime * playerNS::speed;
 		}
 		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-			velocity.x -= deltaTime * 10 / ASPECT_RATIO;
+			velocity.x -= deltaTime * playerNS::speed / ASPECT_RATIO;
 		}
 		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-			velocity.x += deltaTime * 10 / ASPECT_RATIO;
+			velocity.x += deltaTime * playerNS::speed / ASPECT_RATIO;
 		}
 
 		// blink and tp direction
