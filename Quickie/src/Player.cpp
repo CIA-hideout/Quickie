@@ -17,10 +17,6 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	min.y = 0;
 	min.z = 0;
 
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
 	rotation.x = 0;
 	rotation.y = 0;
 	rotation.z = 0;
@@ -143,17 +139,18 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	if (alive) {
+
 		if (input->getKeyState(controls.at(CONTROL_UP))) {
-			velocity.y += deltaTime * 10;
+			velocity.y += deltaTime * playerNS::speed;
 		}
 		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
-			velocity.y -= deltaTime * 10;
+			velocity.y -= deltaTime * playerNS::speed;
 		}
 		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-			velocity.x -= deltaTime * 10 / ASPECT_RATIO;
+			velocity.x -= deltaTime * playerNS::speed / ASPECT_RATIO;
 		}
 		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-			velocity.x += deltaTime * 10 / ASPECT_RATIO;
+			velocity.x += deltaTime * playerNS::speed / ASPECT_RATIO;
 		}
 
 		// blink and tp direction
@@ -180,6 +177,17 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 				teleport(vS, r_);
 			}
 		}
+
+		if (cooldown.at(INVULNERABLE) > 0.0f && timeGetTime() % 500 < 250)
+		{
+			if (controlled || controlledTP)
+			{
+			}
+			else
+				visible = false;
+		}
+		else
+			visible = true;
 
 		if (outOfMap()) {
 			die();
@@ -234,12 +242,12 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 					}
 				}
 			}
-			//if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
-			//	if (CollisionManager::collideAABB(this, vS[i])) {
-			//		//die();
-			//		break;
-			//	}
-			//}
+			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
+				if (CollisionManager::collideAABB(this, vS[i])) {
+					die();
+					break;
+				}
+			}
 		}
 	}
 
@@ -281,8 +289,8 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 
-		//if (!controlled)
-		//	audio->playCue(FX_BLINK);
+		if (!controlled)
+			audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
 		QLine* qline = new QLine(this, angle);
 		qline->init(vS, graphics);
@@ -305,8 +313,8 @@ void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
 	float magnitude = 10.0f;
 	if (cooldown.at(COOLDOWN_TELEPORT) <= 0) {
 
-		//if (!controlledTP)
-		//	audio->playCue(FX_TP);
+		if (!controlledTP)
+			audio->playCue(FX_TP);
 
 		cooldown.at(COOLDOWN_TELEPORT) = 1.0f;
 		pos.x += cos(angle) * magnitude;

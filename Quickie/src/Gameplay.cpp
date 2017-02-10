@@ -12,14 +12,7 @@ Gameplay::Gameplay()
 	o4 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-
-	w1 = new Wall(D3DXVECTOR3(0,  29, 29.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// - up
-	w2 = new Wall(D3DXVECTOR3(0, -29, 29.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);	// - down
-	w3 = new Wall(D3DXVECTOR3(-25, 0, 29.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | left
-	w4 = new Wall(D3DXVECTOR3( 25, 0, 29.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
-
-	// BASED ON CAMERA
-
+	
 	gameStack.push(gameplayNS::LEVEL_1);
 }
 
@@ -42,6 +35,26 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	pos2D = D3DXVECTOR2(GAME_WIDTH / 1.5, GAME_HEIGHT / 2);
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+	
+	sqr2->winner = 0;
+
+	// BASED ON CAMERA
+	pos2D = D3DXVECTOR2(GAME_WIDTH / 2, 0);
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	w1 = new Wall(pos3D, DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// - up
+
+	pos2D = D3DXVECTOR2(GAME_WIDTH /2, GAME_HEIGHT);
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	w2 = new Wall(pos3D, DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);	// - down
+
+	pos2D = D3DXVECTOR2(0, GAME_HEIGHT / 2);
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	w3 = new Wall(pos3D, DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | left
+
+	pos2D = D3DXVECTOR2(GAME_WIDTH, GAME_HEIGHT / 2);
+	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+	w4 = new Wall(pos3D, DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
+	
 
 	lManager->init(audio);
 
@@ -86,12 +99,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 void Gameplay::update()
 {
-
-	D3DXVECTOR2 out;
-
-	graphics->camera->pointOnScreen(out, sqr1->pos);
-
-	printf("%.2f, %.2f\n", out.x, out.y);
+	setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 
 	if (!gameplay)
 	{
@@ -152,7 +160,6 @@ void Gameplay::update()
 
 		graphics->camera->update(*deltaTime);
 
-		setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 		if (input->getKeyState(controls.at(CONTROL_ENTER)))
 		{
 			nextState = stateNS::REVERT;
@@ -160,13 +167,13 @@ void Gameplay::update()
 		}
 		else
 		{
-			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f)
+			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f && sqr1->winner != 1)
 			{
 				sqr2->winner = 2;
 				nextState = stateNS::ENDSCREEN;
 				pNextState = &nextState;
 			}
-			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f)
+			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f && sqr2->winner != 2)
 			{
 				sqr1->winner = 1;
 				nextState = stateNS::ENDSCREEN;

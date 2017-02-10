@@ -40,7 +40,6 @@ void EndScreen::update()
 {
 	if (input->getKeyState(controls.at(CONTROL_ENTER)))
 	{
-		sqr1->winner = 0;
 		nextState = stateNS::REVERT;
 		pNextState = &nextState;
 	}
@@ -49,11 +48,25 @@ void EndScreen::update()
 		switch (currentScene)
 		{
 		case endscreenNS::EXPLODE:
-			sqr1->velocity.x -= *deltaTime * playerNS::speed;
+			{
+			sqr1->velocity.y += *deltaTime * playerNS::speed;
 			sqr1->controlled = true;
-			sqr2->velocity.x += *deltaTime * playerNS::speed;
+			sqr2->velocity.y += *deltaTime * playerNS::speed;
 			sqr2->controlled = true;
-			currentScene = endscreenNS::RESPAWN;
+
+			D3DXVECTOR2 pos2D = D3DXVECTOR2(0, GAME_HEIGHT / 6);
+			D3DXVECTOR3 pos3D;
+			graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+			if (sqr1->pos.y > pos3D.y)
+			{
+				sqr1->die();
+				sqr2->die();
+			}
+		
+			if (!sqr1->alive && !sqr2->alive)
+				currentScene = endscreenNS::RESPAWN;
+			}
+			
 			break;
 
 		case endscreenNS::RESPAWN:
@@ -116,10 +129,11 @@ void EndScreen::render()
 	// Set Fonts for Options
 	f = fonts.at(fontsNS::END_SCREEN);
 	
-	f.print(
-		GAME_WIDTH / 2 - f.getTotalWidth(("Press Enter to Exit")) / 2,
-		GAME_HEIGHT / 2,
-		"Press Enter to Exit");
+	if (timeGetTime() % 500 < 250)
+		f.print(
+			GAME_WIDTH / 2 - f.getTotalWidth("Press Enter to Exit") / 2,
+			GAME_HEIGHT / 2,
+			"[Press Enter to Exit]");
 
 	for (int i = 0; i < qEnvironmentObj.size(); i++) {
 		qEnvironmentObj[i]->draw(worldMatrix);
