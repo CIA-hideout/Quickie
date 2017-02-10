@@ -46,7 +46,7 @@ public:
 private:
 	float timer = 0;
 	int levelCount = 0;
-	double zAxis = 19.5;
+	double zAxis = 29.5;
 	boolean isShuffled = false;
 	boolean isRandomGen = false;
 

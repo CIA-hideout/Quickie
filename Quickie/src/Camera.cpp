@@ -8,7 +8,7 @@ Camera::Camera() {
 Camera::Camera(CameraType cT, float fov, D3DVIEWPORT9& viewPort) {
 
 	cameraType = cT;
-	pos = D3DXVECTOR3(0.0f, 0.0f, -10.0f);
+	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	originalPos = pos;
 	look = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);

@@ -102,7 +102,7 @@ void Obstacle::draw(D3DXMATRIX& worldMat) {
 
 	D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 
-	D3DXMatrixTranslation(&worldMat, pos.x, pos.y, pos.z);
+	D3DXMatrixTranslation(&worldMat, pos.x, pos.y, 29.5);
 
 	matTemp = matRot * worldMat;
 
@@ -293,8 +293,8 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 	D3DXVECTOR2 topleft = D3DXVECTOR2(0, 0);
 	D3DXVECTOR2 bottomright = D3DXVECTOR2(GAME_WIDTH, GAME_HEIGHT);	// resolution of game is 1280 x 720
 
-	graphics->camera->pointInWorld(high, topleft, 19.5);
-	graphics->camera->pointInWorld(low, bottomright, 19.5);
+	graphics->camera->pointInWorld(high, topleft, 29.5);
+	graphics->camera->pointInWorld(low, bottomright, 29.5);
 
 	std::uniform_real_distribution<float> randomX(high.x, low.x);	// between -18 to 18
 	std::uniform_real_distribution<float> randomY(low.y, high.y);	// between -14 to 14
@@ -303,7 +303,7 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 
 	//printf("%.2f, %.2f\n", x, y);
 
-	return D3DXVECTOR3(x, y, 19.5);
+	return D3DXVECTOR3(x, y, 29.5);
 }
 
 void Obstacle::assignPosition(rapidjson::Document& doc, int i) {

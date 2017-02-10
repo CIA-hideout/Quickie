@@ -234,12 +234,12 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 					}
 				}
 			}
-			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
-				if (CollisionManager::collideAABB(this, vS[i])) {
-					//die();
-					break;
-				}
-			}
+			//if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
+			//	if (CollisionManager::collideAABB(this, vS[i])) {
+			//		//die();
+			//		break;
+			//	}
+			//}
 		}
 	}
 

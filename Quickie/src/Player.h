@@ -17,7 +17,7 @@ namespace playerNS
 	const int length = 2;
 	const int breadth = 2;
 	const int height = 2;
-	const int z = 19.5;
+	const int z = 29.5;
 
 	const int	speed = 10;
 }

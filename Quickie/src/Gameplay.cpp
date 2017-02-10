@@ -13,10 +13,10 @@ Gameplay::Gameplay()
 	o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 
-	w1 = new Wall(D3DXVECTOR3(0,  29, 19.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// - up
-	w2 = new Wall(D3DXVECTOR3(0, -29, 19.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);	// - down
-	w3 = new Wall(D3DXVECTOR3(-25, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | left
-	w4 = new Wall(D3DXVECTOR3( 25, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
+	w1 = new Wall(D3DXVECTOR3(0,  29, 29.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// - up
+	w2 = new Wall(D3DXVECTOR3(0, -29, 29.5), DIMENSION_HORIZONTAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);	// - down
+	w3 = new Wall(D3DXVECTOR3(-25, 0, 29.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | left
+	w4 = new Wall(D3DXVECTOR3( 25, 0, 29.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
 
 	// BASED ON CAMERA
 
@@ -86,6 +86,13 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 void Gameplay::update()
 {
+
+	D3DXVECTOR2 out;
+
+	graphics->camera->pointOnScreen(out, sqr1->pos);
+
+	printf("%.2f, %.2f\n", out.x, out.y);
+
 	if (!gameplay)
 	{
 		switch (gameStack.top())
