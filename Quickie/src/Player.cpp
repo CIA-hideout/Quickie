@@ -143,6 +143,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	if (alive) {
+
 		if (input->getKeyState(controls.at(CONTROL_UP))) {
 			velocity.y += deltaTime * playerNS::speed;
 		}
@@ -180,6 +181,17 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 				teleport(vS, r_);
 			}
 		}
+
+		if (cooldown.at(INVULNERABLE) > 0.0f && timeGetTime() % 500 < 250)
+		{
+			if (controlled || controlledTP)
+			{
+			}
+			else
+				visible = false;
+		}
+		else
+			visible = true;
 
 		if (outOfMap()) {
 			die();

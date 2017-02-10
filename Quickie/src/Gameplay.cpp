@@ -88,12 +88,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 void Gameplay::update()
 {
-
-	D3DXVECTOR2 out;
-
-	graphics->camera->pointOnScreen(out, sqr1->pos);
-
-	printf("%.2f, %.2f\n", out.x, out.y);
+	setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 
 	if (!gameplay)
 	{
@@ -154,7 +149,6 @@ void Gameplay::update()
 
 		graphics->camera->update(*deltaTime);
 
-		setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 		if (input->getKeyState(controls.at(CONTROL_ENTER)))
 		{
 			nextState = stateNS::REVERT;

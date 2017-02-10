@@ -32,9 +32,9 @@ namespace stateNS
 		REVERT
 	};
 
-	const UINT	sqr1X = GAME_WIDTH / 5;
-	const UINT	sqr2X = GAME_WIDTH / 1.5;
-	const UINT	sqrY = GAME_HEIGHT / 2.5;
+	const UINT	sqr1X = GAME_WIDTH / 4;
+	const UINT	sqr2X = (GAME_WIDTH / 4) * 3;
+	const UINT	sqrY = (GAME_HEIGHT / 5) * 2;
 }
 
 class State

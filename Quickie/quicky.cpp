@@ -72,6 +72,7 @@ void quicky::update() {
 
 		case stateNS::REVERT:
 		{
+			audio->stopCue(BGMRand);
 			gameState.pop();
 		}
 			break;
