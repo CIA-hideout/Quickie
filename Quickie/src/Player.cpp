@@ -281,8 +281,8 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
 
-		if (!controlled)
-			audio->playCue(FX_BLINK);
+		//if (!controlled)
+		//	audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
 		QLine* qline = new QLine(this, angle);
 		qline->init(vS, graphics);
@@ -305,8 +305,8 @@ void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
 	float magnitude = 10.0f;
 	if (cooldown.at(COOLDOWN_TELEPORT) <= 0) {
 
-		if (!controlledTP)
-			audio->playCue(FX_TP);
+		//if (!controlledTP)
+		//	audio->playCue(FX_TP);
 
 		cooldown.at(COOLDOWN_TELEPORT) = 1.0f;
 		pos.x += cos(angle) * magnitude;
@@ -329,7 +329,7 @@ void Player::die()
 	else
 	{
 		health--;
-		audio->playCue(FX_DEATH);
+		// audio->playCue(FX_DEATH);
 	}
 }
 

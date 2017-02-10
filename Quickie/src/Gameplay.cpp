@@ -18,6 +18,8 @@ Gameplay::Gameplay()
 	w3 = new Wall(D3DXVECTOR3(-25, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | left
 	w4 = new Wall(D3DXVECTOR3( 25, 0, 19.5), DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
 
+	// BASED ON CAMERA
+
 	gameStack.push(gameplayNS::LEVEL_1);
 }
 
