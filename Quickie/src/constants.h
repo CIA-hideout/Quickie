@@ -33,8 +33,8 @@
 #define DIMENSION_VERTICAL_LARGE	D3DXVECTOR3(1.5, 25, 0.5)
 #define DIMENSION_NON_EXISTANT		D3DXVECTOR3(0, 0, 0)			// use if obstacles are not needed
 #define DIMENSION_ALMOST_ZERO		D3DXVECTOR3(0.01, 0.01, 0.01)	// use for scaling as 0 * n = 0
-#define DIMENSION_HORIZONTAL_WALL	D3DXVECTOR3(120, 20, 0.5)			// use as walls to block player from gtfo of the screen
-#define DIMENSION_VERTICAL_WALL		D3DXVECTOR3(20, 50, 0.5)			// use as walls to block player from gtfo of the screen
+#define DIMENSION_HORIZONTAL_WALL	D3DXVECTOR3(150, 1, 0.5)			// use as walls to block player from gtfo of the screen
+#define DIMENSION_VERTICAL_WALL		D3DXVECTOR3(1, 100, 0.5)			// use as walls to block player from gtfo of the screen
 
 //-----------------------------------------------
 // Useful macros

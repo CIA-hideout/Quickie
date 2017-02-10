@@ -150,6 +150,6 @@ void Font::print(int x, int y, D3DXCOLOR c, std::string s)
 
 int Font::getTotalWidth(std::string s)
 {
-	return width * s.length();
+	return width * (s.length() - 1);
 }
 
