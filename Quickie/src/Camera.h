@@ -17,6 +17,13 @@ enum CameraType {
 	CAMERA_TYPE_FREE
 };
 
+namespace cameraNS
+{
+	const int x = 29;
+	const int y = 29;
+	const int total = x + y;
+}
+
 class Camera {
 
 public:

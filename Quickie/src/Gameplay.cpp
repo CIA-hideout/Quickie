@@ -167,19 +167,38 @@ void Gameplay::update()
 		}
 		else
 		{
-			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f && sqr1->winner != 1)
+			if (!AI)
 			{
-				sqr2->winner = 2;
-				nextState = stateNS::ENDSCREEN;
-				pNextState = &nextState;
+				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
+				{
+					sqr2->winner = 2;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
+				else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f && sqr2->winner != 2)
+				{
+					sqr1->winner = 1;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
 			}
-			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f && sqr2->winner != 2)
+			else
 			{
-				sqr1->winner = 1;
-				nextState = stateNS::ENDSCREEN;
-				pNextState = &nextState;
+				// determine if sqr 1 lose or wins
 			}
 		}
+
+		if (input->getKeyState(controls.at(CONTROL_SPACEBAR))) {
+			if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR))) {
+				
+				// Create and init AI, set AI to true
+				// set sqr2 visible to false
+				input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
+			}
+		}
+		else
+			input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
+		
 	}
 }
 
@@ -279,7 +298,6 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 
 				case gameplayNS::LEVEL_RANDOM:
 					lManager->setRandom(qEnvironmentObj, qPlayer);
-
 					break;
 				}
 			}

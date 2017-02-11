@@ -4,7 +4,6 @@
 #include <stack>
 
 #include "State.h"
-#include "CollisionManager.h"
 #include "Player.h"
 #include "Wall.h"
 #include "Obstacle.h"
@@ -38,6 +37,7 @@ class Gameplay : public State
 
 	LevelManager*				lManager;
 	bool						gameplay = false;
+	bool						AI = false;
 	
 	gameplayNS::Mode						selectedMode;
 	std::stack<gameplayNS::Mode>			gameStack;

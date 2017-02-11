@@ -1,18 +1,30 @@
-#ifndef _PATH_H_
-#define _PATH_H_
+#pragma once
 
+#include "Node.h"
+#include "graphics.h"
 
-class Path
+class PathFinder
 {
-	int cols;
-	int rows;
-	//int grid[];			// 2D array to represent the screen
-	//int openSet[];			// squares that are not yet evaluated
-	int closedSet[][];		// squares that are evaluated
-	// Evaluate: to check whether a move is possible there by the algorithm
+	Node*					start;
+	Node*					end;
+	Graphics*				graphics;
+
+	std::vector<std::vector<Node>>		nodesOnScreen;
+	std::vector<Node*>					path;
+	std::vector<Node*>					openSet;				// unevaluated nodes
+	std::vector<Node*>					closedSet;				// evaluated nodes
+																// evaluated means that it has been checked if it is an efficient path towards the end
 
 public:
 
-};
 
-#endif
+	PathFinder();
+	~PathFinder();
+
+	void initialize(Graphics* graphics);
+	void update(std::vector<VertexShape*>& , Player* player);			// update the start, end and path
+	void draw(D3DXMATRIX& worldMatrix);					// for testing purposes
+	void setTargetNode(Node* target);
+	bool determinePath();								// set the most efficient path based on the target
+	int heuristic(Node* start, Node* end);				// determine the efficiency of a path
+};
