@@ -14,11 +14,12 @@ void Menu::initialize(Graphics* g, Input* i, Audio* a , rapidjson::Document& doc
 	State::initialize(g, i, a, doc, dT);
 
 	D3DXVECTOR3 pos3D;
-
 	graphics->camera->pointInWorld(pos3D, sqr1Pos, playerNS::z);
 	sqr1 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 	graphics->camera->pointInWorld(pos3D, sqr2Pos, playerNS::z);
-	sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+	sqr2 = new Player(D3DXVECTOR3(0, 0, playerNS::z), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+
+	pathfinder.initialize(g);
 
 	sqr1->init(g, i, a);
 	sqr2->init(g, i, a);
@@ -66,6 +67,8 @@ void Menu::update()
 			temp->update(*deltaTime, qEnvironmentObj);
 		}
 	}
+
+	pathfinder.update(qEnvironmentObj, sqr1);
 }
 
 void Menu::render()
@@ -94,4 +97,6 @@ void Menu::render()
 	}
 	sqr1->draw(worldMatrix);
 	sqr2->draw(worldMatrix);
+
+	pathfinder.draw(worldMatrix);
 }

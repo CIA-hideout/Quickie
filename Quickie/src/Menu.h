@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "Player.h"
 #include "LevelManager.h"
+#include "PathFinder.h"
 
 namespace menuNS
 {
@@ -23,6 +24,8 @@ class Menu : public State
 	D3DXVECTOR2					sqr2Pos = D3DXVECTOR2(stateNS::sqr2X, stateNS::sqrY);
 	std::vector<VertexShape*>	qEnvironmentObj;
 	menuNS::Scene				currentScene;
+
+	PathFinder	pathfinder;
 
 public:
 	Menu();
