@@ -5,8 +5,7 @@ Release = June 2010;
 
 Options
 {
-    Report File = kek.txt;
-    Verbose Report = 1;
+    Verbose Report = 0;
     Generate C/C++ Headers = 1;
 }
 
@@ -17,8 +16,8 @@ Global Settings
     Header File = quickie-sound.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
-    Last Modified Low = 2847427968;
-    Last Modified High = 30573452;
+    Last Modified Low = 1518411581;
+    Last Modified High = 30573800;
 
     Category
     {
@@ -228,12 +227,10 @@ Wave Bank
     Compression Preset Name = <none>;
     Xbox Bank Last Modified Low = 0;
     Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 4292376075;
-    PC Bank Last Modified High = 30573451;
-    Header Last Modified Low = 0;
-    Header Last Modified High = 0;
-    Bank Last Revised Low = 3202014473;
-    Bank Last Revised High = 30573239;
+    PC Bank Last Modified Low = 1518807129;
+    PC Bank Last Modified High = 30573800;
+    Bank Last Revised Low = 1518791479;
+    Bank Last Revised High = 30573800;
 
     Wave
     {
@@ -253,8 +250,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170077353;
-            Last Modified High = 30573335;
+            Last Modified Low = 582585856;
+            Last Modified High = 30572639;
         }
     }
 
@@ -276,8 +273,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170137368;
-            Last Modified High = 30573335;
+            Last Modified Low = 582585856;
+            Last Modified High = 30572639;
         }
     }
 
@@ -299,8 +296,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170197386;
-            Last Modified High = 30573335;
+            Last Modified Low = 582585856;
+            Last Modified High = 30572639;
         }
     }
 
@@ -322,8 +319,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170312426;
-            Last Modified High = 30573335;
+            Last Modified Low = 582585856;
+            Last Modified High = 30572639;
         }
     }
 
@@ -345,8 +342,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170372426;
-            Last Modified High = 30573335;
+            Last Modified Low = 582585856;
+            Last Modified High = 30572639;
         }
     }
 
@@ -364,21 +361,21 @@ Wave Bank
             Sampling Rate = 44100;
             Bits Per Sample = 1;
             Play Region Offset = 44;
-            Play Region Length = 1411200;
+            Play Region Length = 1693440;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170917560;
-            Last Modified High = 30573335;
+            Last Modified Low = 790518784;
+            Last Modified High = 30573646;
         }
     }
 
     Wave
     {
-        Name = blink;
-        File = blink.wav;
-        Build Settings Last Modified Low = 1470574017;
-        Build Settings Last Modified High = 30573239;
+        Name = menuSelect;
+        File = menuSelect.wav;
+        Build Settings Last Modified Low = 4025898525;
+        Build Settings Last Modified High = 30573231;
 
         Cache
         {
@@ -387,35 +384,12 @@ Wave Bank
             Sampling Rate = 44100;
             Bits Per Sample = 1;
             Play Region Offset = 44;
-            Play Region Length = 43954;
+            Play Region Length = 11400;
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170787528;
-            Last Modified High = 30573335;
-        }
-    }
-
-    Wave
-    {
-        Name = death;
-        File = death.wav;
-        Build Settings Last Modified Low = 1470574017;
-        Build Settings Last Modified High = 30573239;
-
-        Cache
-        {
-            Format Tag = 0;
-            Channels = 1;
-            Sampling Rate = 44100;
-            Bits Per Sample = 1;
-            Play Region Offset = 44;
-            Play Region Length = 75692;
-            Loop Region Offset = 0;
-            Loop Region Length = 0;
-            File Type = 1;
-            Last Modified Low = 4170797561;
-            Last Modified High = 30573335;
+            Last Modified Low = 3725093632;
+            Last Modified High = 30573633;
         }
     }
 
@@ -423,8 +397,8 @@ Wave Bank
     {
         Name = teleport;
         File = teleport.wav;
-        Build Settings Last Modified Low = 1470579027;
-        Build Settings Last Modified High = 30573239;
+        Build Settings Last Modified Low = 871742336;
+        Build Settings Last Modified High = 30573634;
 
         Cache
         {
@@ -437,8 +411,54 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 4170927563;
-            Last Modified High = 30573335;
+            Last Modified Low = 3705093632;
+            Last Modified High = 30573633;
+        }
+    }
+
+    Wave
+    {
+        Name = death;
+        File = death.wav;
+        Build Settings Last Modified Low = 2711507830;
+        Build Settings Last Modified High = 30573799;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 1;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 75692;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 3705093632;
+            Last Modified High = 30573633;
+        }
+    }
+
+    Wave
+    {
+        Name = blink;
+        File = blink.wav;
+        Build Settings Last Modified Low = 2778562845;
+        Build Settings Last Modified High = 30573799;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 1;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 43954;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 3705093632;
+            Last Modified High = 30573633;
         }
     }
 }
@@ -450,15 +470,15 @@ Sound Bank
     Windows File = Win\Sound Bank.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Bank Last Modified Low = 2847452977;
-    Bank Last Modified High = 30573452;
+    Bank Last Modified Low = 1519461493;
+    Bank Last Modified High = 30573800;
     Header Last Modified High = 0;
     Header Last Modified Low = 0;
 
     Sound
     {
         Name = bgm4;
-        Volume = -600;
+        Volume = -400;
         Pitch = 0;
         Priority = 0;
 
@@ -506,7 +526,7 @@ Sound Bank
     Sound
     {
         Name = bgm1;
-        Volume = -600;
+        Volume = -400;
         Pitch = 0;
         Priority = 0;
 
@@ -554,7 +574,7 @@ Sound Bank
     Sound
     {
         Name = bgm2;
-        Volume = -600;
+        Volume = -400;
         Pitch = 0;
         Priority = 0;
 
@@ -602,7 +622,7 @@ Sound Bank
     Sound
     {
         Name = bgm3;
-        Volume = -600;
+        Volume = -200;
         Pitch = 0;
         Priority = 0;
 
@@ -650,7 +670,7 @@ Sound Bank
     Sound
     {
         Name = bgm5;
-        Volume = -600;
+        Volume = -400;
         Pitch = 0;
         Priority = 0;
 
@@ -698,7 +718,7 @@ Sound Bank
     Sound
     {
         Name = menuBGM;
-        Volume = 50;
+        Volume = -500;
         Pitch = 0;
         Priority = 0;
 
@@ -745,6 +765,53 @@ Sound Bank
 
     Sound
     {
+        Name = menuSelect;
+        Volume = -400;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = Wave Bank;
+                    Bank Index = 0;
+                    Entry Name = menuSelect;
+                    Entry Index = 6;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Sound
+    {
         Name = teleport;
         Volume = -400;
         Pitch = 0;
@@ -782,7 +849,7 @@ Sound Bank
                     Bank Name = Wave Bank;
                     Bank Index = 0;
                     Entry Name = teleport;
-                    Entry Index = 8;
+                    Entry Index = 7;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -793,7 +860,7 @@ Sound Bank
     Sound
     {
         Name = death;
-        Volume = 300;
+        Volume = -400;
         Pitch = 0;
         Priority = 0;
 
@@ -829,7 +896,7 @@ Sound Bank
                     Bank Name = Wave Bank;
                     Bank Index = 0;
                     Entry Name = death;
-                    Entry Index = 7;
+                    Entry Index = 8;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -840,7 +907,7 @@ Sound Bank
     Sound
     {
         Name = blink;
-        Volume = 300;
+        Volume = 0;
         Pitch = 0;
         Priority = 0;
 
@@ -876,7 +943,7 @@ Sound Bank
                     Bank Name = Wave Bank;
                     Bank Index = 0;
                     Entry Name = blink;
-                    Entry Index = 6;
+                    Entry Index = 9;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -1058,7 +1125,7 @@ Sound Bank
 
     Cue
     {
-        Name = blink;
+        Name = menuSelect;
 
         Variation
         {
@@ -1069,8 +1136,8 @@ Sound Bank
 
         Sound Entry
         {
-            Name = blink;
-            Index = 8;
+            Name = menuSelect;
+            Index = 6;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -1090,7 +1157,27 @@ Sound Bank
         Sound Entry
         {
             Name = teleport;
-            Index = 6;
+            Index = 7;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = blink;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = blink;
+            Index = 9;
             Weight Min = 0;
             Weight Max = 255;
         }
@@ -1110,7 +1197,7 @@ Sound Bank
         Sound Entry
         {
             Name = death;
-            Index = 7;
+            Index = 8;
             Weight Min = 0;
             Weight Max = 255;
         }

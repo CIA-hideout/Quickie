@@ -42,6 +42,7 @@ void EndScreen::update()
 	{
 		nextState = stateNS::REVERT;
 		pNextState = &nextState;
+		audio->playCue(menuSelect);
 	}
 	else
 	{
