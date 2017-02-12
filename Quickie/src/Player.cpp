@@ -184,7 +184,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			else
 				visible = false;
 		}
-		else if (cooldown.at(INVULNERABLE) > 0.0f)
+		else if (cooldown.at(INVULNERABLE) > -1.0f)
 			visible = true;
 
 		if (outOfMap()) {

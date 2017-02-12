@@ -67,18 +67,14 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* target, AI* ai)
 		}
 	}
 
-	if(determinePath())
+	if(determineNextMove())
 	{
-		// do stuff e.g. move AI to target
-
-		for (auto i = 0; i < path.size(); ++i)
-		{
-			path.at(i)->visible = true;
-		}
+		// do stuff
+		
 	}
 	else
 	{
-		// no possible path found
+		// no possible move found
 	}
 
 }
@@ -97,82 +93,86 @@ void PathFinder::draw(D3DXMATRIX& worldMatrix)
 	}
 }
 
-bool PathFinder::determinePath()
+bool PathFinder::determineNextMove()
 {
 	if (start != nullptr && end != nullptr)
 	{
-		std::vector<Node*>					openSet;				// unevaluated nodes
-		std::vector<Node*>					closedSet;				// evaluated nodes
+		//std::vector<Node*>					openSet;				// unevaluated nodes
+		// std::vector<Node*>					closedSet;				// evaluated nodes
 		// evaluated means that it has been checked if it is an efficient path towards the end
 
-		openSet.push_back(start);
-		path.clear();
-		auto n = 0; //
-		while (!openSet.empty())
+		//openSet.push_back(start);
+		//path.clear();
+		//while (!openSet.empty())
+		//{
+		//for (auto i = 0; i < openSet.size(); ++i)
+		//{
+		//	if (openSet[i]->f <= openSet[best]->f)
+		//	{
+		//		best = i;
+		//	}
+		//}
+
+		//auto current = openSet[best];
+		//if (current == end)
+		//{
+		//	auto temp = current;
+		//	path.push_back(temp);
+
+		//	while (temp->getprevious() != nullptr)
+		//	{
+		//		path.push_back(temp->getprevious());
+		//		temp = temp->getprevious();
+		//	}
+		//	return true;
+		//}
+
+		//openSet.erase(std::find(openSet.begin(), openSet.end(), current));
+		// closedSet.push_back(current);
+
+		auto best = 0;
+		auto neighbours = start->getNeighbours();
+		for (auto i = 0; i < neighbours.size(); ++i)
 		{
-			auto best = 0;
-			for (auto i = 0; i < openSet.size(); ++i)
+			auto neighbour = neighbours[i];
+
+			// if closedset already has neighbour or is an obstacle, skip evaluating this neighbour
+			if (neighbour->getCurrentObject() != nodeNS::OBJECT_TYPE_OBSTACLE)
 			{
-				if (openSet[i]->f <= openSet[best]->f)
-				{
-					best = i;
-				}
-			}
+				auto tempG = start->g + 1;
 
-			auto current = openSet[best];
-			n++;
-			if (current == end)
-			{
-				auto temp = current;
-				path.push_back(temp);
-
-				while (temp->getprevious() != nullptr)
-				{
-					path.push_back(temp->getprevious());
-					temp = temp->getprevious();
-				}
-				return true;
-			}
-
-			openSet.erase(std::find(openSet.begin(), openSet.end(), current));
-			closedSet.push_back(current);
-
-			auto neighbours = current->getNeighbours();
-			for (auto i = 0; i < neighbours.size(); ++i)
-			{
-				auto neighbour = neighbours[i];
-
-				// if closedset already has neighbour or is an obstacle, skip evaluating this neighbour
-				if (std::find(closedSet.begin(), closedSet.end(), neighbour) == closedSet.end() && neighbour->getCurrentObject() != nodeNS::OBJECT_TYPE_OBSTACLE)
-				{
-					auto tempG = current->g + 1;
-
-					auto newPath = false;
-					if (std::find(openSet.begin(), openSet.end(), neighbour) != openSet.end())			// if openset has neighbour, evaluate this neighbour
-					{
-						if (tempG < neighbour->g)
-						{
-							neighbour->g = tempG;
-							newPath = true;
-						}
-					}
-					else																				// if openset doesnt have this neighbour, add it in openset
+				//auto newPath = false;
+				//if (std::find(neighbours.begin(), neighbours.end(), neighbour) != neighbours.end())			// if current Node has neighbour, evaluate this neighbour
+				//{
+					if (tempG < neighbour->g)
 					{
 						neighbour->g = tempG;
-						newPath = true;
-						openSet.push_back(neighbour);
+						//newPath = true;
 					}
+				//}
+				//else																				// if openset doesnt have this neighbour, add it in openset
+				//{
+				//	neighbour->g = tempG;
+				//	newPath = true;
+				//	openSet.push_back(neighbour);
+				//}
 
-					if (newPath)
-					{
-						neighbour->h = heuristic(neighbour, end);
-						neighbour->f = neighbour->g + neighbour->h;
+				//if (newPath)
+				//{
+					neighbour->h = heuristic(neighbour, end);
+					neighbour->f = neighbour->g + neighbour->h;
 
-						neighbour->setPrevious(current);
-					}
-				}
+					if (neighbours[i]->f <= neighbours[best]->f)
+						best = i;
+					//neighbour->setPrevious(current);
+				//}
 			}
 		}
+
+		start->pos.x = neighbours[best]->pos.x;
+		start->pos.y = neighbours[best]->pos.y;
+		return true;
+	//}
 	}
 	return false;
 }

@@ -21,6 +21,6 @@ public:
 	void initialize(Graphics* graphics);
 	void update(std::vector<VertexShape*>& , Player* target, AI* start);			// update the start, end and path
 	void draw(D3DXMATRIX& worldMatrix);					// for testing purposes
-	bool determinePath();								// set the most efficient path based on the target
+	bool determineNextMove();								// set the most efficient path based on the target
 	double heuristic(Node* start, Node* end) const;				// determine the efficiency of a path
 };
