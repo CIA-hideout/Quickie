@@ -133,7 +133,7 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 		if (cooldown.at(INVULNERABLE) > 0.0f && timeGetTime() % 500 < 250)
 			visible = false;
-		else
+		else if (cooldown.at(INVULNERABLE) > -1.0f)
 			visible = true;
 
 		if (outOfMap()) {
@@ -152,9 +152,7 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	healthBar->pos = pos;
 	healthBar->pos.y = pos.y + dimension.y;
 
-	velocity.x *= 0.75;
-	velocity.y *= 0.75;
-	move(vS, deltaTime);
+	//move(vS, deltaTime);
 	healthBar->update(deltaTime);
 }
 
