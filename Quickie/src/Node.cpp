@@ -173,6 +173,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 
 	case nodeNS::OBJECT_TYPE_NODE:
 		currentObject = nodeNS::OBJECT_TYPE_NODE;
+		visible = false;
 		break;
 	}
 
@@ -181,7 +182,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 
 void Node::setNeighbours(std::vector<std::vector<Node>>* nV)
 {
-	if (i < cameraNS::cols -1)
+	if (i < cameraNS::cols - 1)
 		neighbours.push_back(&nV->at(i + 1).at(j));			// right neighbour
 
 	if (i > 0)
