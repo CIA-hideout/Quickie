@@ -23,6 +23,7 @@ public:
 	void checkCollision(VertexShape*, std::vector<VertexShape*>&);
 
 	float calcDistance(D3DXVECTOR3&, D3DXVECTOR3&);
+	static void calcNorm(D3DXVECTOR4&, D3DXVECTOR2&, D3DXVECTOR2&);
 
 	static bool collideAABB(VertexShape*, VertexShape*);
 	static bool collideOOBB(VertexShape*, VertexShape*, D3DXVECTOR3&);

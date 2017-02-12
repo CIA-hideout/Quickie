@@ -116,8 +116,8 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 			// >>> [0] end
 
 			// get rotation of the norm line segment
-			float dx = fNorm.x - fNorm.z;
-			float dy = fNorm.y - fNorm.w;
+			float dx = fNorm.z - fNorm.x;
+			float dy = fNorm.w - fNorm.y;
 			r_ = atan(dy / dx);
 
 			// >>> [1] reflecting off a line that has the rotation r_

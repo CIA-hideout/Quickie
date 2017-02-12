@@ -165,13 +165,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		v.y = intersection.y;
 		posV.push_back(v);
 
-		dx = tStart.x - tEnd.x;
-		dy = tStart.y - tEnd.y;
-
-		tNorm.x = -dy;
-		tNorm.y = dx;
-		tNorm.z = dy;
-		tNorm.w = -dx;
+		CM::calcNorm(tNorm, D3DXVECTOR2(tStart.x, tStart.y), D3DXVECTOR2(tEnd.x, tEnd.y));
 
 		normV.push_back(tNorm);
 	}
@@ -190,13 +184,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		v.y = intersection.y;
 		posV.push_back(v);
 
-		dx = tStart.x - tEnd.x;
-		dy = tStart.y - tEnd.y;
-
-		tNorm.x = -dy;
-		tNorm.y = dx;
-		tNorm.z = dy;
-		tNorm.w = -dx;
+		CM::calcNorm(tNorm, D3DXVECTOR2(tStart.x, tStart.y), D3DXVECTOR2(tEnd.x, tEnd.y));
 
 		normV.push_back(tNorm);
 	}
@@ -215,13 +203,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		v.y = intersection.y;
 		posV.push_back(v);
 
-		dx = tStart.x - tEnd.x;
-		dy = tStart.y - tEnd.y;
-
-		tNorm.x = -dy;
-		tNorm.y = dx;
-		tNorm.z = dy;
-		tNorm.w = -dx;
+		CM::calcNorm(tNorm, D3DXVECTOR2(tStart.x, tStart.y), D3DXVECTOR2(tEnd.x, tEnd.y));
 
 		normV.push_back(tNorm);
 	}
@@ -240,13 +222,7 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 		v.y = intersection.y;
 		posV.push_back(v);
 
-		dx = tStart.x - tEnd.x;
-		dy = tStart.y - tEnd.y;
-
-		tNorm.x = -dy;
-		tNorm.y = dx;
-		tNorm.z = dy;
-		tNorm.w = -dx;
+		CM::calcNorm(tNorm, D3DXVECTOR2(tStart.x, tStart.y), D3DXVECTOR2(tEnd.x, tEnd.y));
 
 		normV.push_back(tNorm);
 	}
@@ -297,5 +273,22 @@ bool CollisionManager::primitiveCollision(D3DXVECTOR3& pOut, std::vector<D3DXVEC
 	}
 
 	return false;
+
+}
+
+void CollisionManager::calcNorm(D3DXVECTOR4& pOut, D3DXVECTOR2& pStart, D3DXVECTOR2& pEnd) {
+	
+	float m = 0;
+
+	pOut.x = pStart.x * cos(D3DX_PI / 2) + pStart.y * -sin(D3DX_PI / 2);
+	pOut.y = pStart.x * sin(D3DX_PI / 2) + pStart.y * cos(D3DX_PI / 2);
+	pOut.z = pEnd.x * cos(D3DX_PI / 2) + pEnd.y * -sin(D3DX_PI / 2);
+	pOut.w = pEnd.x * sin(D3DX_PI / 2) + pEnd.y * cos(D3DX_PI / 2);
+
+	// get magnitude
+
+	m = sqrt(pow(pOut.x - pOut.z, 2) + pow(pOut.y - pOut.w, 2));
+
+	pOut /= m;
 
 }
