@@ -31,9 +31,8 @@ AI::AI(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3
 	cooldown.insert(std::pair <CooldownType, float>(SPAWN_TIME, 0.0f));
 }
 
-void AI::init(Graphics* graphics, Input* input, Audio* audio) {
+void AI::init(Graphics* graphics, Audio* audio) {
 
-	this->input = input;
 	this->graphics = graphics;
 	this->audio = audio;
 

@@ -161,7 +161,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 
 	case nodeNS::OBJECT_TYPE_PLAYER:
 		currentObject = nodeNS::OBJECT_TYPE_PLAYER;
-		//visible = true;
+		visible = true;
 		break;
 
 	case nodeNS::OBJECT_TYPE_QLINE:
@@ -170,6 +170,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 
 	case nodeNS::OBJECT_TYPE_AI:
 		currentObject = nodeNS::OBJECT_TYPE_AI;
+		visible = true;
 		break;
 
 	case nodeNS::OBJECT_TYPE_NODE:
