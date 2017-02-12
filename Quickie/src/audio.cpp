@@ -12,7 +12,7 @@ Audio::Audio()
 {
 	mute = false;
 	// remove this line in release
-	mute = true;
+	 mute = true;
 }
 
 //==================================================
