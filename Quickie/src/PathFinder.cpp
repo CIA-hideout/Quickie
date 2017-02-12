@@ -2,6 +2,9 @@
 
 PathFinder::PathFinder()
 {
+	start = nullptr;
+	end = nullptr;
+	graphics = nullptr;
 }
 
 PathFinder::~PathFinder()
@@ -18,16 +21,15 @@ void PathFinder::initialize(Graphics* g)
 	{
 		std::vector<Node> tempVector = std::vector<Node>();
 		
-		for (int y = -cameraNS::y; y <= cameraNS::y; ++y)
+		for (int y = cameraNS::y; y >= -cameraNS::y; --y)
 		{
-			Node temp = Node(D3DXVECTOR3(x, y, playerNS::z), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
+			Node temp = Node(D3DXVECTOR3(x, y, playerNS::z), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
 			temp.init(g);
 			temp.i = i;
 			temp.j = j;
 			tempVector.push_back(temp);
 			j++;
 		}
-
 		nodesOnScreen.push_back(tempVector);
 		j = 0;
 		i++;
@@ -45,7 +47,7 @@ void PathFinder::initialize(Graphics* g)
 	}
 }
 
-void PathFinder::update(std::vector<VertexShape*>& vS, Player* p)
+void PathFinder::update(std::vector<VertexShape*>& vS, Player* target, AI* ai)
 {
 	for (auto x = 0; x <nodesOnScreen.size(); ++x)
 	{
@@ -54,33 +56,31 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* p)
 		for (auto y = 0; y < pVect->size(); ++y)
 		{
 			Node* temp = &pVect->at(y);
-			temp->update(vS, p);
+			temp->update(vS, target, ai);
 
-			if (temp->objectType == OBJECT_TYPE_AI)
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_AI)		// set AI as start
 				start = temp;
+
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_PLAYER)		// set Player as end
+			end = temp;
+
 		}
 	}
 
-	determinePath();
-}
-
-void PathFinder::setTargetNode(Node* target)
-{
-	for (auto x = 0; x <nodesOnScreen.size(); ++x)
+	if(determinePath())
 	{
-		std::vector<Node>* pVect = &nodesOnScreen.at(x);
+		// do stuff e.g. move AI to target
 
-		for (auto y = 0; y < pVect->size(); ++y)
+		for (auto i = 0; i < path.size(); ++i)
 		{
-			Node* temp = &pVect->at(y);
-			
-			if (temp == target)
-			{
-				end = target;
-				break;
-			}
+			path.at(i)->visible = true;
 		}
 	}
+	else
+	{
+		// no possible path found
+	}
+
 }
 
 void PathFinder::draw(D3DXMATRIX& worldMatrix)
@@ -99,78 +99,89 @@ void PathFinder::draw(D3DXMATRIX& worldMatrix)
 
 bool PathFinder::determinePath()
 {
-	openSet.push_back(start);
-
-	while (openSet.size() > 0)
+	if (start != nullptr && end != nullptr)
 	{
-		auto best = 0;
+		std::vector<Node*>					openSet;				// unevaluated nodes
+		std::vector<Node*>					closedSet;				// evaluated nodes
+		// evaluated means that it has been checked if it is an efficient path towards the end
 
-		for (auto i = 0; i < openSet.size(); ++i)
+		openSet.push_back(start);
+		path.clear();
+		auto n = 0; //
+		while (!openSet.empty())
 		{
-			if (openSet[i]->f < openSet[best]->f)
+			auto best = 0;
+			for (auto i = 0; i < openSet.size(); ++i)
 			{
-				best = i;
-			}
-		}
-
-		auto current = openSet[best];
-
-		if (current == end)
-		{
-			path.clear();
-
-			auto temp = current;
-			path.push_back(temp);
-
-			while (temp->getprevious() != nullptr)
-			{
-				path.push_back(temp->getprevious());
-				temp = temp->getprevious();
-			}
-
-			return true;
-		}
-
-		openSet.erase(std::remove(openSet.begin(), openSet.end(), openSet[best]), openSet.end());
-		closedSet.push_back(current);
-
-		auto neighbours = current->getNeighbours();
-		for (auto i = 0; i < neighbours.size(); ++i)
-		{
-			auto neighbour = neighbours[i];
-
-			if (std::find(closedSet.begin(), closedSet.end(), neighbour) == closedSet.end())			// if closedset already has neighbour, skip evaluating this neighbour
-			{
-				auto tempG = current->g + 1;
-
-				if (std::find(openSet.begin(), openSet.end(), neighbour) != closedSet.end())			// if openset has neighbour, evaluate this neighbour
+				if (openSet[i]->f <= openSet[best]->f)
 				{
-					if (tempG < neighbour->g)
-						neighbour->g = tempG;	
-				}
-				else																					// if openset doesnt have this neighbour, add it in openset
-				{
-					neighbour->g = tempG;
-					openSet.push_back(neighbour);
+					best = i;
 				}
 			}
 
-			neighbour->h = heuristic(neighbour, end);
-			neighbour->f = neighbour->g + neighbour->h;
+			auto current = openSet[best];
+			n++;
+			if (current == end)
+			{
+				auto temp = current;
+				path.push_back(temp);
 
-			neighbour->setPrevious(current);
+				while (temp->getprevious() != nullptr)
+				{
+					path.push_back(temp->getprevious());
+					temp = temp->getprevious();
+				}
+				return true;
+			}
+
+			openSet.erase(std::find(openSet.begin(), openSet.end(), current));
+			closedSet.push_back(current);
+
+			auto neighbours = current->getNeighbours();
+			for (auto i = 0; i < neighbours.size(); ++i)
+			{
+				auto neighbour = neighbours[i];
+
+				// if closedset already has neighbour or is an obstacle, skip evaluating this neighbour
+				if (std::find(closedSet.begin(), closedSet.end(), neighbour) == closedSet.end() && neighbour->getCurrentObject() != nodeNS::OBJECT_TYPE_OBSTACLE)
+				{
+					auto tempG = current->g + 1;
+
+					auto newPath = false;
+					if (std::find(openSet.begin(), openSet.end(), neighbour) != openSet.end())			// if openset has neighbour, evaluate this neighbour
+					{
+						if (tempG < neighbour->g)
+						{
+							neighbour->g = tempG;
+							newPath = true;
+						}
+					}
+					else																				// if openset doesnt have this neighbour, add it in openset
+					{
+						neighbour->g = tempG;
+						newPath = true;
+						openSet.push_back(neighbour);
+					}
+
+					if (newPath)
+					{
+						neighbour->h = heuristic(neighbour, end);
+						neighbour->f = neighbour->g + neighbour->h;
+
+						neighbour->setPrevious(current);
+					}
+				}
+			}
 		}
 	}
-
 	return false;
 }
 
-int PathFinder::heuristic(Node* start, Node* end)
+double PathFinder::heuristic(Node* initial, Node* target) const
 {
-	unsigned int x = end->i - start->i;
-	unsigned int y = end->j - start->j;
+	unsigned int x = target->i - initial->i;
+	unsigned int y = target->j - initial->j;
 
 	auto xy = x*x + y*y;
-
 	return sqrt(xy);
 }

@@ -94,6 +94,8 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->assignControl(controlsDoc, i);
 		temp->respawn(qEnvironmentObj);
 	}
+
+	pathfinder.initialize(g);
 }
 
 void Gameplay::update()
@@ -157,8 +159,8 @@ void Gameplay::update()
 		}
 
 		lManager->update(*deltaTime);
-
 		graphics->camera->update(*deltaTime);
+
 
 		if (input->getKeyState(controls.at(CONTROL_ENTER)))
 		{
@@ -167,7 +169,7 @@ void Gameplay::update()
 		}
 		else
 		{
-			if (!AI)
+			if (!AIGame)
 			{
 				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
 				{
@@ -182,23 +184,35 @@ void Gameplay::update()
 					pNextState = &nextState;
 				}
 			}
-			else
-			{
-				// determine if sqr 1 lose or wins
-			}
 		}
+	}
+}
 
-		if (input->getKeyState(controls.at(CONTROL_SPACEBAR))) {
-			if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR))) {
-				
-				// Create and init AI, set AI to true
-				// set sqr2 visible to false
-				input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
-			}
+void Gameplay::ai()
+{
+	if (input->getKeyState(controls.at(CONTROL_SPACEBAR) && !AIGame)) {
+		if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR))) {
+
+			printf("AI");
+			computer = new AI(sqr2->pos, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
+			AIGame = true;
+			sqr2->visible = false;
+			computer->respawn(qEnvironmentObj);
+			input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
 		}
-		else
-			input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
-		
+	}
+	else
+		input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
+
+	if (gameplay && AIGame)
+	{
+		pathfinder.update(qEnvironmentObj, sqr1, computer);
+		computer->update(*deltaTime, qEnvironmentObj);
+
+		pathfinder.draw(worldMatrix);
+		computer->draw(worldMatrix);
+
+		// determine win lose
 	}
 }
 
@@ -243,6 +257,7 @@ void Gameplay::render()
 	}
 
 	else {
+
 		for (int i = 0; i < qEnvironmentObj.size(); i++) {
 			qEnvironmentObj[i]->draw(worldMatrix);
 		}
@@ -251,7 +266,6 @@ void Gameplay::render()
 			Player* temp = (Player*)qPlayer[i];
 			temp->draw(worldMatrix);
 		}
-		setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 	}
 }
 

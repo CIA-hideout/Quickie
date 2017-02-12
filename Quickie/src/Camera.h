@@ -22,7 +22,9 @@ enum CameraType {
 namespace cameraNS
 {
 	const int x = 29;
+	const int cols = x * 2;
 	const int y = 29;
+	const int rows = y * 2;
 	const int total = x + y;
 }
 

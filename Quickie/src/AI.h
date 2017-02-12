@@ -10,7 +10,6 @@ public:
 
 	std::map<CooldownType, float>	cooldown;
 	GUIBar*							healthBar;
-	static int						winner;
 	ParticleSource					ps;
 
 	AI() = default;

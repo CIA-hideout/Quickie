@@ -19,8 +19,6 @@ void Menu::initialize(Graphics* g, Input* i, Audio* a , rapidjson::Document& doc
 	graphics->camera->pointInWorld(pos3D, sqr2Pos, playerNS::z);
 	sqr2 = new Player(D3DXVECTOR3(0, 0, playerNS::z), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 
-	pathfinder.initialize(g);
-
 	sqr1->init(g, i, a);
 	sqr2->init(g, i, a);
 }
@@ -67,8 +65,6 @@ void Menu::update()
 			temp->update(*deltaTime, qEnvironmentObj);
 		}
 	}
-
-	pathfinder.update(qEnvironmentObj, sqr1);
 }
 
 void Menu::render()
@@ -97,6 +93,4 @@ void Menu::render()
 	}
 	sqr1->draw(worldMatrix);
 	sqr2->draw(worldMatrix);
-
-	pathfinder.draw(worldMatrix);
 }

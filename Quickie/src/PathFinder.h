@@ -11,9 +11,6 @@ class PathFinder
 
 	std::vector<std::vector<Node>>		nodesOnScreen;
 	std::vector<Node*>					path;
-	std::vector<Node*>					openSet;				// unevaluated nodes
-	std::vector<Node*>					closedSet;				// evaluated nodes
-																// evaluated means that it has been checked if it is an efficient path towards the end
 
 public:
 
@@ -22,9 +19,8 @@ public:
 	~PathFinder();
 
 	void initialize(Graphics* graphics);
-	void update(std::vector<VertexShape*>& , Player* player);			// update the start, end and path
+	void update(std::vector<VertexShape*>& , Player* target, AI* start);			// update the start, end and path
 	void draw(D3DXMATRIX& worldMatrix);					// for testing purposes
-	void setTargetNode(Node* target);
 	bool determinePath();								// set the most efficient path based on the target
-	int heuristic(Node* start, Node* end);				// determine the efficiency of a path
+	double heuristic(Node* start, Node* end) const;				// determine the efficiency of a path
 };
