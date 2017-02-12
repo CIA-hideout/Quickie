@@ -55,9 +55,6 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	w4 = new Wall(pos3D, DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
 	
-
-	lManager->init(audio);
-
 	qEnvironmentObj.push_back(o1);
 	qEnvironmentObj.push_back(o2);
 	qEnvironmentObj.push_back(o3);
@@ -72,6 +69,8 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 	qPlayer.push_back(sqr1);
 	qPlayer.push_back(sqr2);
+
+	lManager->init(audio, qEnvironmentObj, qPlayer);
 
 	// parse obstacles details
 	FILE* obsFile = fopen("resource\\data\\obstacles.json", "rb");
@@ -157,7 +156,7 @@ void Gameplay::update()
 			temp->update(*deltaTime, qEnvironmentObj);
 		}
 
-		lManager->update(*deltaTime, qEnvironmentObj, qPlayer);
+		lManager->update(*deltaTime);
 
 		graphics->camera->update(*deltaTime);
 
@@ -282,7 +281,7 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 					break;
 
 				case gameplayNS::LEVEL_RANDOM:
-					lManager->setRandom(qEnvironmentObj, qPlayer);
+					lManager->setRandom();
 
 					break;
 				}

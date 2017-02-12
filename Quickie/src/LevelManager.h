@@ -27,9 +27,9 @@ public:
 	LevelManager();
 	~LevelManager();
 
-	void init(Audio*);
+	void init(Audio*, std::vector<VertexShape*>, std::vector<VertexShape*>);
 
-	void update(float, std::vector<VertexShape*>, std::vector<VertexShape*>);
+	void update(float);
 
 	// Set Different Levels during the Gameplay
 	void setLevelOne(std::vector<VertexShape*>);		// set Lvl 1
@@ -37,7 +37,7 @@ public:
 	void setLevelThree(std::vector<VertexShape*>);		// set Lvl 3
 	void setShuffle(std::vector<VertexShape*>);			// set the shuffled levels
 	void shuffle();										// shuffle the exisiting levels
-	void setRandom(std::vector<VertexShape*>, std::vector<VertexShape*>);			// set the obstales location really randomly
+	void setRandom();			// set the obstales location really randomly
 
 	// setters
 	void setShuffledBool(boolean newCon)	{ isShuffled = newCon; }
@@ -49,8 +49,12 @@ private:
 	double zAxis = 29.5;
 	boolean isShuffled = false;
 	boolean isRandomGen = false;
+	std::random_device rd;     // only used once to initialise (seed) engine
 
 	Audio* audio;		// Pointer to audio system
 
 	std::vector<int> shuffleLevel;	// store the shuffled levels
+
+	std::vector<VertexShape*> qEnvironmentObj;
+	std::vector<VertexShape*> qPlayers;
 };

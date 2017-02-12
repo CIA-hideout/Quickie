@@ -202,7 +202,6 @@ D3DXVECTOR3 Obstacle::getRandomColor() {
 	color.push_back(COLOR_BLUE);
 	color.push_back(COLOR_WHITE);
 
-	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(color.begin(), color.end(), rng); // randomise vector content
 
@@ -277,16 +276,14 @@ D3DXVECTOR3 Obstacle::getRandomDimension() {
 	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
 	dimensions.push_back(DIMENSION_VERTICAL_LARGE);
 
-	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(dimensions.begin(), dimensions.end(), rng); //ramdomise vector
 
 	return dimensions.front(); // use first value of random vector
 }
 
-D3DXVECTOR3 Obstacle::getRandomPosition()
+D3DXVECTOR3 Obstacle::getRandomPosition(std::vector<VertexShape*> vS, std::vector<VertexShape*> vP)
 {
-	std::random_device rd;		// only used once to initialise (seed) engine
 	std::mt19937 rng(rd());		// random-number engine used (Mersenne-Twister in this case)
 
 	D3DXVECTOR3 high, low;		// high = point(0,0)/ low = point(1280,720)
@@ -373,18 +370,18 @@ void Obstacle::setLevel3(int count)
 		currentState = SHRINK;
 }
 
-void Obstacle::setRandom(int count, std::vector<VertexShape*> players)
+void Obstacle::setRandom(int count, std::vector<VertexShape*> environment, std::vector<VertexShape*> players)
 {
 	if (count != 0)
 		currentState = SHRINK;
 
 	for (int i = 0; i < players.size(); i++) {
 		newDimension = getRandomDimension();		// get a random direction and set it
-		newPos = getRandomPosition();				// get a random position and set it
+		newPos = getRandomPosition(environment, players);				// get a random position and set it
 
 		if (CollisionManager::collideAABB(players[i], this))
 		{
-			newPos = getRandomPosition();
+			newPos = getRandomPosition(environment, players);
 			newDimension = getRandomDimension();
 		}
 	

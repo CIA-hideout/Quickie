@@ -10,12 +10,14 @@ LevelManager::~LevelManager()
 	
 }
 
-void LevelManager::init(Audio* a)
+void LevelManager::init(Audio* a, std::vector<VertexShape*> vS, std::vector<VertexShape*> vP)
 {
 	audio = a;
+	qEnvironmentObj = vS;
+	qPlayers = vP;
 }
 
-void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS, std::vector<VertexShape*> players)
+void LevelManager::update(float deltaTime)
 {
 	timer += deltaTime;
 	//printf("%.2f\n", timer);
@@ -23,14 +25,14 @@ void LevelManager::update(float deltaTime, std::vector<VertexShape*> vS, std::ve
 		// Run this if shuffled mode is activated
 		if (isShuffled) {
 			levelCount++;
-			setShuffle(vS);
+			setShuffle(qEnvironmentObj);
 			timer = 0;
 		}
 		
 		// Run this if random mode is activated
 		if (isRandomGen) {
 			levelCount++;
-			setRandom(vS, players);
+			setRandom();
 			timer = 0;
 			printf("Me run something!");
 		}
@@ -111,21 +113,20 @@ void LevelManager::shuffle()
 	shuffleLevel.push_back(2);
 	shuffleLevel.push_back(3);
 
-	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(shuffleLevel.begin(), shuffleLevel.end(), rng); //ramdomise vector
 }
 
 // pure randomisation of obstacle location and size
-void LevelManager::setRandom(std::vector<VertexShape*> vS, std::vector<VertexShape*> players)
+void LevelManager::setRandom()
 {
 	isRandomGen = true;
 	audio->stopCue(BGMRand);
 
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			Obstacle* tempObs = (Obstacle*)vS[i];
-			tempObs->setRandom(levelCount, players);
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
+			tempObs->setRandom(levelCount, qEnvironmentObj, qPlayers);
 		}
 	}
 	
