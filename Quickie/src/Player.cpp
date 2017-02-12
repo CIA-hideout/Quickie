@@ -147,10 +147,10 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			velocity.y -= deltaTime * playerNS::speed;
 		}
 		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-			velocity.x -= deltaTime * playerNS::speed / ASPECT_RATIO;
+			velocity.x -= deltaTime * playerNS::speed;
 		}
 		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-			velocity.x += deltaTime * playerNS::speed / ASPECT_RATIO;
+			velocity.x += deltaTime * playerNS::speed;
 		}
 
 		// blink and tp direction
@@ -159,9 +159,9 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 				if (velocity.x != 0.0f || velocity.y != 0.0f) {
 					float r_;
 					if (velocity.x >= 0)
-						r_ = atan(velocity.y / velocity.x);
+						r_ = atan(velocity.y / (velocity.x));
 					else if (velocity.x < 0)
-						r_ = D3DX_PI + atan(velocity.y / velocity.x);
+						r_ = D3DX_PI + atan(velocity.y / (velocity.x));
 					blink(vS, r_);
 				}
 			}
@@ -288,7 +288,6 @@ void Player::respawn(std::vector<VertexShape*>& vS) {
 void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-
 		if (!controlled)
 			audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
@@ -345,7 +344,7 @@ void Player::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 {
 	if (x)
 	{
-		this->pos.x += velocity.x;
+		this->pos.x += velocity.x / ASPECT_RATIO;
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
 				if (CollisionManager::collideAABB(this, vS[i])) {

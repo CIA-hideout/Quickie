@@ -12,7 +12,7 @@ QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
 	parent = vS;
 	this->rotation_ = rotation_;
-	magnetude = 15;
+	magnetude = 20;
 	objectType = OBJECT_TYPE_QLINE;
 	meshPtr = nullptr;
 	color = parent->color;
@@ -73,7 +73,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	while (m_ > 0.0f) {
 
-		rayEnd.x = rayStart.x + cos(rotation_) * m_;
+		rayEnd.x = rayStart.x + (cos(rotation_) * m_) / ASPECT_RATIO;
 		rayEnd.y = rayStart.y + sin(rotation_) * m_;
 
 		dist_ = cDist_ = 999;
@@ -139,10 +139,10 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 			dy = projPoint.y - fIntersect.y;
 
 			if (dx >= 0) {
-				rotation_ = atan(dy / dx);
+				rotation_ = atan(dy / dx / ASPECT_RATIO);
 			}
 			else if (dx < 0) {
-				rotation_ = PI + atan(dy / dx);
+				rotation_ = PI + atan(dy / dx / ASPECT_RATIO);
 			}
 
 			// >>> [1] end
@@ -158,28 +158,25 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	// now check if the player collidesui with anything here
 
-	D3DXVECTOR3 intersect_;
+	//D3DXVECTOR3 intersect_;
 
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			if (CollisionManager::collideAABB(parent, vS[i])) {
-				if (fLatestID == vS[i]->id) {
-					// continue the thing until player is free
-					// there is no change in rotation_. use the same variable
-					rayEnd.x += cos(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
-					rayEnd.y += sin(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
-					vertexPoint.push_back(rayEnd);
-				}
-				else {
-					// moves player back
-					rayEnd.x -= cos(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
-					rayEnd.y -= sin(rotation_) * 2; // sqrt(pow(0.5, 2) + pow(0.5, 2));
-					vertexPoint.push_back(rayEnd);
-					break;
-				}
-			}
-		}
-	}
+	//for (int i = 0; i < vS.size(); i++) {
+	//	if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+	//		if (CollisionManager::collideAABB(parent, vS[i])) {
+	//			if (fLatestID == vS[i]->id) {
+	//				rayEnd.x += cos(rotation_) * 2;
+	//				rayEnd.y += sin(rotation_) * 2;
+	//				vertexPoint.push_back(rayEnd);
+	//			}
+	//			else {
+	//				rayEnd.x -= (cos(rotation_) * 2) / ASPECT_RATIO;
+	//				rayEnd.y -= sin(rotation_) * 2;
+	//				vertexPoint.push_back(rayEnd);
+	//				break;
+	//			}
+	//		}
+	//	}
+	//}
 
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
