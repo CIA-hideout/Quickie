@@ -183,37 +183,39 @@ void Gameplay::update()
 					nextState = stateNS::ENDSCREEN;
 					pNextState = &nextState;
 				}
+
+				if (input->getKeyState(controls.at(CONTROL_SPACEBAR)))
+				{
+					if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR)))
+					{
+						computer = new AI(sqr2->pos, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
+						AIGame = true;
+						sqr2->visible = false;
+						sqr2->alive = false;
+						sqr2->health = 0;
+						computer->init(graphics, audio);
+						computer->respawn(qEnvironmentObj);
+						input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
+					}
+				}
+				else
+					input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
 			}
+			else
+			{
+				pathfinder.update(qEnvironmentObj, sqr1, computer);
+				computer->update(*deltaTime, qEnvironmentObj);
+
+				// determine win lose
+			}
+
+			
 		}
 	}
 }
 
 void Gameplay::ai()
 {
-	if (input->getKeyState(controls.at(CONTROL_SPACEBAR) && !AIGame)) {
-		if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR))) {
-
-			printf("AI");
-			computer = new AI(sqr2->pos, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
-			AIGame = true;
-			sqr2->visible = false;
-			computer->respawn(qEnvironmentObj);
-			input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
-		}
-	}
-	else
-		input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
-
-	if (gameplay && AIGame)
-	{
-		pathfinder.update(qEnvironmentObj, sqr1, computer);
-		computer->update(*deltaTime, qEnvironmentObj);
-
-		pathfinder.draw(worldMatrix);
-		computer->draw(worldMatrix);
-
-		// determine win lose
-	}
 }
 
 void Gameplay::render()
@@ -266,11 +268,18 @@ void Gameplay::render()
 			Player* temp = (Player*)qPlayer[i];
 			temp->draw(worldMatrix);
 		}
+
+		if (AIGame)
+		{
+			pathfinder.draw(worldMatrix);
+			computer->draw(worldMatrix);
+		}
 	}
 }
 
 
 void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
+	
 	// IF Player goes up
 	if (m == gameplayNS::REVERT && m != gameplayNS::LEVEL_1) {
 		if (input->getKeyState(c)) {
