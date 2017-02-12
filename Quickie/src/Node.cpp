@@ -105,7 +105,7 @@ void Node::draw(D3DXMATRIX& worldMat)
 	}
 }
 
-void Node::update(std::vector<VertexShape*>& vS, Player* player)
+void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 {
 	QLine* qTemp;
 	D3DXVECTOR3 poi;
@@ -121,7 +121,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player)
 	
 	if (currentObject != nodeNS::OBJECT_TYPE_QLINE)
 	{
-		for (int i = 0; i < vS.size(); i++)
+		for (auto i = 0; i < vS.size(); i++)
 		{
 			if (vS[i]->objectType == nodeNS::OBJECT_TYPE_QLINE)
 			{
@@ -139,7 +139,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player)
 
 	if (currentObject != nodeNS::OBJECT_TYPE_AI)
 	{
-		if (CollisionManager::collideAABB(this, player))
+		if (CollisionManager::collideAABB(this, ai))
 		{
 			detectedObject = nodeNS::OBJECT_TYPE_AI;
 		}
@@ -161,6 +161,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player)
 
 	case nodeNS::OBJECT_TYPE_PLAYER:
 		currentObject = nodeNS::OBJECT_TYPE_PLAYER;
+		//visible = true;
 		break;
 
 	case nodeNS::OBJECT_TYPE_QLINE:
@@ -173,27 +174,45 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player)
 
 	case nodeNS::OBJECT_TYPE_NODE:
 		currentObject = nodeNS::OBJECT_TYPE_NODE;
+		visible = false;
 		break;
 	}
+
+	previous = nullptr;
 }
 
 void Node::setNeighbours(std::vector<std::vector<Node>>* nV)
 {
-	if (i < cameraNS::x - 1)
-		neighbours.push_back(&nV->at(i + 1).at(j));
+	if (i < cameraNS::cols -1)
+		neighbours.push_back(&nV->at(i + 1).at(j));			// right neighbour
+
 	if (i > 0)
-		neighbours.push_back(&nV->at(i - 1).at(j));
-	if (j < cameraNS::y - 1)
-		neighbours.push_back(&nV->at(i).at(j + 1));
+		neighbours.push_back(&nV->at(i - 1).at(j));			// left neighbour
+	
+	if (j < cameraNS::rows - 1)
+		neighbours.push_back(&nV->at(i).at(j + 1));			// top neighbour
+	
 	if (j > 0)
-		neighbours.push_back(&nV->at(i).at(j - 1));
+		neighbours.push_back(&nV->at(i).at(j - 1));			// bottom neighbour
+	
+	if (i > 0 && j > 0)
+		neighbours.push_back(&nV->at(i - 1).at(j - 1));		// top left neighbour
+	
+	if (i < cameraNS::cols - 1 && j > 0)
+		neighbours.push_back(&nV->at(i + 1).at(j - 1));		// top right neighbour
+	
+	if (i > 0 && j < cameraNS::rows - 1)
+		neighbours.push_back(&nV->at(i - 1).at(j + 1));		// bottom left neighbour
+	
+	if (i < cameraNS::cols - 1 && j < cameraNS::rows - 1)
+		neighbours.push_back(&nV->at(i + 1).at(j + 1));		// bottom right neighbour
 }
 
 void Node::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 {
 	if (x)
 	{
-		for (int i = 0; i < vS.size(); i++) {
+		for (auto i = 0; i < vS.size(); i++) {
 			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
 					detectedObject = nodeNS::OBJECT_TYPE_OBSTACLE;
@@ -204,7 +223,7 @@ void Node::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 	}
 	else
 	{
-		for (int i = 0; i < vS.size(); i++) {
+		for (auto i = 0; i < vS.size(); i++) {
 			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
 					detectedObject = nodeNS::OBJECT_TYPE_OBSTACLE;
@@ -213,6 +232,4 @@ void Node::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 			}
 		}
 	}
-
-
 }

@@ -25,7 +25,6 @@ class Menu : public State
 	std::vector<VertexShape*>	qEnvironmentObj;
 	menuNS::Scene				currentScene;
 
-	PathFinder	pathfinder;
 
 public:
 	Menu();

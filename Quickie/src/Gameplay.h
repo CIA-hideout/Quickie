@@ -37,7 +37,7 @@ class Gameplay : public State
 
 	LevelManager*				lManager;
 	bool						gameplay = false;
-	bool						AI = false;
+	bool						AIGame = false;
 	
 	gameplayNS::Mode						selectedMode;
 	std::stack<gameplayNS::Mode>			gameStack;
@@ -58,6 +58,9 @@ class Gameplay : public State
 	Player* sqr2;
 	Player* sqr3;
 
+	PathFinder	pathfinder;
+	AI*			computer;
+
 public:
 	Gameplay();
 	virtual ~Gameplay();
@@ -65,7 +68,7 @@ public:
 
 	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;
-	void ai() override{};
+	void ai() override;
 	void render() override;
 	void collisions() override{};
 	void releaseAll() override{};

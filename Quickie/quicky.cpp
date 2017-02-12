@@ -81,7 +81,7 @@ void quicky::update() {
 }
 
 void quicky::ai() {
-
+	gameState.top()->ai();
 }
 
 void quicky::collisions() {
