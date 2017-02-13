@@ -4,7 +4,6 @@
 #include "CollisionManager.h"
 #include "random.h"
 #include <algorithm>
-#include <random>
 
 enum ObsState
 {
@@ -17,7 +16,6 @@ enum ObsState
 class Obstacle : public VertexShape {
 
 private:
-	int obstacleId;
 	float timer = 0;			// a timer to move/change direction
 	int currentState = INACTIVE;
 
@@ -32,7 +30,7 @@ private:
 	D3DXVECTOR3 newDimension;	// store the new dimension
 
 	public:
-	Obstacle() = default;
+	Obstacle();
 	Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);
 	~Obstacle();
 
@@ -50,7 +48,13 @@ private:
 	void setLevel1(int);
 	void setLevel2(int);
 	void setLevel3(int);
-	void setRandom(int, std::vector<VertexShape*>, std::vector<VertexShape*>);
+	void setRandom(int);
+
+	// get and set new dimensions & position
+	D3DXVECTOR3 getNewDimension() { return newDimension; }
+	D3DXVECTOR3 getNewPosition() { return newPos; }
+	void setNewDimension(D3DXVECTOR3 d) { newDimension = d; }
+	void setNewPosition(D3DXVECTOR3 p) { newPos = p; }
 
 	// assign position from json
 	void assignPosition(rapidjson::Document&, int obstacle);

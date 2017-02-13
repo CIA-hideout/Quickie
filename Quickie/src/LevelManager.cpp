@@ -122,11 +122,50 @@ void LevelManager::setRandom()
 	audio->stopCue(BGMRand);
 
 	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+
 		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
-			tempObs->setRandom(levelCount, qEnvironmentObj, qPlayers);
+			// checkCollision(tempObs);
 		}
 	}
 	
 	audio->playCue(BGMRand);
+}
+
+void LevelManager::checkCollision(Obstacle* obs)
+{
+	//boolean isReady = false;		// escape from loop
+	int playersCount;			// if = 2, no collision with players
+	int wallsCount;				// if = 4, no collision with walls
+	Obstacle tempObs = Obstacle();
+
+	tempObs.init(obs->audio, obs->graphics);
+
+	while (true) {
+		playersCount = 0;
+		wallsCount = 0;
+
+		tempObs.setRandom(levelCount);
+
+		// check if new position and dimension collides with players
+		for (int j = 0; j < qPlayers.size(); j++) {
+			if (!CollisionManager::collideAABB(qPlayers[j], &tempObs))
+				playersCount++;
+		}
+
+		// check if new position and dimension collides with walls
+		for (int k = 0; k < qEnvironmentObj.size(); k++) {
+			if (qEnvironmentObj[k]->objectType == OBJECT_TYPE_WALL) {
+				if (!CollisionManager::collideAABB(qEnvironmentObj[k], &tempObs))
+					wallsCount++;
+			}
+		}
+
+		if (playersCount == 2 && wallsCount == 4)	{
+			obs->setNewDimension(tempObs.getNewDimension());
+			obs->setNewPosition(tempObs.getNewPosition());
+			return;
+		}
+			
+	}
 }

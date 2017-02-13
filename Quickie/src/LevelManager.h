@@ -38,6 +38,9 @@ public:
 	void setShuffle();			// set the shuffled levels
 	void shuffle();										// shuffle the exisiting levels
 	void setRandom();			// set the obstales location really randomly
+	
+	void checkCollision(Obstacle*);		// check if obstacles collide with somethings
+
 
 	// setters
 	void setShuffledBool(boolean newCon)	{ isShuffled = newCon; }

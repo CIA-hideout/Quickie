@@ -1,9 +1,30 @@
 #include "Obstacle.h"
 
-Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
-	static int obstacleCount = 0;
-	obstacleId = obstacleCount++;
+Obstacle::Obstacle(){
+	memcpy(this->pos, getRandomPosition(), sizeof(D3DXVECTOR3));
+	memcpy(this->dimension, getRandomDimension(), sizeof(D3DXVECTOR3));
+	memcpy(this->scale, D3DXVECTOR3(1,1,1), sizeof(D3DXVECTOR3));
+	memcpy(this->color, COLOR_PURPLE, sizeof(D3DXVECTOR3));
 
+	min.x = 0;
+	min.y = 0;
+	min.z = 0;
+
+	min.x = 0;
+	min.y = 0;
+	min.z = 0;
+
+	rotation.x = 0;
+	rotation.y = 0;
+	rotation.z = 0;
+
+	objectType = OBJECT_TYPE_OBSTACLE;
+
+	velocity.x = 0;
+	velocity.y = 0;
+}
+
+Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
 	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
@@ -29,7 +50,6 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 Obstacle::~Obstacle() {
 }
-
 
 void Obstacle::init(Audio* audio, Graphics* graphics) {
 	this->graphics = graphics;
@@ -276,7 +296,7 @@ D3DXVECTOR3 Obstacle::getRandomDimension() {
 	if (resultX == 0 || resultY == 0)
 		return DIMENSION_NON_EXISTANT;
 
-	printf("%.2f, %.2f, %.2f\n", resultX, resultY, z);
+	printf("Dim: %.2f, %.2f, %.2f\n", resultX, resultY, z);
 
 	return D3DXVECTOR3(resultX, resultY, z);
 }
@@ -293,7 +313,7 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 	float x = randFloat(high.x, low.x);	// between -18 to 18
 	float y = randFloat(low.y, high.y); // between -14 to 14
 
-	//printf("%.2f, %.2f\n", x, y);
+	printf("Pos: %.2f, %.2f\n", x, y);
 
 	return D3DXVECTOR3(x, y, 29.5);
 }
@@ -365,22 +385,11 @@ void Obstacle::setLevel3(int count)
 		currentState = SHRINK;
 }
 
-void Obstacle::setRandom(int count, std::vector<VertexShape*> environment, std::vector<VertexShape*> players)
+void Obstacle::setRandom(int count)
 {
-	
+	newDimension = getRandomDimension();		// get a random direction and set it
+	newPos = getRandomPosition();				// get a random position and set it
+
 	if (count != 0)
 		currentState = SHRINK;
-	
-	for (int i = 0; i < players.size(); i++) {
-		newDimension = getRandomDimension();		// get a random direction and set it
-		newPos = getRandomPosition();				// get a random position and set it
-
-		if (CollisionManager::collideAABB(players[i], this))
-		{
-			newPos = getRandomPosition();
-			newDimension = getRandomDimension();
-		}
-	
-	}
-
 }
