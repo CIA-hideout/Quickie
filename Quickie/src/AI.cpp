@@ -128,6 +128,9 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	if (alive) {
+		
+		//pos.x = deltaTime * velocity.x;
+		//pos.y = deltaTime * velocity.y;
 
 		// blink and tp direction
 
@@ -152,7 +155,9 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	healthBar->pos = pos;
 	healthBar->pos.y = pos.y + dimension.y;
 
-	//move(vS, deltaTime);
+	velocity.x *= 0.75 * deltaTime * aiNS::speed;
+	velocity.y *= 0.75 * deltaTime * aiNS::speed;
+	move(vS, deltaTime);
 	healthBar->update(deltaTime);
 }
 

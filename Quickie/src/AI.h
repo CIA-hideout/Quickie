@@ -5,6 +5,11 @@
 #include "GUIBar.h"
 #include "random.h"
 
+namespace aiNS
+{
+	const int speed = 10;
+}
+
 class AI : public VertexShape {
 public:
 

@@ -17,11 +17,11 @@ void PathFinder::initialize(Graphics* g)
 
 	auto i = 0, j = 0;
 
-	for (int x = -cameraNS::x; x <= cameraNS::x; ++x)
+	for (int x = -cameraNS::x; x <= cameraNS::x; x += 2)
 	{
 		std::vector<Node> tempVector = std::vector<Node>();
 
-		for (int y = cameraNS::y; y >= -cameraNS::y; --y)
+		for (int y = cameraNS::y; y >= -cameraNS::y; y -= 4)
 		{
 			Node temp = Node(D3DXVECTOR3(x, y, playerNS::z), D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), COLOR_RED);
 			temp.init(g);
@@ -62,19 +62,21 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* target, AI* ai)
 				start = temp;
 
 			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_PLAYER)		// set Player as end
-			end = temp;
+				end = temp;
 		}
 	}
 
-	printf("END: x %d y %d\n", end->i, end->j);
-	printf("START: x %d y %d\n", start->i, start->j);
 	Node* bestMove = determineNextMove();
-	bestMove->visible = true;
 
-	printf("best: x %d y %d\n", bestMove->i, bestMove->j);
-	printf("BEST: x %f y %f\n", bestMove->pos.x, bestMove->pos.y);
-	ai->pos.x = bestMove->pos.x;
-	ai->pos.y = bestMove->pos.y;
+	auto neighbours = end->getNeighbours();
+	if (std::find(neighbours.begin(), neighbours.end(), start) == neighbours.end())
+	{
+		double x = bestMove->pos.x - start->pos.x;
+		double y = bestMove->pos.y - start->pos.y;
+
+		ai->velocity.x = x;
+		ai->velocity.y = y;
+	}
 }
 
 void PathFinder::draw(D3DXMATRIX& worldMatrix)
