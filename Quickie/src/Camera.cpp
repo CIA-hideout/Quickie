@@ -8,15 +8,14 @@ Camera::Camera() {
 Camera::Camera(float fov, D3DVIEWPORT9& viewPort) {
 
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	originalPos = pos;
 	look = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 
+	originalPos = pos;
 	vp = viewPort;
 
 	D3DXMatrixPerspectiveFovLH(&projection, fov, vp.Width / vp.Height, vp.MinZ, vp.MaxZ);
-
 	cameraEffect.insert(std::pair<CameraState, float>(CS_SHAKE, 0.0f));
 
 }
@@ -48,7 +47,6 @@ void Camera::pitch(float angle) {
 	D3DXMATRIX T;
 	D3DXMatrixRotationAxis(&T, &right, angle);
 
-	// rotate _up and _look around _right vector
 	D3DXVec3TransformCoord(&up, &up, &T);
 	D3DXVec3TransformCoord(&look, &look, &T);
 }
@@ -57,7 +55,6 @@ void Camera::roll(float angle) {
 	D3DXMATRIX T;
 	D3DXMatrixRotationAxis(&T, &look, angle);
 
-	// rotate _up and _right around _look vector
 	D3DXVec3TransformCoord(&right, &right, &T);
 	D3DXVec3TransformCoord(&up, &up, &T);
 }
@@ -82,6 +79,18 @@ void Camera::strafe(float u) {
 
 void Camera::fly(float u) {
 	originalPos += up * u;
+}
+
+void Camera::update(float deltaTime) {
+	for (std::map<CameraState, float>::iterator i = cameraEffect.begin(); i != cameraEffect.end(); i++) {
+		if (i->second > 0.0f)
+			i->second -= deltaTime;
+	}
+}
+
+void Camera::shake(float duration, float intensity) {
+	cameraEffect.at(CS_SHAKE) = duration;
+	shakeIntensity = intensity;
 }
 
 D3DXVECTOR2 Camera::pointOnScreen(D3DXVECTOR2& pOut, D3DXVECTOR3& pos) {
@@ -144,16 +153,4 @@ D3DXVECTOR3 Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z)
 
 	return retVal;
 
-}
-
-void Camera::update(float deltaTime) {
-	for (std::map<CameraState, float>::iterator i = cameraEffect.begin(); i != cameraEffect.end(); i++) {
-		if (i->second > 0.0f)
-			i->second -= deltaTime;
-	}
-}
-
-void Camera::shake(float duration, float intensity) {
-	cameraEffect.at(CS_SHAKE) = duration;
-	shakeIntensity = intensity;
 }

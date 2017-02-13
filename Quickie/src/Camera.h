@@ -29,11 +29,6 @@ public:
 	void roll(float);
 
 	void getViewMatrix(D3DXMATRIX*);
-	void getPosition(D3DXVECTOR3&);
-	void setPosition(D3DXVECTOR3&);
-	void getRight(D3DXVECTOR3&);
-	void getUp(D3DXVECTOR3&);
-	void getLock(D3DXVECTOR3&);
 
 	void update(float);
 
