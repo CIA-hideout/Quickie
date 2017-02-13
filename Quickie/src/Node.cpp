@@ -180,7 +180,7 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 	previous = nullptr;
 }
 
-void Node::setNeighbours(std::vector<std::vector<Node>>* nV)
+void Node::	setNeighbours(std::vector<std::vector<Node>>* nV)
 {
 	if (i < cameraNS::cols - 1)
 		neighbours.push_back(&nV->at(i + 1).at(j));			// right neighbour
