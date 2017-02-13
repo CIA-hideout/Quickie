@@ -8,7 +8,7 @@ class QLine : public VertexShape {
 public:
 
 	float						time;
-	float						magnetude;
+	float						magnitude;
 	float						rotation_;
 	VertexShape*				parent;
 
@@ -16,7 +16,7 @@ public:
 
 	~QLine();
 
-	QLine(VertexShape*, float);
+	QLine(VertexShape*, float, float);
 
 	D3DXVECTOR3					startPoint;
 

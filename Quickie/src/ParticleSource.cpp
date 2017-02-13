@@ -80,7 +80,6 @@ void ParticleSource::init(Graphics* graphics) {
 	vShape->alive = true;
 
 	float v_;
-
 	distribution = std::uniform_real_distribution<float>(0, 2 * D3DX_PI);
 
 	for (int i = 0; i < particleCount; i++)  {
@@ -100,8 +99,6 @@ void ParticleSource::init(Graphics* graphics) {
 		}
 
 		particles[i].pos = pos;
-
-		// printf("particle %d, pos.x = %.2f, %.2f\n", i + 1, particles[i].pos.x, particles[i].pos.y);
 	}
 
 }

@@ -291,7 +291,7 @@ void Player::blink(std::vector<VertexShape*>& vS, float angle) {
 		if (!controlled)
 			audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
-		QLine* qline = new QLine(this, angle);
+		QLine* qline = new QLine(this, 20, angle);
 		qline->init(vS, graphics);
 	}
   
@@ -325,7 +325,7 @@ void Player::die()
 {
 	this->alive = false;
 	this->visible = false;
-	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
+	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), true);
 	ps.init(graphics);
 	cooldown.at(SPAWN_TIME) = 3.0f;
 	graphics->camera->shake(0.25f, 1.0f);

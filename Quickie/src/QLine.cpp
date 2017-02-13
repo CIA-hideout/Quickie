@@ -7,13 +7,13 @@
 #pragma comment(lib, "comsuppw.lib")
 #pragma comment(lib, "comsuppwd.lib")
 
-QLine::QLine(VertexShape* vS, float rotation_) : VertexShape() {
+QLine::QLine(VertexShape* vS, float magnitude, float rotation_) : VertexShape() {
+	objectType = OBJECT_TYPE_QLINE;
 	time = 0.5;
 	memcpy(this->startPoint, vS->pos, sizeof(D3DXVECTOR3));
 	parent = vS;
 	this->rotation_ = rotation_;
-	magnetude = 20;
-	objectType = OBJECT_TYPE_QLINE;
+	this->magnitude = magnitude;
 	meshPtr = nullptr;
 	color = parent->color;
 	graphics = nullptr;
@@ -38,7 +38,7 @@ void QLine::update(float deltaTime, std::vector<VertexShape*>& vS) {
 					if (vS[i]->id > id && this->parent != qtemp->parent) {
 						ptemp->alive = false;
 						ptemp->visible = false;
-						ptemp->ps = ParticleSource(2000, parent->velocity, intersect, qtemp->color);
+						ptemp->ps = ParticleSource(200, parent->velocity, intersect, qtemp->color, true);
 						ptemp->ps.init(graphics);
 						ptemp->cooldown.at(SPAWN_TIME) = 3.0f;
 						qtemp->alive = false;
@@ -59,7 +59,7 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 
 	this->graphics = graphics;
 
-	float r_, m_ = magnetude;
+	float r_, m_ = magnitude;
 	float dist_, cDist_;
 	rayStart.x = startPoint.x;
 	rayStart.y = startPoint.y;
