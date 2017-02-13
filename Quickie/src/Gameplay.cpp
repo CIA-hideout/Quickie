@@ -99,6 +99,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 void Gameplay::update()
 {
+
 	setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
 
 	if (!gameplay)
@@ -139,6 +140,12 @@ void Gameplay::update()
 	{
 		audio->stopCue(menuBGM);
 		menu->canPlaySound = true;
+
+		D3DXVECTOR2 v2;
+		D3DXVECTOR3 v3;
+		graphics->camera->pointOnScreen(v2, sqr1->pos);
+		graphics->camera->pointInWorld(v3, v2, sqr1->pos.z);
+		printf("%.2f, %.2f | %.2f, %.2f\n", v3.x, v3.y, sqr1->pos.x, sqr1->pos.y);
 
 		for (int i = 0; i < qEnvironmentObj.size(); i++) {
 			if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {

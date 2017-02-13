@@ -47,7 +47,7 @@ void Game::initialize(HWND hw)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing high resolution timer"));
 	QueryPerformanceCounter(&timeStart);        // get starting time
 	initialized = true;
-	graphics->camera = new Camera(CAMERA_TYPE_FREE, FOV, graphics->viewPort);
+	graphics->camera = new Camera(FOV, graphics->viewPort);
 	graphics->get3Ddevice()->SetTransform(D3DTS_PROJECTION, &graphics->camera->projection);
 
 	input = new Input(hw);

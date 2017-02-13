@@ -12,17 +12,12 @@ enum CameraState {
 	CS_STATIONARY
 };
 
-enum CameraType {
-	CAMERA_TYPE_LAND_OBJECT,
-	CAMERA_TYPE_FREE
-};
-
 class Camera {
 
 public:
 
 	Camera();
-	Camera(CameraType ct, float fov, D3DVIEWPORT9& viewPort);
+	Camera(float, D3DVIEWPORT9&);
 	~Camera();
 
 	void strafe(float);
@@ -34,7 +29,6 @@ public:
 	void roll(float);
 
 	void getViewMatrix(D3DXMATRIX*);
-	void setCameraType(CameraType);
 	void getPosition(D3DXVECTOR3&);
 	void setPosition(D3DXVECTOR3&);
 	void getRight(D3DXVECTOR3&);
@@ -50,7 +44,6 @@ public:
 
 	std::map<CameraState, float>	cameraEffect;
 
-	CameraType						cameraType;
 	D3DXVECTOR3						right;
 	D3DXVECTOR3						up;
 	D3DXVECTOR3						look;

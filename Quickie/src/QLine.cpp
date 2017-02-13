@@ -156,32 +156,9 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
-	// now check if the player collidesui with anything here
-
-	//D3DXVECTOR3 intersect_;
-
-	//for (int i = 0; i < vS.size(); i++) {
-	//	if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-	//		if (CollisionManager::collideAABB(parent, vS[i])) {
-	//			if (fLatestID == vS[i]->id) {
-	//				rayEnd.x += cos(rotation_) * 2;
-	//				rayEnd.y += sin(rotation_) * 2;
-	//				vertexPoint.push_back(rayEnd);
-	//			}
-	//			else {
-	//				rayEnd.x -= (cos(rotation_) * 2) / ASPECT_RATIO;
-	//				rayEnd.y -= sin(rotation_) * 2;
-	//				vertexPoint.push_back(rayEnd);
-	//				break;
-	//			}
-	//		}
-	//	}
-	//}
-
 	parent->pos.x = vertexPoint[vertexPoint.size() - 1].x;
 	parent->pos.y = vertexPoint[vertexPoint.size() - 1].y;
 
-	// create all the vertices
 	vertexCount = vertexPoint.size();
 
 	// no need for meshes here. lines can be rendered with primitive indices
@@ -196,10 +173,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		0
 		);
 
-	_com_error err(res);
-	std::string errMsg = err.ErrorMessage();
-	//printf("%s\n", errMsg.c_str());
-
 	res = graphics->get3Ddevice()->CreateIndexBuffer(
 		(vertexCount * 2 - 2) * sizeof(WORD),
 		D3DUSAGE_WRITEONLY,
@@ -208,10 +181,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 		&indexBuffer,
 		0
 		);
-
-	err = _com_error(res);
-	errMsg = err.ErrorMessage();
-	//printf("%s\n", errMsg.c_str());
 
 	vertexBuffer->Lock(0, 0, (void**)&vertices, 0);
 
@@ -240,7 +209,6 @@ void QLine::init(std::vector<VertexShape*>& vS, Graphics* graphics) {
 	this->visible = true;
 
 	pos = startPoint;
-
 	vS.push_back(this);
 
 	initialized = true;

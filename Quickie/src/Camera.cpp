@@ -5,9 +5,8 @@
 Camera::Camera() {
 }
 
-Camera::Camera(CameraType cT, float fov, D3DVIEWPORT9& viewPort) {
+Camera::Camera(float fov, D3DVIEWPORT9& viewPort) {
 
-	cameraType = cT;
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	originalPos = pos;
 	look = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
@@ -31,17 +30,17 @@ void Camera::getViewMatrix(D3DXMATRIX* v_) {
 	if (cameraEffect.at(CS_SHAKE) > 0.0f) {
 		std::random_device rdev;
 		std::mt19937 generator(rdev());
-		std::uniform_real_distribution<float> distribution(-shakeIntensity, shakeIntensity);
+		std::uniform_real_distribution<float> distribution(-shakeIntensity / 15.0f, shakeIntensity / 15.0f);
 
-		pos.x = originalPos.x + distribution(generator) / 15.0f;
-		pos.y = originalPos.y + distribution(generator) / 15.0f;
-		pos.z = originalPos.z + distribution(generator) / 15.0f;
+		pos.x = originalPos.x + distribution(generator);
+		pos.y = originalPos.y + distribution(generator);
+		pos.z = originalPos.z + distribution(generator);
 		D3DXMatrixLookAtLH(v_, &pos, &look, &up);
 	}
 	else {
 		D3DXMatrixLookAtLH(v_, &originalPos, &look, &up);
 	}
-	
+
 }
 
 void Camera::pitch(float angle) {
@@ -55,57 +54,34 @@ void Camera::pitch(float angle) {
 }
 
 void Camera::roll(float angle) {
+	D3DXMATRIX T;
+	D3DXMatrixRotationAxis(&T, &look, angle);
 
-	// only roll for aircraft type
-	if (cameraType == CAMERA_TYPE_FREE)
-	{
-		D3DXMATRIX T;
-		D3DXMatrixRotationAxis(&T, &look, angle);
-
-		// rotate _up and _right around _look vector
-		D3DXVec3TransformCoord(&right, &right, &T);
-		D3DXVec3TransformCoord(&up, &up, &T);
-	}
-
+	// rotate _up and _right around _look vector
+	D3DXVec3TransformCoord(&right, &right, &T);
+	D3DXVec3TransformCoord(&up, &up, &T);
 }
 
 void Camera::yaw(float angle) {
 
 	D3DXMATRIX T;
 
-	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		D3DXMatrixRotationY(&T, angle);
-	}
-	else if (cameraType == CAMERA_TYPE_FREE) {
-		D3DXMatrixRotationAxis(&T, &up, angle);
-	}
+	D3DXMatrixRotationAxis(&T, &up, angle);
 	D3DXVec3TransformCoord(&right, &right, &T);
 	D3DXVec3TransformCoord(&look, &look, &T);
 
 }
 
 void Camera::walk(float u) {
-	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		originalPos += D3DXVECTOR3(look.x, 0.0f, look.z) * u;
-	}
-	else if (cameraType == CAMERA_TYPE_FREE) {
-		originalPos += look * u;
-	}
+	originalPos += look * u;
 }
 
 void Camera::strafe(float u) {
-	if (cameraType == CAMERA_TYPE_LAND_OBJECT) {
-		originalPos += D3DXVECTOR3(right.x, 0.0f, right.z) * u;
-	}
-	else if (cameraType == CAMERA_TYPE_FREE) {
-		originalPos += right * u;
-	}
+	originalPos += right * u;
 }
 
 void Camera::fly(float u) {
-	if (cameraType == CAMERA_TYPE_FREE) {
-		originalPos += up * u;
-	}
+	originalPos += up * u;
 }
 
 D3DXVECTOR2 Camera::pointOnScreen(D3DXVECTOR2& pOut, D3DXVECTOR3& pos) {
@@ -128,11 +104,12 @@ D3DXVECTOR2 Camera::pointOnScreen(D3DXVECTOR2& pOut, D3DXVECTOR3& pos) {
 	v4.z = z_;
 	v4.w = w_;
 
+	// normalized screen coord
 	v4.x /= v4.w;
 	v4.y /= v4.w;
 
-	pOut.x = vp.Width * v4.x / 2 / projection(0, 0) + (vp.Width / 2);
-	pOut.y = vp.Height / 2 - vp.Height * v4.y / 2 / projection(1, 1);
+	pOut.x = vp.Width * v4.x / 2 + vp.Width / 2;
+	pOut.y = vp.Height / 2 - vp.Height * v4.y / 2;
 
 	D3DXVECTOR2 retVal;
 
@@ -148,14 +125,16 @@ D3DXVECTOR3 Camera::pointInWorld(D3DXVECTOR3& pOut, D3DXVECTOR2& point, float z)
 	// R2 -> R3 | z
 
 	float x_, y_ = 0;
+	float min_ = -1;
+	float max_ = 1;
 
 	// normalize to -1 and 1
-	x_ = (2 * (point.x - 0) / (vp.Width - 0)) - 1;
-	y_ = -(2 * (point.y - 0) / (vp.Height - 0) - 1);
-	pOut.z = z;
+	x_ = ((max_ - min_) * (point.x) / (vp.Width)) + min_;
+	y_ = -((max_ - min_) * (point.y) / (vp.Height) + min_);
 
 	pOut.x = x_ / vp.MinZ * z;
 	pOut.y = y_ / vp.MinZ * z;
+	pOut.z = z;
 
 	D3DXVECTOR3 retVal;
 
