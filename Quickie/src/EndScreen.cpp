@@ -28,6 +28,12 @@ void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document&
 	else
 		sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
 
+	if (temp.winner == 0)
+	{
+		sqr1->color = D3DXVECTOR3(0, 240, 0);
+		sqr2->color = D3DXVECTOR3(0, 240, 0);
+	}
+
 	sqr1->init(g, i, a);
 	sqr2->init(g, i, a);
 	audio->stopCue(BGMRand);
@@ -123,6 +129,14 @@ void EndScreen::render()
 			GAME_HEIGHT / 5,
 			fontNS::BLUE,
 			"Player 2 wins");
+	}
+	else if (sqr1->winner == 0)
+	{
+		f.print(
+			GAME_WIDTH / 2 - f.getTotalWidth("Computer wins") / 2,
+			GAME_HEIGHT / 5,
+			fontNS::GREEN,
+			"Computer wins");
 	}
 
 

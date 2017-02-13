@@ -1,5 +1,4 @@
 #include "quicky.h"
-#include "src/EndScreen.h"
 
 quicky::quicky() {
 }

@@ -86,7 +86,7 @@ void AI::init(Graphics* graphics, Audio* audio) {
 
 	indicesCount = 36;
 
-	visible = true;
+	visible = visible;
 	alive = true;
 
 	healthBar = new GUIBar(this, D3DXVECTOR3(217, 83, 79));
@@ -120,8 +120,6 @@ void AI::draw(D3DXMATRIX& worldMat) {
 
 void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
-	//printf("%.2f, %.2f\n", pos.x, pos.y);
-
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
 			i->second -= deltaTime;
@@ -129,11 +127,6 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 	if (alive) {
 		
-		//pos.x = deltaTime * velocity.x;
-		//pos.y = deltaTime * velocity.y;
-
-		// blink and tp direction
-
 		if (cooldown.at(INVULNERABLE) > 0.0f && timeGetTime() % 500 < 250)
 			visible = false;
 		else if (cooldown.at(INVULNERABLE) > -1.0f)
@@ -201,13 +194,11 @@ void AI::move(std::vector<VertexShape*>& vS, float dt) {
 
 void AI::respawn(std::vector<VertexShape*>& vS) {
 
-	D3DXVECTOR2 pos2D = D3DXVECTOR2(randX_2D(), randY_2D());;
-	D3DXVECTOR3 pos3D;
+	D3DXVECTOR3 pos3D = D3DXVECTOR3(randX(), randY(), playerNS::z);
 
 	alive = true;
 	visible = true;
 
-	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	pos.x = pos3D.x;
 	pos.y = pos3D.y;
 
@@ -217,8 +208,7 @@ void AI::respawn(std::vector<VertexShape*>& vS) {
 		{
 			if (CollisionManager::collideAABB(this, vS[i]))
 			{
-				pos2D = D3DXVECTOR2(randX_2D(), randY_2D());
-				graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+				pos3D = D3DXVECTOR3(randX(), randY(), playerNS::z);
 				pos.x = pos3D.x;
 				pos.y = pos3D.y;
 				i = 0;
@@ -303,6 +293,8 @@ void AI::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 
 
 }
+
+
 
 
 AI::~AI() {

@@ -253,13 +253,11 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 void Player::respawn(std::vector<VertexShape*>& vS) {
 
-	D3DXVECTOR2 pos2D = D3DXVECTOR2(randX_2D(), randY_2D());;
-	D3DXVECTOR3 pos3D;
+	D3DXVECTOR3 pos3D = D3DXVECTOR3(randX(), randY(), playerNS::z);
 
 	alive = true;
 	visible = true;
 
-	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	pos.x = pos3D.x;
 	pos.y = pos3D.y;
 
@@ -269,8 +267,7 @@ void Player::respawn(std::vector<VertexShape*>& vS) {
 		{
 			if (CollisionManager::collideAABB(this, vS[i]))
 			{
-				pos2D = D3DXVECTOR2(randX_2D(), randY_2D());
-				graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
+				pos3D = D3DXVECTOR3(randX(), randY(), playerNS::z);
 				pos.x = pos3D.x;
 				pos.y = pos3D.y;
 				i = 0;
