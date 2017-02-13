@@ -35,6 +35,9 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	pos2D = D3DXVECTOR2(GAME_WIDTH / 1.5, GAME_HEIGHT / 2);
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
+
+	computer = new AI(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
+	computer->init(graphics, audio);
 	
 	sqr2->winner = 0;
 
@@ -95,7 +98,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->respawn(qEnvironmentObj);
 	}
 
-	pathfinder.initialize(g);
+	pathfinder.initialize(g, computer);
 }
 
 void Gameplay::update()
@@ -161,6 +164,9 @@ void Gameplay::update()
 		lManager->update(*deltaTime);
 		graphics->camera->update(*deltaTime);
 
+		//if (lManager->getTimer() >= LEVEL_TIME)
+			//pathfinder.checkObstacles();
+
 
 		if (input->getKeyState(controls.at(CONTROL_ENTER)))
 		{
@@ -186,14 +192,15 @@ void Gameplay::update()
 
 				if (input->getKeyState(controls.at(CONTROL_SPACEBAR)))
 				{
+					
 					if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR)))
 					{
-						computer = new AI(sqr2->pos, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
 						AIGame = true;
+						computer->visible = true;
+						computer->alive = true;
 						sqr2->visible = false;
 						sqr2->alive = false;
 						sqr2->health = 0;
-						computer->init(graphics, audio);
 						computer->respawn(qEnvironmentObj);
 						input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
 					}
@@ -203,10 +210,22 @@ void Gameplay::update()
 			}
 			else
 			{
-				pathfinder.update(qEnvironmentObj, sqr1, computer);
+				pathfinder.update(qEnvironmentObj, sqr1);
 				computer->update(*deltaTime, qEnvironmentObj);
 
 				// determine win lose
+				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
+				{
+					sqr1->winner = 0;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
+				else if (computer->health <= 0 && computer->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 0)
+				{
+					sqr1->winner = 1;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
 			}
 
 			
@@ -257,7 +276,6 @@ void Gameplay::render()
 		}
 
 	}
-
 	else {
 
 		for (int i = 0; i < qEnvironmentObj.size(); i++) {

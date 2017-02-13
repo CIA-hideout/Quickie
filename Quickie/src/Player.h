@@ -49,6 +49,6 @@ public:
 	void teleport(std::vector<VertexShape*>&, float);
 	void assignControl(rapidjson::Document&, int player);
 
-	int randX_2D(){ return randInt(1, GAME_WIDTH - 1); }
-	int randY_2D(){ return randInt(1, GAME_HEIGHT - 1); }
+	int randX(){ return randInt(-cameraNS::x + 2, cameraNS::x - 2); }
+	int randY(){ return randInt(-cameraNS::y + 2, cameraNS::y - 2); }
 };

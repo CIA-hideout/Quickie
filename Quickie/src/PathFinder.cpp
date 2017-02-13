@@ -11,12 +11,13 @@ PathFinder::~PathFinder()
 {
 }
 
-void PathFinder::initialize(Graphics* g)
+void PathFinder::initialize(Graphics* g, AI* a)
 {
 	graphics = g;
+	computer = a;
+	currentBehaviour = pathfinderNS::STOP;
 
 	auto i = 0, j = 0;
-
 	for (int x = -cameraNS::x; x <= cameraNS::x; x += 2)
 	{
 		std::vector<Node> tempVector = std::vector<Node>();
@@ -34,7 +35,6 @@ void PathFinder::initialize(Graphics* g)
 		j = 0;
 		i++;
 	}
-
 	for (auto x = 0; x < nodesOnScreen.size(); ++x)
 	{
 		std::vector<Node>* pVect = &nodesOnScreen.at(x);
@@ -47,8 +47,10 @@ void PathFinder::initialize(Graphics* g)
 	}
 }
 
-void PathFinder::update(std::vector<VertexShape*>& vS, Player* target, AI* ai)
+void PathFinder::update(std::vector<VertexShape*>& vS, Player* target)
 {
+	obstacleNodes.clear();
+	emptyNodes.clear();
 	for (auto x = 0; x <nodesOnScreen.size(); ++x)
 	{
 		std::vector<Node>* pVect = &nodesOnScreen.at(x);
@@ -56,26 +58,77 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* target, AI* ai)
 		for (auto y = 0; y < pVect->size(); ++y)
 		{
 			Node* temp = &pVect->at(y);
-			temp->update(vS, target, ai);
+			temp->update(vS, target, computer);
 
-			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_AI)		// set AI as start
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_AI)		// set PathFinder as start
 				start = temp;
 
-			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_PLAYER)		// set Player as end
-				end = temp;
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_PLAYER)
+				player = temp;
+
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_OBSTACLE)
+				obstacleNodes.push_back(temp);
+
+
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_NODE)
+				emptyNodes.push_back(temp);
 		}
 	}
-
-	Node* bestMove = determineNextMove();
-
-	auto neighbours = end->getNeighbours();
-	if (std::find(neighbours.begin(), neighbours.end(), start) == neighbours.end())
+		
+	if (obstacleNodes.size() != 0 && emptyNodes.size() != 0 && computer->cooldown.at(INVULNERABLE) < 0.0f && computer->alive)
 	{
-		double x = bestMove->pos.x - start->pos.x;
-		double y = bestMove->pos.y - start->pos.y;
+		if (timeGetTime() % pathfinderNS::behaviourRand < pathfinderNS::behaviourRand / 50)
+		{
+			randBehaviour();
+		}
 
-		ai->velocity.x = x;
-		ai->velocity.y = y;
+		if (start == nullptr || end == nullptr)
+			randBehaviour();
+		else
+			act(vS);
+	}
+}
+
+void PathFinder::setTarget(nodeNS::ObjectType target)
+{
+
+	switch (target)
+	{
+	case nodeNS::OBJECT_TYPE_PLAYER:
+			end = player;
+		break;
+
+	case nodeNS::OBJECT_TYPE_OBSTACLE:
+			end = obstacleNodes.at(randInt(0, obstacleNodes.size()));
+		break;
+
+	case nodeNS::OBJECT_TYPE_NODE:
+			end = emptyNodes.at(randInt(0, emptyNodes.size()));
+		break;
+
+	}
+}
+
+void PathFinder::checkObstacles()
+{
+	obstacleNodes.clear();
+	emptyNodes.clear();
+
+	for (auto x = 0; x <nodesOnScreen.size(); ++x)
+	{
+		std::vector<Node>* pVect = &nodesOnScreen.at(x);
+
+		for (auto y = 0; y < pVect->size(); ++y)
+		{
+			Node* temp = &pVect->at(y);
+
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_OBSTACLE)
+				obstacleNodes.push_back(temp);
+
+
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_NODE)
+				emptyNodes.push_back(temp);
+		}
 	}
 }
 
@@ -97,38 +150,6 @@ Node* PathFinder::determineNextMove()
 {
 	if (start != nullptr && end != nullptr)
 	{
-		//std::vector<Node*>					openSet;				// unevaluated nodes
-		// std::vector<Node*>					closedSet;				// evaluated nodes
-		// evaluated means that it has been checked if it is an efficient path towards the end
-
-		//openSet.push_back(start);
-		//path.clear();
-		//while (!openSet.empty())
-		//{
-		//for (auto i = 0; i < openSet.size(); ++i)
-		//{
-		//	if (openSet[i]->f <= openSet[best]->f)
-		//	{
-		//		best = i;
-		//	}
-		//}
-
-		//auto current = openSet[best];
-		//if (current == end)
-		//{
-		//	auto temp = current;
-		//	path.push_back(temp);
-
-		//	while (temp->getprevious() != nullptr)
-		//	{
-		//		path.push_back(temp->getprevious());
-		//		temp = temp->getprevious();
-		//	}
-		//	return true;
-		//}
-
-		//openSet.erase(std::find(openSet.begin(), openSet.end(), current));
-		// closedSet.push_back(current);
 
 		auto best = 0;
 		auto neighbours = start->getNeighbours();
@@ -136,42 +157,15 @@ Node* PathFinder::determineNextMove()
 		{
 			auto neighbour = neighbours[i];
 
-			// if closedset already has neighbour or is an obstacle, skip evaluating this neighbour
 			if (neighbour->getCurrentObject() != nodeNS::OBJECT_TYPE_OBSTACLE)
 			{
-				auto tempG = start->g + 1;
-
-				//auto newPath = false;
-				//if (std::find(neighbours.begin(), neighbours.end(), neighbour) != neighbours.end())			// if current Node has neighbour, evaluate this neighbour
-				//{
-					if (tempG < neighbour->g)
-					{
-						neighbour->g = tempG;
-						//newPath = true;
-					}
-				//}
-				//else																				// if openset doesnt have this neighbour, add it in openset
-				//{
-				//	neighbour->g = tempG;
-				//	newPath = true;
-				//	openSet.push_back(neighbour);
-				//}
-
-				//if (newPath)
-				//{
 					neighbour->h = heuristic(neighbour, end);
-					neighbour->f = neighbour->g + neighbour->h;
 
-					if (neighbours[i]->f <= neighbours[best]->f)
+					if (neighbours[i]->h <= neighbours[best]->h)
 						best = i;
-					//neighbour->setPrevious(current);
-
-				//}
 			}
-			
 		}
 		return neighbours[best];
-	//}
 	}
 
 	return nullptr;
@@ -185,3 +179,146 @@ double PathFinder::heuristic(Node* initial, Node* target) const
 	auto xy = x*x + y*y;
 	return sqrt(xy);
 }
+
+void PathFinder::act(std::vector<VertexShape*>& vS)
+{
+
+	Node* bestMove = determineNextMove();
+
+	auto neighbours = end->getNeighbours();
+	if (std::find(neighbours.begin(), neighbours.end(), start) == neighbours.end() && bestMove != nullptr)
+	{
+		double x = bestMove->pos.x - start->pos.x;
+		double y = bestMove->pos.y - start->pos.y;
+
+		if (currentBehaviour != pathfinderNS::STOP)
+		{
+			computer->velocity.x = x;
+			computer->velocity.y = y;
+		}
+	}
+
+	switch (currentBehaviour)
+	{
+	case pathfinderNS::TARGET_PLAYER:
+
+		// blink on a 25% chance
+
+		if (randInt(0, pathfinderNS::baseRand) < 25)
+		{
+			if (heuristic(start, end) < pathfinderNS::range)
+			{
+				if (computer->cooldown.at(COOLDOWN_BLINK) <= 0) {
+					if (computer->velocity.x != 0.0f || computer->velocity.y != 0.0f) {
+						float r_;
+						if (computer->velocity.x >= 0)
+							r_ = atan(computer->velocity.y / computer->velocity.x);
+						else if (computer->velocity.x < 0)
+							r_ = D3DX_PI + atan(computer->velocity.y / computer->velocity.x);
+						computer->blink(vS, r_);
+					}
+				}
+			}
+			else
+			{
+				currentBehaviour = pathfinderNS::HIDE;
+			}
+		}
+
+		break;
+
+	case pathfinderNS::HIDE:
+
+		// teleport on a 25% chance
+
+		if (randInt(0, pathfinderNS::baseRand) < 25)
+		{
+			if (heuristic(start, end) < pathfinderNS::range)
+			{
+				if (computer->velocity.x != 0.0f || computer->velocity.y != 0.0f) {
+					float r_;
+					if (computer->velocity.x >= 0)
+						r_ = atan(computer->velocity.y / computer->velocity.x);
+					else if (computer->velocity.x < 0)
+						r_ = D3DX_PI + atan(computer->velocity.y / computer->velocity.x);
+
+					computer->teleport(vS, r_);
+				}
+			}
+			else
+			{
+				currentBehaviour = pathfinderNS::TARGET_PLAYER;
+			}
+		}
+		break;
+
+	case pathfinderNS::RUN:
+
+		if (randInt(0, pathfinderNS::baseRand) < 5)
+		{
+			currentBehaviour = pathfinderNS::HIDE;
+		}
+		else if (randInt(0, pathfinderNS::baseRand) < 10)
+		{
+			currentBehaviour = pathfinderNS::STOP;
+		}
+
+		break;
+	}
+
+
+}
+
+void PathFinder::randBehaviour()
+{
+	auto r = randInt(0, pathfinderNS::behaviourNum * pathfinderNS::baseRand);
+
+	if (r < pathfinderNS::baseRand * 1.5)
+	{
+		currentBehaviour = pathfinderNS::TARGET_PLAYER;
+		end = player;
+	}
+	else if (r < pathfinderNS::baseRand * 3)
+	{
+		currentBehaviour = pathfinderNS::RUN;
+		end = emptyNodes.at(randInt(0, emptyNodes.size() - 1));
+	}
+	else if (r < pathfinderNS::baseRand * 3.5)
+	{
+		currentBehaviour = pathfinderNS::HIDE;
+		end = obstacleNodes.at(randInt(0, obstacleNodes.size() - 1));
+	}
+	else if (r < pathfinderNS::baseRand * 4)
+	{
+		currentBehaviour = pathfinderNS::STOP;
+	}
+}
+
+
+//void PathFinder::modifiedRandBehaviour(float modifier, pathfinderNS::Type selector)
+//{
+//	auto r = randInt(0, pathfinderNS::behaviourNum * (pathfinderNS::baseRand - 1) + (pathfinderNS::baseRand * modifier));
+//
+//	for (auto i = 1; i <= pathfinderNS::behaviourNum; ++i)
+//	{
+//
+//		if (i == selector)
+//		{
+//			if (r > pathfinderNS::baseRand * (i - 1) && r < pathfinderNS::baseRand * i * modifier)
+//			{
+//				currentBehaviour = pathfinderNS::Type(i - 1);
+//				if (i < pathfinderNS::targetsNum)
+//					setTarget(nodeNS::ObjectType(i - 1));
+//			}
+//		}
+//		else
+//		{
+//			if (r > pathfinderNS::baseRand * (i - 1) && r < pathfinderNS::baseRand * i)
+//			{
+//				currentBehaviour = pathfinderNS::Type(i - 1);
+//				if (i < pathfinderNS::targetsNum)
+//					setTarget(nodeNS::ObjectType(i - 1));
+//			}
+//		}
+//	}
+//}

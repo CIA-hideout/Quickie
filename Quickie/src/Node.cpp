@@ -4,7 +4,6 @@ Node::Node(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVEC
 
 	graphics = nullptr;
 	input = nullptr;
-	previous = nullptr;
 	health = maxHealth = 3;
 
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
@@ -84,7 +83,7 @@ void Node::init(Graphics* g)
 	indicesCount = 36;
 
 	visible = false;
-	alive = true;
+	alive = false;
 }
 
 void Node::draw(D3DXMATRIX& worldMat)
@@ -113,44 +112,34 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 	// detect what's in the node
 	detectedObject = nodeNS::OBJECT_TYPE_NODE;
 
-	if (currentObject != nodeNS::OBJECT_TYPE_OBSTACLE)
-	{
-		checkObstaclesCollision(vS, true);			// true, check for x-axis
-		checkObstaclesCollision(vS, false);			// false, check for y-axis
-	}
+	checkObstaclesCollision(vS, true);			// true, check for x-axis
+	checkObstaclesCollision(vS, false);			// false, check for y-axis
 	
-	if (currentObject != nodeNS::OBJECT_TYPE_QLINE)
+	for (auto i = 0; i < vS.size(); i++)
 	{
-		for (auto i = 0; i < vS.size(); i++)
+		if (vS[i]->objectType == nodeNS::OBJECT_TYPE_QLINE)
 		{
-			if (vS[i]->objectType == nodeNS::OBJECT_TYPE_QLINE)
+			qTemp = (QLine*)vS[i];
+			if (qTemp->parent != this)
 			{
-				qTemp = (QLine*)vS[i];
-				if (qTemp->parent != this)
-				{
-					if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-						detectedObject = nodeNS::OBJECT_TYPE_QLINE;
-						break;
-					}
+				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
+					detectedObject = nodeNS::OBJECT_TYPE_QLINE;
+					break;
 				}
 			}
 		}
 	}
 
-	if (currentObject != nodeNS::OBJECT_TYPE_AI)
+	
+	if (CollisionManager::collideAABB(this, ai))
 	{
-		if (CollisionManager::collideAABB(this, ai))
-		{
-			detectedObject = nodeNS::OBJECT_TYPE_AI;
-		}
+		detectedObject = nodeNS::OBJECT_TYPE_AI;
 	}
 
-	if (currentObject != nodeNS::OBJECT_TYPE_PLAYER)
+	
+	if (CollisionManager::collideAABB(this, player))
 	{
-		if (CollisionManager::collideAABB(this, player))
-		{
-			detectedObject = nodeNS::OBJECT_TYPE_PLAYER;
-		}
+		detectedObject = nodeNS::OBJECT_TYPE_PLAYER;
 	}
 
 	switch (detectedObject)
@@ -163,21 +152,18 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 		currentObject = nodeNS::OBJECT_TYPE_PLAYER;
 		break;
 
-	case nodeNS::OBJECT_TYPE_QLINE:
-		currentObject = nodeNS::OBJECT_TYPE_QLINE;
-		break;
-
 	case nodeNS::OBJECT_TYPE_AI:
 		currentObject = nodeNS::OBJECT_TYPE_AI;
 		break;
 
+	case nodeNS::OBJECT_TYPE_QLINE:
+		currentObject = nodeNS::OBJECT_TYPE_QLINE;
+		break;
+
 	case nodeNS::OBJECT_TYPE_NODE:
 		currentObject = nodeNS::OBJECT_TYPE_NODE;
-		visible = false;
 		break;
 	}
-
-	previous = nullptr;
 }
 
 void Node::	setNeighbours(std::vector<std::vector<Node>>* nV)

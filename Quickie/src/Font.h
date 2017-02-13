@@ -16,6 +16,7 @@ namespace fontNS
 	const D3DXCOLOR					YELLOW = D3DCOLOR_XRGB(240, 240, 0);
 	const D3DXCOLOR					BLUE = D3DCOLOR_XRGB(0, 240, 240);
 	const D3DXCOLOR					RED = D3DCOLOR_XRGB(240, 0, 0);
+	const D3DXCOLOR					GREEN = D3DCOLOR_XRGB(0, 240, 0);
 }
 
 class Font

@@ -11,8 +11,11 @@ namespace aiNS
 }
 
 class AI : public VertexShape {
+
+	
 public:
 
+	
 	std::map<CooldownType, float>	cooldown;
 	GUIBar*							healthBar;
 	ParticleSource					ps;
@@ -32,6 +35,6 @@ public:
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport(std::vector<VertexShape*>&, float);
 
-	int randX_2D(){ return randInt(1, GAME_WIDTH - 1); }
-	int randY_2D(){ return randInt(1, GAME_HEIGHT - 1); }
+	int randX(){ return randInt(-cameraNS::x + 2, cameraNS::x - 2); }
+	int randY(){ return randInt(-cameraNS::y + 2, cameraNS::y - 2); }
 };

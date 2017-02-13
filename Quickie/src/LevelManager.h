@@ -46,6 +46,8 @@ public:
 	void setShuffledBool(boolean newCon)	{ isShuffled = newCon; }
 	void setRandomBool(boolean newCon)		{ isRandomGen = newCon; }
 
+	float getTimer(){ return timer; }
+
 private:
 	float timer = 0;
 	int levelCount = 0;
