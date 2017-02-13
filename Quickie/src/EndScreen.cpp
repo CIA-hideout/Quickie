@@ -60,8 +60,8 @@ void EndScreen::update()
 			graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 			if (sqr1->pos.y > pos3D.y)
 			{
-				sqr1->die();
-				sqr2->die();
+				sqr1->die(false);
+				sqr2->die(false);
 			}
 		
 			if (!sqr1->alive && !sqr2->alive)

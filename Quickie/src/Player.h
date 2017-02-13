@@ -43,7 +43,7 @@ public:
 	void update(float, std::vector<VertexShape*>&);
 	void move(std::vector<VertexShape*>& vS, float);
 	void respawn(std::vector<VertexShape*>& vS);
-	void die();
+	void die(bool);
 	void checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x);
 	void blink(std::vector<VertexShape*>&, float);
 	void teleport(std::vector<VertexShape*>&, float);

@@ -190,7 +190,7 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 			visible = true;
 
 		if (outOfMap()) {
-			die();
+			die(false);
 		}
 	}
 	else {
@@ -237,14 +237,14 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 				qTemp = (QLine*)vS[i];
 				if (qTemp->parent != this) {
 					if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-						die();
+						die(true);
 						break;
 					}
 				}
 			}
 			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
-					die();
+					die(false);
 					break;
 				}
 			}
@@ -321,11 +321,11 @@ void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
 	}
 }
 
-void Player::die()
+void Player::die(bool inherit)
 {
 	this->alive = false;
 	this->visible = false;
-	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), true);
+	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), inherit);
 	ps.init(graphics);
 	cooldown.at(SPAWN_TIME) = 3.0f;
 	graphics->camera->shake(0.25f, 1.0f);
