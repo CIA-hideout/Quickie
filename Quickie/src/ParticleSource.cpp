@@ -19,10 +19,6 @@ ParticleSource::~ParticleSource() {
 
 void ParticleSource::init(Graphics* graphics) {
 
-	std::random_device rdev;
-	std::mt19937 generator(rdev());
-	std::uniform_real_distribution<float> distribution(-5.0f, 5.0f);
-
 	this->graphics = graphics;
 
 	particles = (ParticleData*)std::malloc(sizeof(ParticleData)* particleCount);
@@ -80,22 +76,21 @@ void ParticleSource::init(Graphics* graphics) {
 	vShape->alive = true;
 
 	float v_;
-	distribution = std::uniform_real_distribution<float>(0, 2 * D3DX_PI);
 
 	for (int i = 0; i < particleCount; i++)  {
 
-		v_ = distribution(generator) / 5.0f;
-		rotation.z = distribution(generator);
+		v_ = randFloat(0, 2 * D3DX_PI) / 5.0f;
+		rotation.z = randFloat(0, 2 * D3DX_PI);
 
 		if (this->inherit) {
 			particles[i].velocity.x = (v_ * cos(rotation.z) + velocity.x * 15) / ASPECT_RATIO;
 			particles[i].velocity.y = v_ * sin(rotation.z) + velocity.y * 15;
-			particles[i].velocity.z = distribution(generator) / 5.0f + velocity.z * 15;
+			particles[i].velocity.z = randFloat(0, 2 * D3DX_PI) / 5.0f + velocity.z * 15;
 		}
 		else {
 			particles[i].velocity.x = (v_ * cos(rotation.z)) / ASPECT_RATIO;
 			particles[i].velocity.y = v_ * sin(rotation.z);
-			particles[i].velocity.z = distribution(generator) / 5.0f;
+			particles[i].velocity.z = randFloat(0, 2 * D3DX_PI) / 5.0f;
 		}
 
 		particles[i].pos = pos;

@@ -1,12 +1,6 @@
 #include "Obstacle.h"
-#include <algorithm>
-#include <random>
-
 
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
-	static int obstacleCount = 0;
-	obstacleId = obstacleCount++;
-
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
 	memcpy(this->scale, scale, sizeof(D3DXVECTOR3));
@@ -32,7 +26,6 @@ Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale,
 
 Obstacle::~Obstacle() {
 }
-
 
 void Obstacle::init(Audio* audio, Graphics* graphics) {
 	this->graphics = graphics;
@@ -191,8 +184,7 @@ void Obstacle::update(float deltaTime, std::vector<VertexShape*> players) {
 
 // Randomly generate a color and returns the value
 D3DXVECTOR3 Obstacle::getRandomColor() {
-	//std::srand(unsigned(std::time(nullptr)));
-
+	
 	// array is not dynamic use vector instead
 	std::vector<D3DXVECTOR3> color;
 	color.push_back(COLOR_RED);
@@ -202,9 +194,7 @@ D3DXVECTOR3 Obstacle::getRandomColor() {
 	color.push_back(COLOR_BLUE);
 	color.push_back(COLOR_WHITE);
 
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::shuffle(color.begin(), color.end(), rng); // randomise vector content
+	color = rand3DVector(color);	//randomise vector
 
 	return color.front();	//use first value of randomise array
 }
@@ -261,34 +251,31 @@ void Obstacle::setDimension(D3DXVECTOR3 newDimension) {
 // generate a random size for the obstructor and returns the size
 D3DXVECTOR3 Obstacle::getRandomDimension() {
 
-	std::vector<D3DXVECTOR3> dimensions;
+	int max_value = 40;	
+	int min_value = 5;
+	
+	float resultX, resultY;		// use for roatation
+	float y = 1.5f;				// fixed
+	float z = 0.5;				// fixed
+	
+	float x = randInt(min_value, max_value);
+	boolean isVertical = randBool(); // if true, swap x and y;
+	
+	resultX = x;
+	resultY = y;
 
-	// small and medium size to appear more frequently (horizontal)
-	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
-	dimensions.push_back(DIMENSION_HORIZONTAL_SMALL);
-	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
-	dimensions.push_back(DIMENSION_HORIZONTAL_MEDIUM);
-	dimensions.push_back(DIMENSION_HORIZONTAL_LARGE);
+	if (isVertical)  {
+		resultX = y;
+		resultY = x;
+	}
 
-	// small and medium size to appear more frequently (vertical)
-	dimensions.push_back(DIMENSION_VERTICAL_SMALL);
-	dimensions.push_back(DIMENSION_VERTICAL_SMALL);
-	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
-	dimensions.push_back(DIMENSION_VERTICAL_MEDIUM);
-	dimensions.push_back(DIMENSION_VERTICAL_LARGE);
+	printf("Dim: %.2f, %.2f, %.2f\n", resultX, resultY, z);
 
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::shuffle(dimensions.begin(), dimensions.end(), rng); //ramdomise vector
-
-	return dimensions.front(); // use first value of random vector
+	return D3DXVECTOR3(resultX, resultY, z);
 }
 
 D3DXVECTOR3 Obstacle::getRandomPosition()
 {
-	std::random_device rd;		// only used once to initialise (seed) engine
-	std::mt19937 rng(rd());		// random-number engine used (Mersenne-Twister in this case)
-
 	D3DXVECTOR3 high, low;		// high = point(0,0)/ low = point(1280,720)
 	D3DXVECTOR2 topleft = D3DXVECTOR2(0, 0);
 	D3DXVECTOR2 bottomright = D3DXVECTOR2(GAME_WIDTH, GAME_HEIGHT);	// resolution of game is 1280 x 720
@@ -296,12 +283,10 @@ D3DXVECTOR3 Obstacle::getRandomPosition()
 	graphics->camera->pointInWorld(high, topleft, 29.5);
 	graphics->camera->pointInWorld(low, bottomright, 29.5);
 
-	std::uniform_real_distribution<float> randomX(high.x, low.x);	// between -18 to 18
-	std::uniform_real_distribution<float> randomY(low.y, high.y);	// between -14 to 14
-	float x = randomX(rng);
-	float y = randomY(rng);
+	float x = randFloat(high.x, low.x);	// between -18 to 18
+	float y = randFloat(low.y, high.y); // between -14 to 14
 
-	//printf("%.2f, %.2f\n", x, y);
+	printf("Pos: %.2f, %.2f\n", x, y);
 
 	return D3DXVECTOR3(x, y, 29.5);
 }
@@ -373,20 +358,8 @@ void Obstacle::setLevel3(int count)
 		currentState = SHRINK;
 }
 
-void Obstacle::setRandom(int count, std::vector<VertexShape*> players)
+void Obstacle::setRandom(int count)
 {
-	if (count != 0)
-		currentState = SHRINK;
-
-	for (int i = 0; i < players.size(); i++) {
-		newDimension = getRandomDimension();		// get a random direction and set it
-		newPos = getRandomPosition();				// get a random position and set it
-
-		if (CollisionManager::collideAABB(players[i], this))
-		{
-			newPos = getRandomPosition();
-			newDimension = getRandomDimension();
-		}
-	
-	}
+	newDimension = getRandomDimension();		// get a random direction and set it
+	newPos = getRandomPosition();				// get a random position and set it
 }

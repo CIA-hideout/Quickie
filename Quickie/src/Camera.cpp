@@ -27,13 +27,9 @@ Camera::~Camera() {
 void Camera::getViewMatrix(D3DXMATRIX* v_) {
 
 	if (cameraEffect.at(CS_SHAKE) > 0.0f) {
-		std::random_device rdev;
-		std::mt19937 generator(rdev());
-		std::uniform_real_distribution<float> distribution(-shakeIntensity / 15.0f, shakeIntensity / 15.0f);
-
-		pos.x = originalPos.x + distribution(generator);
-		pos.y = originalPos.y + distribution(generator);
-		pos.z = originalPos.z + distribution(generator);
+		pos.x = originalPos.x + randFloat(-shakeIntensity, shakeIntensity) / 15.0f;
+		pos.y = originalPos.y + randFloat(-shakeIntensity, shakeIntensity) / 15.0f;
+		pos.z = originalPos.z + randFloat(-shakeIntensity, shakeIntensity) / 15.0f;
 		D3DXMatrixLookAtLH(v_, &pos, &look, &up);
 	}
 	else {
