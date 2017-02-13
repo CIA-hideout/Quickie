@@ -2,6 +2,9 @@
 
 #include "VertexShape.h"
 #include "CollisionManager.h"
+#include "random.h"
+#include <algorithm>
+#include <random>
 
 enum ObsState
 {
@@ -28,9 +31,7 @@ private:
 	D3DXVECTOR3 newPos;			// store the new position when updating
 	D3DXVECTOR3 newDimension;	// store the new dimension
 
-	std::random_device rd;     // only used once to initialise (seed) engine
-
-public:
+	public:
 	Obstacle() = default;
 	Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);
 	~Obstacle();
@@ -43,7 +44,7 @@ public:
 	void setPosition(D3DXVECTOR3);
 	D3DXVECTOR3 getRandomColor();
 	D3DXVECTOR3 getRandomDimension();
-	D3DXVECTOR3 getRandomPosition(std::vector<VertexShape*>, std::vector<VertexShape*>);
+	D3DXVECTOR3 getRandomPosition();
 
 	// set Levels location
 	void setLevel1(int);

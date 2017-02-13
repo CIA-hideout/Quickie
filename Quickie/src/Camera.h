@@ -6,6 +6,8 @@
 #include <map>
 
 #include <random>
+#include "Random.h"
+
 
 enum CameraState {
 	CS_SHAKE,

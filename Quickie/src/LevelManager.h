@@ -32,10 +32,10 @@ public:
 	void update(float);
 
 	// Set Different Levels during the Gameplay
-	void setLevelOne(std::vector<VertexShape*>);		// set Lvl 1
-	void setLevelTwo(std::vector<VertexShape*>);		// set Lvl 2
-	void setLevelThree(std::vector<VertexShape*>);		// set Lvl 3
-	void setShuffle(std::vector<VertexShape*>);			// set the shuffled levels
+	void setLevelOne();		// set Lvl 1
+	void setLevelTwo();		// set Lvl 2
+	void setLevelThree();		// set Lvl 3
+	void setShuffle();			// set the shuffled levels
 	void shuffle();										// shuffle the exisiting levels
 	void setRandom();			// set the obstales location really randomly
 
@@ -49,7 +49,6 @@ private:
 	double zAxis = 29.5;
 	boolean isShuffled = false;
 	boolean isRandomGen = false;
-	std::random_device rd;     // only used once to initialise (seed) engine
 
 	Audio* audio;		// Pointer to audio system
 

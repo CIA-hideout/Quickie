@@ -265,19 +265,19 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 				// user selects after init is run
 				switch (selectedMode) {
 				case gameplayNS::LEVEL_1:
-					lManager->setLevelOne(qEnvironmentObj);
+					lManager->setLevelOne();
 					break;
 
 				case gameplayNS::LEVEL_2:
-					lManager->setLevelTwo(qEnvironmentObj);
+					lManager->setLevelTwo();
 					break;
 
 				case gameplayNS::LEVEL_3:
-					lManager->setLevelThree(qEnvironmentObj);
+					lManager->setLevelThree();
 					break;
 
 				case gameplayNS::LEVEL_SHUFFLE:
-					lManager->setShuffle(qEnvironmentObj);
+					lManager->setShuffle();
 					break;
 
 				case gameplayNS::LEVEL_RANDOM:

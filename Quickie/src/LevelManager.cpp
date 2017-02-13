@@ -25,7 +25,7 @@ void LevelManager::update(float deltaTime)
 		// Run this if shuffled mode is activated
 		if (isShuffled) {
 			levelCount++;
-			setShuffle(qEnvironmentObj);
+			setShuffle();
 			timer = 0;
 		}
 		
@@ -34,19 +34,18 @@ void LevelManager::update(float deltaTime)
 			levelCount++;
 			setRandom();
 			timer = 0;
-			printf("Me run something!");
 		}
 		timer = 0;
 	}
 }
 
 // set obstacles location for level 1
-void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
+void LevelManager::setLevelOne()
 {
 	audio->stopCue(BGMRand);
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			Obstacle* tempObs = (Obstacle*)vS[i];
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
 			tempObs->setLevel1(levelCount);
 		}
 	}
@@ -54,12 +53,12 @@ void LevelManager::setLevelOne(std::vector<VertexShape*> vS)
 }
 
 // set obstacles location for level 2
-void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
+void LevelManager::setLevelTwo()
 {
 	audio->stopCue(BGMRand);
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			Obstacle* tempObs = (Obstacle*)vS[i];
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
 			tempObs->setLevel2(levelCount);
 		}
 	}
@@ -68,12 +67,12 @@ void LevelManager::setLevelTwo(std::vector<VertexShape*> vS)
 }
 
 // set obstacles location for level 3
-void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
+void LevelManager::setLevelThree()
 {
 	audio->stopCue(BGMRand);
-	for (int i = 0; i < vS.size(); i++) {
-		if (vS[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-			Obstacle* tempObs = (Obstacle*)vS[i];
+	for (int i = 0; i < qEnvironmentObj.size(); i++) {
+		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+			Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
 			tempObs->setLevel3(levelCount);
 		}
 	}
@@ -81,7 +80,7 @@ void LevelManager::setLevelThree(std::vector<VertexShape*> vS)
 }
 
 // set obstacles location for the shuffled levels
-void LevelManager::setShuffle(std::vector<VertexShape*> vS)
+void LevelManager::setShuffle()
 {
 	// assign random levels into vector
 	if (shuffleLevel.empty())
@@ -92,13 +91,13 @@ void LevelManager::setShuffle(std::vector<VertexShape*> vS)
 
 	switch (level)
 	{
-		case 1: setLevelOne(vS);
+		case 1: setLevelOne();
 				break;
 
-		case 2: setLevelTwo(vS);
+		case 2: setLevelTwo();
 				break;
 
-		case 3: setLevelThree(vS);
+		case 3: setLevelThree();
 				break;
 
 		default: break;
@@ -112,9 +111,8 @@ void LevelManager::shuffle()
 	shuffleLevel.push_back(1);
 	shuffleLevel.push_back(2);
 	shuffleLevel.push_back(3);
-
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::shuffle(shuffleLevel.begin(), shuffleLevel.end(), rng); //ramdomise vector
+	
+	shuffleLevel = randIntVector(shuffleLevel);
 }
 
 // pure randomisation of obstacle location and size
