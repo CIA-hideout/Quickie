@@ -125,7 +125,7 @@ void LevelManager::setRandom()
 
 		if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
 			Obstacle* tempObs = (Obstacle*)qEnvironmentObj[i];
-			// checkCollision(tempObs);
+			checkCollision(tempObs);
 		}
 	}
 	
@@ -137,7 +137,7 @@ void LevelManager::checkCollision(Obstacle* obs)
 	//boolean isReady = false;		// escape from loop
 	int playersCount;			// if = 2, no collision with players
 	int wallsCount;				// if = 4, no collision with walls
-	Obstacle tempObs = Obstacle();
+	Obstacle tempObs = Obstacle(D3DXVECTOR3(0, 0, 0), DIMENSION_NON_EXISTANT, D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 
 	tempObs.init(obs->audio, obs->graphics);
 
@@ -146,6 +146,8 @@ void LevelManager::checkCollision(Obstacle* obs)
 		wallsCount = 0;
 
 		tempObs.setRandom(levelCount);
+		tempObs.setDimension(tempObs.getNewDimension());
+		tempObs.setPosition(tempObs.getNewPosition());
 
 		// check if new position and dimension collides with players
 		for (int j = 0; j < qPlayers.size(); j++) {
@@ -161,9 +163,14 @@ void LevelManager::checkCollision(Obstacle* obs)
 			}
 		}
 
+		// Set obs pos and dimension and state
 		if (playersCount == 2 && wallsCount == 4)	{
 			obs->setNewDimension(tempObs.getNewDimension());
 			obs->setNewPosition(tempObs.getNewPosition());
+			
+			if (levelCount != 0)
+				obs->setState(SHRINK);
+
 			return;
 		}
 			

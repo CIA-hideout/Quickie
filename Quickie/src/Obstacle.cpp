@@ -1,29 +1,5 @@
 #include "Obstacle.h"
 
-Obstacle::Obstacle(){
-	memcpy(this->pos, getRandomPosition(), sizeof(D3DXVECTOR3));
-	memcpy(this->dimension, getRandomDimension(), sizeof(D3DXVECTOR3));
-	memcpy(this->scale, D3DXVECTOR3(1,1,1), sizeof(D3DXVECTOR3));
-	memcpy(this->color, COLOR_PURPLE, sizeof(D3DXVECTOR3));
-
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
-	min.x = 0;
-	min.y = 0;
-	min.z = 0;
-
-	rotation.x = 0;
-	rotation.y = 0;
-	rotation.z = 0;
-
-	objectType = OBJECT_TYPE_OBSTACLE;
-
-	velocity.x = 0;
-	velocity.y = 0;
-}
-
 Obstacle::Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 	memcpy(this->pos, pos, sizeof(D3DXVECTOR3));
 	memcpy(this->dimension, dimension, sizeof(D3DXVECTOR3));
@@ -276,7 +252,7 @@ void Obstacle::setDimension(D3DXVECTOR3 newDimension) {
 D3DXVECTOR3 Obstacle::getRandomDimension() {
 
 	int max_value = 40;	
-	int min_value = 0;
+	int min_value = 5;
 	
 	float resultX, resultY;		// use for roatation
 	float y = 1.5f;				// fixed
@@ -292,9 +268,6 @@ D3DXVECTOR3 Obstacle::getRandomDimension() {
 		resultX = y;
 		resultY = x;
 	}
-
-	if (resultX == 0 || resultY == 0)
-		return DIMENSION_NON_EXISTANT;
 
 	printf("Dim: %.2f, %.2f, %.2f\n", resultX, resultY, z);
 
@@ -389,7 +362,4 @@ void Obstacle::setRandom(int count)
 {
 	newDimension = getRandomDimension();		// get a random direction and set it
 	newPos = getRandomPosition();				// get a random position and set it
-
-	if (count != 0)
-		currentState = SHRINK;
 }

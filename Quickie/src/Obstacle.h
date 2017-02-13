@@ -30,7 +30,7 @@ private:
 	D3DXVECTOR3 newDimension;	// store the new dimension
 
 	public:
-	Obstacle();
+	Obstacle() = default;
 	Obstacle(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);
 	~Obstacle();
 
@@ -55,6 +55,7 @@ private:
 	D3DXVECTOR3 getNewPosition() { return newPos; }
 	void setNewDimension(D3DXVECTOR3 d) { newDimension = d; }
 	void setNewPosition(D3DXVECTOR3 p) { newPos = p; }
+	void setState(ObsState state) { currentState = state; }
 
 	// assign position from json
 	void assignPosition(rapidjson::Document&, int obstacle);

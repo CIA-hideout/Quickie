@@ -70,11 +70,6 @@ const float MIN_FRAME_TIME = 1.0f / FRAME_RATE;   // minimum desired time for 1 
 const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE; // maximum time used in calculations
 const float FOV = PI * 0.5;
 
-// for spawning objects on screen
-const int SPAWN_LEFT[] = {-15, -5 };	// -15 < pos.x < -5
-const int SPAWN_CENTER[] = {-5, 5};		// - 5 < pos.x <  5
-const int SPAWN_RIGHT[] = {5, 15};		//   5 < pos.x < 15
-
 // game time between each level (30 secs than shuffle/random)
 const float LEVEL_TIME = 30.0f;
 
