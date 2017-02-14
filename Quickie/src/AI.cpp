@@ -126,7 +126,7 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 	}
 
 	if (alive) {
-		
+
 		if (cooldown.at(INVULNERABLE) > 0.0f && timeGetTime() % 500 < 250)
 			visible = false;
 		else if (cooldown.at(INVULNERABLE) > -1.0f)

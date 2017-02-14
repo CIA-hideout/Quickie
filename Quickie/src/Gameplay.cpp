@@ -12,7 +12,7 @@ Gameplay::Gameplay()
 	o4 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-	
+
 	gameStack.push(gameplayNS::LEVEL_1);
 }
 
@@ -38,7 +38,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 
 	computer = new AI(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
 	computer->init(graphics, audio);
-	
+
 	sqr2->winner = 0;
 
 	// BASED ON CAMERA
@@ -57,7 +57,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	pos2D = D3DXVECTOR2(GAME_WIDTH, GAME_HEIGHT / 2);
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	w4 = new Wall(pos3D, DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
-	
+
 	qEnvironmentObj.push_back(o1);
 	qEnvironmentObj.push_back(o2);
 	qEnvironmentObj.push_back(o3);
@@ -192,7 +192,7 @@ void Gameplay::update()
 
 				if (input->getKeyState(controls.at(CONTROL_SPACEBAR)))
 				{
-					
+
 					if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR)))
 					{
 						AIGame = true;
@@ -228,7 +228,7 @@ void Gameplay::update()
 				}
 			}
 
-			
+
 		}
 	}
 }
@@ -297,7 +297,7 @@ void Gameplay::render()
 
 
 void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
-	
+
 	// IF Player goes up
 
 	if (m == gameplayNS::REVERT && m != gameplayNS::LEVEL_1) {

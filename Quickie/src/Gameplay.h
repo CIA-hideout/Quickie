@@ -39,7 +39,7 @@ class Gameplay : public State
 	LevelManager*				lManager;
 	bool						gameplay = false;
 	bool						AIGame = false;
-	
+
 	gameplayNS::Mode						selectedMode;
 	std::stack<gameplayNS::Mode>			gameStack;
 
