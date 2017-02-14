@@ -71,7 +71,7 @@ const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE; // maximum time used in calc
 const float FOV = PI * 0.5;
 
 // game time between each level (30 secs than shuffle/random)
-const float LEVEL_TIME = 30.0f;
+const float LEVEL_TIME = 20.0f;
 
 // audio file required by audio.cpp
 // WAVE_BANK must be the location of the xwb file
