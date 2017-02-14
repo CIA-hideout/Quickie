@@ -9,6 +9,7 @@
 #include "Obstacle.h"
 #include "LevelManager.h"
 #include "Menu.h"
+#include "Behaviour.h"
 
 namespace gameplayNS
 {
@@ -58,7 +59,7 @@ class Gameplay : public State
 	Player* sqr2;
 	Player* sqr3;
 
-	PathFinder	pathfinder;
+	Behaviour	AIBehaviour;
 	AI*			computer;
 
 public:

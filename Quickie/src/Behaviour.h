@@ -3,7 +3,7 @@
 #include "Node.h"
 #include "graphics.h"
 
-namespace pathfinderNS
+namespace behaviourNS
 {
 	const int targetsNum = 3;
 	const int behaviourNum = 4;
@@ -20,7 +20,7 @@ namespace pathfinderNS
 	};
 }
 
-class PathFinder
+class Behaviour
 {
 	Node*					start;
 	Node*					end;
@@ -28,7 +28,7 @@ class PathFinder
 	AI*						computer;
 	Graphics*				graphics;
 
-	pathfinderNS::Type					currentBehaviour;
+	behaviourNS::Type					currentBehaviour;
 	std::vector<std::vector<Node>>		nodesOnScreen;
 	std::vector<Node*>					obstacleNodes;
 	std::vector<Node*>					emptyNodes;
@@ -36,8 +36,8 @@ class PathFinder
 public:
 
 
-	PathFinder();
-	~PathFinder();
+	Behaviour();
+	~Behaviour();
 
 	void initialize(Graphics* graphics, AI* computer);
 	void update(std::vector<VertexShape*>& , Player* target);			// update the start, end
@@ -49,7 +49,7 @@ public:
 
 	void act(std::vector<VertexShape*>& vS);
 	void randBehaviour();
-	//void modifiedRandBehaviour(float modifier, pathfinderNS::Type selector);
+	//void modifiedRandBehaviour(float modifier, behaviourNS::Type selector);
 
 	Node* getEnd() { return end; }
 	Node* getStart(){ return start; }

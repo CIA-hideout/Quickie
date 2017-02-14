@@ -1,21 +1,21 @@
-#include "PathFinder.h"
+#include "Behaviour.h"
 
-PathFinder::PathFinder()
+Behaviour::Behaviour()
 {
 	start = nullptr;
 	end = nullptr;
 	graphics = nullptr;
 }
 
-PathFinder::~PathFinder()
+Behaviour::~Behaviour()
 {
 }
 
-void PathFinder::initialize(Graphics* g, AI* a)
+void Behaviour::initialize(Graphics* g, AI* a)
 {
 	graphics = g;
 	computer = a;
-	currentBehaviour = pathfinderNS::STOP;
+	currentBehaviour = behaviourNS::STOP;
 
 	auto i = 0, j = 0;
 	for (int x = -cameraNS::x; x <= cameraNS::x; x += 2)
@@ -47,7 +47,7 @@ void PathFinder::initialize(Graphics* g, AI* a)
 	}
 }
 
-void PathFinder::update(std::vector<VertexShape*>& vS, Player* target)
+void Behaviour::update(std::vector<VertexShape*>& vS, Player* target)
 {
 	obstacleNodes.clear();
 	emptyNodes.clear();
@@ -60,7 +60,7 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* target)
 			Node* temp = &pVect->at(y);
 			temp->update(vS, target, computer);
 
-			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_AI)		// set PathFinder as start
+			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_AI)		// set Behaviour as start
 				start = temp;
 
 			if (temp->getCurrentObject() == nodeNS::OBJECT_TYPE_PLAYER)
@@ -77,7 +77,7 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* target)
 		
 	if (obstacleNodes.size() != 0 && emptyNodes.size() != 0 && computer->cooldown.at(INVULNERABLE) < 0.0f && computer->alive)
 	{
-		if (timeGetTime() % pathfinderNS::behaviourRand < pathfinderNS::behaviourRand / 50)
+		if (timeGetTime() % behaviourNS::behaviourRand < behaviourNS::behaviourRand / 50)
 		{
 			randBehaviour();
 		}
@@ -89,7 +89,7 @@ void PathFinder::update(std::vector<VertexShape*>& vS, Player* target)
 	}
 }
 
-void PathFinder::setTarget(nodeNS::ObjectType target)
+void Behaviour::setTarget(nodeNS::ObjectType target)
 {
 
 	switch (target)
@@ -109,7 +109,7 @@ void PathFinder::setTarget(nodeNS::ObjectType target)
 	}
 }
 
-void PathFinder::checkObstacles()
+void Behaviour::checkObstacles()
 {
 	obstacleNodes.clear();
 	emptyNodes.clear();
@@ -132,7 +132,7 @@ void PathFinder::checkObstacles()
 	}
 }
 
-void PathFinder::draw(D3DXMATRIX& worldMatrix)
+void Behaviour::draw(D3DXMATRIX& worldMatrix)
 {
 	for (auto x = 0; x <nodesOnScreen.size(); ++x)
 	{
@@ -146,7 +146,7 @@ void PathFinder::draw(D3DXMATRIX& worldMatrix)
 	}
 }
 
-Node* PathFinder::determineNextMove()
+Node* Behaviour::determineNextMove()
 {
 	if (start != nullptr && end != nullptr)
 	{
@@ -171,7 +171,7 @@ Node* PathFinder::determineNextMove()
 	return nullptr;
 }
 
-double PathFinder::heuristic(Node* initial, Node* target) const
+double Behaviour::heuristic(Node* initial, Node* target) const
 {
 	unsigned int x = target->i - initial->i;
 	unsigned int y = target->j - initial->j;
@@ -180,7 +180,7 @@ double PathFinder::heuristic(Node* initial, Node* target) const
 	return sqrt(xy);
 }
 
-void PathFinder::act(std::vector<VertexShape*>& vS)
+void Behaviour::act(std::vector<VertexShape*>& vS)
 {
 
 	Node* bestMove = determineNextMove();
@@ -191,7 +191,7 @@ void PathFinder::act(std::vector<VertexShape*>& vS)
 		double x = bestMove->pos.x - start->pos.x;
 		double y = bestMove->pos.y - start->pos.y;
 
-		if (currentBehaviour != pathfinderNS::STOP)
+		if (currentBehaviour != behaviourNS::STOP)
 		{
 			computer->velocity.x = x;
 			computer->velocity.y = y;
@@ -200,13 +200,13 @@ void PathFinder::act(std::vector<VertexShape*>& vS)
 
 	switch (currentBehaviour)
 	{
-	case pathfinderNS::TARGET_PLAYER:
+	case behaviourNS::TARGET_PLAYER:
 
 		// blink on a 25% chance
 
-		if (randInt(0, pathfinderNS::baseRand) < 25)
+		if (randInt(0, behaviourNS::baseRand) < 25)
 		{
-			if (heuristic(start, end) < pathfinderNS::range)
+			if (heuristic(start, end) < behaviourNS::range)
 			{
 				if (computer->cooldown.at(COOLDOWN_BLINK) <= 0) {
 					if (computer->velocity.x != 0.0f || computer->velocity.y != 0.0f) {
@@ -221,19 +221,19 @@ void PathFinder::act(std::vector<VertexShape*>& vS)
 			}
 			else
 			{
-				currentBehaviour = pathfinderNS::HIDE;
+				currentBehaviour = behaviourNS::HIDE;
 			}
 		}
 
 		break;
 
-	case pathfinderNS::HIDE:
+	case behaviourNS::HIDE:
 
 		// teleport on a 25% chance
 
-		if (randInt(0, pathfinderNS::baseRand) < 25)
+		if (randInt(0, behaviourNS::baseRand) < 25)
 		{
-			if (heuristic(start, end) < pathfinderNS::range)
+			if (heuristic(start, end) < behaviourNS::range)
 			{
 				if (computer->velocity.x != 0.0f || computer->velocity.y != 0.0f) {
 					float r_;
@@ -247,20 +247,20 @@ void PathFinder::act(std::vector<VertexShape*>& vS)
 			}
 			else
 			{
-				currentBehaviour = pathfinderNS::TARGET_PLAYER;
+				currentBehaviour = behaviourNS::TARGET_PLAYER;
 			}
 		}
 		break;
 
-	case pathfinderNS::RUN:
+	case behaviourNS::RUN:
 
-		if (randInt(0, pathfinderNS::baseRand) < 5)
+		if (randInt(0, behaviourNS::baseRand) < 5)
 		{
-			currentBehaviour = pathfinderNS::HIDE;
+			currentBehaviour = behaviourNS::HIDE;
 		}
-		else if (randInt(0, pathfinderNS::baseRand) < 10)
+		else if (randInt(0, behaviourNS::baseRand) < 10)
 		{
-			currentBehaviour = pathfinderNS::STOP;
+			currentBehaviour = behaviourNS::STOP;
 		}
 
 		break;
@@ -269,54 +269,54 @@ void PathFinder::act(std::vector<VertexShape*>& vS)
 
 }
 
-void PathFinder::randBehaviour()
+void Behaviour::randBehaviour()
 {
-	auto r = randInt(0, pathfinderNS::behaviourNum * pathfinderNS::baseRand);
+	auto r = randInt(0, behaviourNS::behaviourNum * behaviourNS::baseRand);
 
-	if (r < pathfinderNS::baseRand * 1.5)
+	if (r < behaviourNS::baseRand * 1.5)
 	{
-		currentBehaviour = pathfinderNS::TARGET_PLAYER;
+		currentBehaviour = behaviourNS::TARGET_PLAYER;
 		end = player;
 	}
-	else if (r < pathfinderNS::baseRand * 3)
+	else if (r < behaviourNS::baseRand * 3)
 	{
-		currentBehaviour = pathfinderNS::RUN;
+		currentBehaviour = behaviourNS::RUN;
 		end = emptyNodes.at(randInt(0, emptyNodes.size() - 1));
 	}
-	else if (r < pathfinderNS::baseRand * 3.5)
+	else if (r < behaviourNS::baseRand * 3.5)
 	{
-		currentBehaviour = pathfinderNS::HIDE;
+		currentBehaviour = behaviourNS::HIDE;
 		end = obstacleNodes.at(randInt(0, obstacleNodes.size() - 1));
 	}
-	else if (r < pathfinderNS::baseRand * 4)
+	else if (r < behaviourNS::baseRand * 4)
 	{
-		currentBehaviour = pathfinderNS::STOP;
+		currentBehaviour = behaviourNS::STOP;
 	}
 }
 
 
-//void PathFinder::modifiedRandBehaviour(float modifier, pathfinderNS::Type selector)
+//void Behaviour::modifiedRandBehaviour(float modifier, behaviourNS::Type selector)
 //{
-//	auto r = randInt(0, pathfinderNS::behaviourNum * (pathfinderNS::baseRand - 1) + (pathfinderNS::baseRand * modifier));
+//	auto r = randInt(0, behaviourNS::behaviourNum * (behaviourNS::baseRand - 1) + (behaviourNS::baseRand * modifier));
 //
-//	for (auto i = 1; i <= pathfinderNS::behaviourNum; ++i)
+//	for (auto i = 1; i <= behaviourNS::behaviourNum; ++i)
 //	{
 //
 //		if (i == selector)
 //		{
-//			if (r > pathfinderNS::baseRand * (i - 1) && r < pathfinderNS::baseRand * i * modifier)
+//			if (r > behaviourNS::baseRand * (i - 1) && r < behaviourNS::baseRand * i * modifier)
 //			{
-//				currentBehaviour = pathfinderNS::Type(i - 1);
-//				if (i < pathfinderNS::targetsNum)
+//				currentBehaviour = behaviourNS::Type(i - 1);
+//				if (i < behaviourNS::targetsNum)
 //					setTarget(nodeNS::ObjectType(i - 1));
 //			}
 //		}
 //		else
 //		{
-//			if (r > pathfinderNS::baseRand * (i - 1) && r < pathfinderNS::baseRand * i)
+//			if (r > behaviourNS::baseRand * (i - 1) && r < behaviourNS::baseRand * i)
 //			{
-//				currentBehaviour = pathfinderNS::Type(i - 1);
-//				if (i < pathfinderNS::targetsNum)
+//				currentBehaviour = behaviourNS::Type(i - 1);
+//				if (i < behaviourNS::targetsNum)
 //					setTarget(nodeNS::ObjectType(i - 1));
 //			}
 //		}

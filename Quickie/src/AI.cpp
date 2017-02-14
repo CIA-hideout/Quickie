@@ -227,7 +227,7 @@ void AI::blink(std::vector<VertexShape*>& vS, float angle) {
 
 		audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
-		QLine* qline = new QLine(this, angle);
+		QLine* qline = new QLine(this, 20, angle);
 		qline->init(vS, graphics);
 	}
 

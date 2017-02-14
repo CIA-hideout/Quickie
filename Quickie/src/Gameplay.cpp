@@ -98,7 +98,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->respawn(qEnvironmentObj);
 	}
 
-	pathfinder.initialize(g, computer);
+	AIBehaviour.initialize(g, computer);
 }
 
 void Gameplay::update()
@@ -165,7 +165,7 @@ void Gameplay::update()
 		graphics->camera->update(*deltaTime);
 
 		//if (lManager->getTimer() >= LEVEL_TIME)
-			//pathfinder.checkObstacles();
+			//AIBehaviour.checkObstacles();
 
 
 		if (input->getKeyState(controls.at(CONTROL_ENTER)))
@@ -210,17 +210,17 @@ void Gameplay::update()
 			}
 			else
 			{
-				pathfinder.update(qEnvironmentObj, sqr1);
+				AIBehaviour.update(qEnvironmentObj, sqr1);
 				computer->update(*deltaTime, qEnvironmentObj);
 
 				// determine win lose
 				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
 				{
-					sqr1->winner = 0;
+					sqr1->winner = 3;
 					nextState = stateNS::ENDSCREEN;
 					pNextState = &nextState;
 				}
-				else if (computer->health <= 0 && computer->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 0)
+				else if (computer->health <= 0 && computer->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 3)
 				{
 					sqr1->winner = 1;
 					nextState = stateNS::ENDSCREEN;
@@ -289,7 +289,7 @@ void Gameplay::render()
 
 		if (AIGame)
 		{
-			pathfinder.draw(worldMatrix);
+			AIBehaviour.draw(worldMatrix);
 			computer->draw(worldMatrix);
 		}
 	}

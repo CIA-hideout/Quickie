@@ -4,7 +4,7 @@
 #include "CollisionManager.h"
 #include "Player.h"
 #include "LevelManager.h"
-#include "PathFinder.h"
+#include "Behaviour.h"
 
 namespace menuNS
 {
