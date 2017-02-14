@@ -114,10 +114,8 @@ void Player::draw(D3DXMATRIX& worldMat) {
 		this->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
 		this->graphics->get3Ddevice()->SetIndices(iBuffer);
 
-		D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 		D3DXMatrixTranslation(&worldMat, pos.x, pos.y, pos.z);
-
-		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &(matRot * worldMat));
+		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
 		meshPtr->DrawSubset(0);
 
 		healthBar->draw(worldMat);

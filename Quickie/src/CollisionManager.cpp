@@ -24,10 +24,6 @@ bool CollisionManager::collideAABB(VertexShape* v1, VertexShape* v2) {
 		return true;
 }
 
-bool CollisionManager::collideOOBB(VertexShape* v1, VertexShape* v2, D3DXVECTOR3& cV) {
-	return false;
-}
-
 bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, VertexShape* v2) {
 
 	if (!collideAABB(v1, v2))
@@ -73,10 +69,6 @@ bool CollisionManager::collidePixelPerfect(D3DXVECTOR3& pOut, VertexShape* v1, V
 		v1List.clear();
 	}
 
-	return false;
-}
-
-bool CollisionManager::collideS(VertexShape* v1, VertexShape* v2, D3DXVECTOR3& cV) {
 	return false;
 }
 
@@ -253,11 +245,11 @@ bool CollisionManager::rayObjectIntersect(D3DXVECTOR3& pOut, D3DXVECTOR4& pNorm,
 }
 
 float CollisionManager::pDist2(const D3DXVECTOR3& p1, const D3DXVECTOR3& p2) {
-	return sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2));
+	return P_DIST_2(p1, p2);
 }
 
 float CollisionManager::pDist3(const D3DXVECTOR3& p1, const D3DXVECTOR3& p2) {
-	return sqrt(pow((float)p1.x - p2.x, 2) + pow((float)p1.y - p2.y, 2) + pow((float)p1.z - p1.z, 2));
+	return P_DIST_3(p1, p2);
 }
 
 bool CollisionManager::primitiveCollision(D3DXVECTOR3& pOut, std::vector<D3DXVECTOR3>& set1, std::vector<D3DXVECTOR3>& set2) {
@@ -277,18 +269,12 @@ bool CollisionManager::primitiveCollision(D3DXVECTOR3& pOut, std::vector<D3DXVEC
 }
 
 void CollisionManager::calcNorm(D3DXVECTOR4& pOut, D3DXVECTOR2& pStart, D3DXVECTOR2& pEnd) {
-	
-	float m = 0;
 
 	pOut.x = pStart.x * cos(D3DX_PI / 2) + pStart.y * -sin(D3DX_PI / 2);
 	pOut.y = pStart.x * sin(D3DX_PI / 2) + pStart.y * cos(D3DX_PI / 2);
 	pOut.z = pEnd.x * cos(D3DX_PI / 2) + pEnd.y * -sin(D3DX_PI / 2);
 	pOut.w = pEnd.x * sin(D3DX_PI / 2) + pEnd.y * cos(D3DX_PI / 2);
 
-	// get magnitude
-
-	m = sqrt(pow(pOut.x - pOut.z, 2) + pow(pOut.y - pOut.w, 2));
-
-	pOut /= m;
+	pOut /= sqrt(pow(pOut.x - pOut.z, 2) + pow(pOut.y - pOut.w, 2));
 
 }
