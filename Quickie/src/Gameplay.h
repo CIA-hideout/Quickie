@@ -4,12 +4,12 @@
 #include <stack>
 
 #include "State.h"
-#include "CollisionManager.h"
 #include "Player.h"
 #include "Wall.h"
 #include "Obstacle.h"
 #include "LevelManager.h"
 #include "Menu.h"
+#include "Behaviour.h"
 
 namespace gameplayNS
 {
@@ -38,7 +38,8 @@ class Gameplay : public State
 
 	LevelManager*				lManager;
 	bool						gameplay = false;
-	
+	bool						AIGame = false;
+
 	gameplayNS::Mode						selectedMode;
 	std::stack<gameplayNS::Mode>			gameStack;
 
@@ -58,6 +59,9 @@ class Gameplay : public State
 	Player* sqr2;
 	Player* sqr3;
 
+	Behaviour	AIBehaviour;
+	AI*			computer;
+
 public:
 	Gameplay();
 	virtual ~Gameplay();
@@ -65,7 +69,7 @@ public:
 
 	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;
-	void ai() override{};
+	void ai() override;
 	void render() override;
 	void collisions() override{};
 	void releaseAll() override{};

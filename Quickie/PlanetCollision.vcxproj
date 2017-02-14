@@ -95,6 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\audio.cpp" />
     <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\EndScreen.cpp" />
@@ -107,6 +108,7 @@
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\ParticleSource.cpp" />
+    <ClCompile Include="src\Behaviour.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Obstacle.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -121,6 +123,7 @@
     <ClCompile Include="src\VertexShape.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\audio.h" />
     <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\EndScreen.h" />
@@ -133,7 +136,7 @@
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\ParticleSource.h" />
-    <ClInclude Include="src\PathFinder.h" />
+    <ClInclude Include="src\Behaviour.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Obstacle.h" />
     <ClInclude Include="src\Camera.h" />

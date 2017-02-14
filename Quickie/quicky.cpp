@@ -1,5 +1,4 @@
 #include "quicky.h"
-#include "src/EndScreen.h"
 
 quicky::quicky() {
 }
@@ -81,7 +80,6 @@ void quicky::update() {
 }
 
 void quicky::ai() {
-
 }
 
 void quicky::collisions() {

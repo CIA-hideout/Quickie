@@ -12,7 +12,7 @@ Gameplay::Gameplay()
 	o4 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o5 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o6 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
-	
+
 	gameStack.push(gameplayNS::LEVEL_1);
 }
 
@@ -35,7 +35,10 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	pos2D = D3DXVECTOR2(GAME_WIDTH / 1.5, GAME_HEIGHT / 2);
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	sqr2 = new Player(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
-	
+
+	computer = new AI(pos3D, D3DXVECTOR3(playerNS::length, playerNS::breadth, playerNS::height), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 0));
+	computer->init(graphics, audio);
+
 	sqr2->winner = 0;
 
 	// BASED ON CAMERA
@@ -54,7 +57,7 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 	pos2D = D3DXVECTOR2(GAME_WIDTH, GAME_HEIGHT / 2);
 	graphics->camera->pointInWorld(pos3D, pos2D, playerNS::z);
 	w4 = new Wall(pos3D, DIMENSION_VERTICAL_WALL, D3DXVECTOR3(1, 1, 1), COLOR_RED);		// | right
-	
+
 	qEnvironmentObj.push_back(o1);
 	qEnvironmentObj.push_back(o2);
 	qEnvironmentObj.push_back(o3);
@@ -94,6 +97,8 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->assignControl(controlsDoc, i);
 		temp->respawn(qEnvironmentObj);
 	}
+
+	AIBehaviour.initialize(g, computer);
 }
 
 void Gameplay::update()
@@ -157,8 +162,11 @@ void Gameplay::update()
 		}
 
 		lManager->update(*deltaTime);
-
 		graphics->camera->update(*deltaTime);
+
+		//if (lManager->getTimer() >= LEVEL_TIME)
+			//AIBehaviour.checkObstacles();
+
 
 		if (input->getKeyState(controls.at(CONTROL_ENTER)))
 		{
@@ -167,20 +175,66 @@ void Gameplay::update()
 		}
 		else
 		{
-			if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 1.0f && sqr1->winner != 1)
+			if (!AIGame)
 			{
-				sqr2->winner = 2;
-				nextState = stateNS::ENDSCREEN;
-				pNextState = &nextState;
+				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
+				{
+					sqr2->winner = 2;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
+				else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f && sqr2->winner != 2)
+				{
+					sqr1->winner = 1;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
+
+				if (input->getKeyState(controls.at(CONTROL_SPACEBAR)))
+				{
+
+					if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR)))
+					{
+						AIGame = true;
+						computer->visible = true;
+						computer->alive = true;
+						sqr2->visible = false;
+						sqr2->alive = false;
+						sqr2->health = 0;
+						computer->respawn(qEnvironmentObj);
+						input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
+					}
+				}
+				else
+					input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
 			}
-			else if (sqr2->health <= 0 && sqr2->cooldown.at(SPAWN_TIME) <= 0.5f && sqr2->winner != 2)
+			else
 			{
-				sqr1->winner = 1;
-				nextState = stateNS::ENDSCREEN;
-				pNextState = &nextState;
+				AIBehaviour.update(qEnvironmentObj, sqr1);
+				computer->update(*deltaTime, qEnvironmentObj);
+
+				// determine win lose
+				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
+				{
+					sqr1->winner = 3;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
+				else if (computer->health <= 0 && computer->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 3)
+				{
+					sqr1->winner = 1;
+					nextState = stateNS::ENDSCREEN;
+					pNextState = &nextState;
+				}
 			}
+
+
 		}
 	}
+}
+
+void Gameplay::ai()
+{
 }
 
 void Gameplay::render()
@@ -222,8 +276,8 @@ void Gameplay::render()
 		}
 
 	}
-
 	else {
+
 		for (int i = 0; i < qEnvironmentObj.size(); i++) {
 			qEnvironmentObj[i]->draw(worldMatrix);
 		}
@@ -232,12 +286,18 @@ void Gameplay::render()
 			Player* temp = (Player*)qPlayer[i];
 			temp->draw(worldMatrix);
 		}
-		setNextStateByInput(stateNS::REVERT, controls.at(CONTROL_ESC));
+
+		if (AIGame)
+		{
+			AIBehaviour.draw(worldMatrix);
+			computer->draw(worldMatrix);
+		}
 	}
 }
 
 
 void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
+
 	// IF Player goes up
 
 	if (m == gameplayNS::REVERT && m != gameplayNS::LEVEL_1) {
@@ -282,7 +342,6 @@ void Gameplay::setCurrentSceneByInput(gameplayNS::Mode m, int c) {
 
 				case gameplayNS::LEVEL_RANDOM:
 					lManager->setRandom();
-
 					break;
 				}
 			}

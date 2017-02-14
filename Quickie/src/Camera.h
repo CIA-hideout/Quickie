@@ -14,6 +14,20 @@ enum CameraState {
 	CS_STATIONARY
 };
 
+enum CameraType {
+	CAMERA_TYPE_LAND_OBJECT,
+	CAMERA_TYPE_FREE
+};
+
+namespace cameraNS
+{
+	const int x = 29;
+	const int cols = x;
+	const int y = 29;
+	const int rows = y / 2;
+	const int total = x + y;
+}
+
 class Camera {
 
 public:

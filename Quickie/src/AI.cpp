@@ -1,8 +1,6 @@
-#include "Player.h"
+#include "AI.h"
 
-int Player::winner = 0;
-
-Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
+AI::AI(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color) : VertexShape() {
 
 	graphics = nullptr;
 	input = nullptr;
@@ -21,7 +19,7 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	rotation.y = 0;
 	rotation.z = 0;
 
-	objectType = OBJECT_TYPE_PLAYER;
+	objectType = OBJECT_TYPE_AI;
 
 	velocity.x = 0;
 	velocity.y = 0;
@@ -31,19 +29,10 @@ Player::Player(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3D
 	cooldown.insert(std::pair <CooldownType, float>(COOLDOWN_TELEPORT, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(INVULNERABLE, 0.0f));
 	cooldown.insert(std::pair <CooldownType, float>(SPAWN_TIME, 0.0f));
-
-	controls.insert(std::pair<Control, int>(CONTROL_UP, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_DOWN, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_LEFT, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_RIGHT, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_BL, 0.1f));
-	controls.insert(std::pair<Control, int>(CONTROL_TP, 0.1f));
-
 }
 
-void Player::init(Graphics* graphics, Input* input, Audio* audio) {
+void AI::init(Graphics* graphics, Audio* audio) {
 
-	this->input = input;
 	this->graphics = graphics;
 	this->audio = audio;
 
@@ -97,14 +86,14 @@ void Player::init(Graphics* graphics, Input* input, Audio* audio) {
 
 	indicesCount = 36;
 
-	visible = true;
+	visible = visible;
 	alive = true;
 
 	healthBar = new GUIBar(this, D3DXVECTOR3(217, 83, 79));
 	healthBar->init(graphics);
 }
 
-void Player::draw(D3DXMATRIX& worldMat) {
+void AI::draw(D3DXMATRIX& worldMat) {
 
 	if (visible) {
 		LPDIRECT3DVERTEXBUFFER9 vBuffer;
@@ -114,8 +103,10 @@ void Player::draw(D3DXMATRIX& worldMat) {
 		this->graphics->get3Ddevice()->SetStreamSource(0, vBuffer, 0, sizeof(LVertex));
 		this->graphics->get3Ddevice()->SetIndices(iBuffer);
 
+		D3DXMatrixRotationYawPitchRoll(&matRot, rotation.y, rotation.z, rotation.x);
 		D3DXMatrixTranslation(&worldMat, pos.x, pos.y, pos.z);
-		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &worldMat);
+
+		this->graphics->get3Ddevice()->SetTransform(D3DTS_WORLD, &(matRot * worldMat));
 		meshPtr->DrawSubset(0);
 
 		healthBar->draw(worldMat);
@@ -127,9 +118,7 @@ void Player::draw(D3DXMATRIX& worldMat) {
 
 }
 
-void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
-
-	//printf("%.2f, %.2f\n", pos.x, pos.y);
+void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 	for (std::map<CooldownType, float>::iterator i = cooldown.begin(); i != cooldown.end(); i++) {
 		if (i->second > 0.0f)
@@ -138,57 +127,13 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 
 	if (alive) {
 
-		if (input->getKeyState(controls.at(CONTROL_UP))) {
-			velocity.y += deltaTime * playerNS::speed;
-		}
-		if (input->getKeyState(controls.at(CONTROL_DOWN))) {
-			velocity.y -= deltaTime * playerNS::speed;
-		}
-		if (input->getKeyState(controls.at(CONTROL_LEFT))) {
-			velocity.x -= deltaTime * playerNS::speed;
-		}
-		if (input->getKeyState(controls.at(CONTROL_RIGHT))) {
-			velocity.x += deltaTime * playerNS::speed;
-		}
-
-		// blink and tp direction
-		if (input->getKeyState(controls.at(CONTROL_BL)) || controlled) {
-			if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-				if (velocity.x != 0.0f || velocity.y != 0.0f) {
-					float r_;
-					if (velocity.x >= 0)
-						r_ = atan(velocity.y / (velocity.x));
-					else if (velocity.x < 0)
-						r_ = D3DX_PI + atan(velocity.y / (velocity.x));
-					blink(vS, r_);
-				}
-			}
-		}
-		if (input->getKeyState(controls.at(CONTROL_TP)) || controlledTP) {
-			if (velocity.x != 0.0f || velocity.y != 0.0f) {
-				float r_;
-				if (velocity.x >= 0)
-					r_ = atan(velocity.y / velocity.x);
-				else if (velocity.x < 0)
-					r_ = D3DX_PI + atan(velocity.y / velocity.x);
-
-				teleport(vS, r_);
-			}
-		}
-
 		if (cooldown.at(INVULNERABLE) > 0.0f && timeGetTime() % 500 < 250)
-		{
-			if (controlled || controlledTP)
-			{
-			}
-			else
-				visible = false;
-		}
+			visible = false;
 		else if (cooldown.at(INVULNERABLE) > -1.0f)
 			visible = true;
 
 		if (outOfMap()) {
-			die(false);
+			die();
 		}
 	}
 	else {
@@ -198,20 +143,18 @@ void Player::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		}
 	}
 
-	if (controlled || controlledTP)
-		healthBar->visible = false;
 	healthBar->percent = (float)health / (float)maxHealth;
 	healthBar->scale.x = healthBar->percent;
 	healthBar->pos = pos;
 	healthBar->pos.y = pos.y + dimension.y;
 
-	velocity.x *= 0.75;
-	velocity.y *= 0.75;
+	velocity.x *= 0.75 * deltaTime * aiNS::speed;
+	velocity.y *= 0.75 * deltaTime * aiNS::speed;
 	move(vS, deltaTime);
 	healthBar->update(deltaTime);
 }
 
-void Player::move(std::vector<VertexShape*>& vS, float dt) {
+void AI::move(std::vector<VertexShape*>& vS, float dt) {
 
 	// deal with the more predominant velocity
 
@@ -233,14 +176,14 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 				qTemp = (QLine*)vS[i];
 				if (qTemp->parent != this) {
 					if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-						die(true);
+						die();
 						break;
 					}
 				}
 			}
 			if (vS[i]->objectType == OBJECT_TYPE_WALL && cooldown.at(INVULNERABLE) <= 0) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
-					die(false);
+					die();
 					break;
 				}
 			}
@@ -249,7 +192,7 @@ void Player::move(std::vector<VertexShape*>& vS, float dt) {
 
 }
 
-void Player::respawn(std::vector<VertexShape*>& vS) {
+void AI::respawn(std::vector<VertexShape*>& vS) {
 
 	D3DXVECTOR3 pos3D = D3DXVECTOR3(randX(), randY(), playerNS::z);
 
@@ -278,35 +221,24 @@ void Player::respawn(std::vector<VertexShape*>& vS) {
 
 }
 
-void Player::blink(std::vector<VertexShape*>& vS, float angle) {
+void AI::blink(std::vector<VertexShape*>& vS, float angle) {
 
 	if (cooldown.at(COOLDOWN_BLINK) <= 0) {
-		if (!controlled)
-			audio->playCue(FX_BLINK);
+
+		audio->playCue(FX_BLINK);
 		cooldown.at(COOLDOWN_BLINK) = 1.0f;
 		QLine* qline = new QLine(this, 20, angle);
 		qline->init(vS, graphics);
 	}
-  
+
 }
 
-void Player::assignControl(rapidjson::Document& doc, int i) {
-
-	controls.at(CONTROL_UP) = doc["player"].GetArray()[i]["up"].GetInt();
-	controls.at(CONTROL_DOWN) = doc["player"].GetArray()[i]["down"].GetInt();
-	controls.at(CONTROL_LEFT) = doc["player"].GetArray()[i]["left"].GetInt();
-	controls.at(CONTROL_RIGHT) = doc["player"].GetArray()[i]["right"].GetInt();
-	controls.at(CONTROL_BL) = doc["player"].GetArray()[i]["bl"].GetInt();
-	controls.at(CONTROL_TP) = doc["player"].GetArray()[i]["tp"].GetInt();
-}
-
-void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
+void AI::teleport(std::vector<VertexShape*>& vS, float angle) {
 
 	float magnitude = 10.0f;
 	if (cooldown.at(COOLDOWN_TELEPORT) <= 0) {
 
-		if (!controlledTP)
-			audio->playCue(FX_TP);
+		audio->playCue(FX_TP);
 
 		cooldown.at(COOLDOWN_TELEPORT) = 1.0f;
 		pos.x += cos(angle) * magnitude;
@@ -314,30 +246,23 @@ void Player::teleport(std::vector<VertexShape*>& vS, float angle) {
 	}
 }
 
-void Player::die(bool inherit)
+void AI::die()
 {
 	this->alive = false;
 	this->visible = false;
-	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), inherit);
+	ps = ParticleSource(200, velocity, pos, D3DXVECTOR3(this->color.x, this->color.y, this->color.z), false);
 	ps.init(graphics);
 	cooldown.at(SPAWN_TIME) = 3.0f;
 	graphics->camera->shake(0.25f, 1.0f);
-
-	if (controlledTP || controlled)
-	{
-	}
-	else
-	{
-		health--;
-		audio->playCue(FX_DEATH);
-	}
+	health--;
+	audio->playCue(FX_DEATH);
 }
 
-void Player::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
+void AI::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 {
 	if (x)
 	{
-		this->pos.x += velocity.x / ASPECT_RATIO;
+		this->pos.x += velocity.x;
 		for (int i = 0; i < vS.size(); i++) {
 			if (vS[i]->id != id && (vS[i]->objectType == OBJECT_TYPE_OBSTACLE)) {
 				if (CollisionManager::collideAABB(this, vS[i])) {
@@ -365,8 +290,12 @@ void Player::checkObstaclesCollision(std::vector<VertexShape*>& vS, bool x)
 			}
 		}
 	}
+
+
 }
 
 
-Player::~Player() {
+
+
+AI::~AI() {
 }

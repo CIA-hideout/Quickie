@@ -8,7 +8,7 @@ EndScreen::EndScreen()
 
 EndScreen::~EndScreen()
 {
-	
+
 }
 
 void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& doc, float* dT)
@@ -27,6 +27,12 @@ void EndScreen::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document&
 		sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(0, 240, 240));
 	else
 		sqr2 = new Player(pos3D, D3DXVECTOR3(2, 2, 2), D3DXVECTOR3(1, 1, 1), D3DXVECTOR3(240, 240, 0));
+
+	if (temp.winner == 3)
+	{
+		sqr1->color = D3DXVECTOR3(0, 240, 0);
+		sqr2->color = D3DXVECTOR3(0, 240, 0);
+	}
 
 	sqr1->init(g, i, a);
 	sqr2->init(g, i, a);
@@ -63,11 +69,11 @@ void EndScreen::update()
 				sqr1->die(false);
 				sqr2->die(false);
 			}
-		
+
 			if (!sqr1->alive && !sqr2->alive)
 				currentScene = endscreenNS::RESPAWN;
 			}
-			
+
 			break;
 
 		case endscreenNS::RESPAWN:
@@ -82,12 +88,12 @@ void EndScreen::update()
 				graphics->camera->pointInWorld(pos3D, sqr2Pos, playerNS::z);
 				sqr2->pos.x = pos3D.x;
 				sqr2->pos.y = pos3D.y;
-				
+
 				currentScene = endscreenNS::EXPLODE;
 			}
 			break;
 		}
-		
+
 		graphics->camera->update(*deltaTime);
 		sqr1->update(*deltaTime, qEnvironmentObj);
 		sqr2->update(*deltaTime, qEnvironmentObj);
@@ -107,7 +113,7 @@ void EndScreen::render()
 	Font f;
 
 	f = fonts.at(fontsNS::HEADING1);
-	
+
 	// Set Title Screen
 	if (sqr1->winner == 1)
 	{
@@ -115,7 +121,7 @@ void EndScreen::render()
 			GAME_WIDTH / 2 - f.getTotalWidth("Player 1 wins") / 2,
 			GAME_HEIGHT / 5,
 			fontNS::YELLOW,
-			"Player 1 wins");	
+			"Player 1 wins");
 	}
 	else if (sqr2->winner == 2)
 	{
@@ -125,11 +131,19 @@ void EndScreen::render()
 			fontNS::BLUE,
 			"Player 2 wins");
 	}
+	else if (sqr1->winner == 3)
+	{
+		f.print(
+			GAME_WIDTH / 2 - f.getTotalWidth("Computer wins") / 2,
+			GAME_HEIGHT / 5,
+			fontNS::GREEN,
+			"Computer wins");
+	}
 
 
 	// Set Fonts for Options
 	f = fonts.at(fontsNS::END_SCREEN);
-	
+
 	if (timeGetTime() % 500 < 250)
 		f.print(
 			GAME_WIDTH / 2 - f.getTotalWidth("Press Enter to Exit") / 2,
