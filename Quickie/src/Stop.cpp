@@ -24,15 +24,15 @@ void Stop::act(std::vector<VertexShape*>& vS, AI* computer)
 	Node* end = nodeManager->getEnd();
 	Node* start = nodeManager->getStart();
 
-	if (nodeManager->heuristic(start, end) < behaviourNS::range && !randomed)						// run or teleport and target player when near the obstacle
+	if (nodeManager->heuristic(start, end) < behaviourNS::range)						// run or teleport and target player when near the obstacle
 	{
 		auto r = randInt(0, behaviourNS::baseRand);
 
-		if (r < 75)					// run 75% chance
+		if (r < 25)					// run 25% chance
 		{
 			nextBehaviour = behaviourNS::RUN;
 		}
-		else						// teleport and target player 25% chance
+		else						// teleport and target player 75% chance
 		{
 			if (computer->velocity.x != 0.0f || computer->velocity.y != 0.0f)
 			{
@@ -47,8 +47,6 @@ void Stop::act(std::vector<VertexShape*>& vS, AI* computer)
 
 			nextBehaviour = behaviourNS::TARGET_PLAYER;
 		}
-
-		randomed = true;
 	}
 }
 

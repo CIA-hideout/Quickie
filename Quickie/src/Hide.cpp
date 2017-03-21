@@ -21,13 +21,19 @@ void Hide::initialize(NodeManager* nM)
 
 void Hide::act(std::vector<VertexShape*>& vS, AI* computer)
 {
-	Node* bestMove = nodeManager->determineBestNode();
 	Node* end = nodeManager->getEnd();
 	Node* start = nodeManager->getStart();
 
+	if (bestMove != nullptr)
+	{
+		if (nodeManager->getStart() == bestMove)
+			bestMove = nodeManager->determineBestNode();
+	}
+	else
+		bestMove = nodeManager->determineBestNode();
 
 	auto neighbours = end->getNeighbours();
-	if (std::find(neighbours.begin(), neighbours.end(), start) == neighbours.end() && bestMove != nullptr)			// if end's neighbours has start, change behaviour
+	if (bestMove != nullptr)
 	{
 		double x = bestMove->pos.x - start->pos.x;
 		double y = bestMove->pos.y - start->pos.y;
@@ -35,7 +41,7 @@ void Hide::act(std::vector<VertexShape*>& vS, AI* computer)
 		computer->velocity.x = x;
 		computer->velocity.y = y;
 
-		if (nodeManager->heuristic(start, end) < behaviourNS::range && !randomed)						// teleport when near the obstacle
+		if (nodeManager->heuristic(start, end) < behaviourNS::range)						// teleport when near the obstacle
 		{
 			if (computer->velocity.x != 0.0f || computer->velocity.y != 0.0f)
 			{
@@ -50,14 +56,6 @@ void Hide::act(std::vector<VertexShape*>& vS, AI* computer)
 
 			nodeManager->setTarget(nodeNS::OBJECT_TYPE_OBSTACLE);							// reset target
 		}
-
-		randomed = true;
-	}
-	else if (!randomed)
-	{
-		randBehaviour();
-
-		randomed = true;
 	}
 }
 

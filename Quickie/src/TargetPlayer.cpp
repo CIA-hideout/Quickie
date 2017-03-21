@@ -21,11 +21,18 @@ void TargetPlayer::initialize(NodeManager* nM)
 
 void TargetPlayer::act(std::vector<VertexShape*>& vS, AI* computer)
 {
-	nodeManager->setTarget(nodeNS::OBJECT_TYPE_PLAYER);
-
-	Node* bestMove = nodeManager->determineBestNode();
 	Node* end = nodeManager->getEnd();
 	Node* start = nodeManager->getStart();
+
+	if (bestMove != nullptr)
+	{
+		if (nodeManager->getStart() == bestMove)
+			bestMove = nodeManager->determineBestNode();
+	}
+	else
+		bestMove = nodeManager->determineBestNode();
+	
+	nodeManager->setTarget(nodeNS::OBJECT_TYPE_PLAYER);
 
 	auto neighbours = end->getNeighbours();
 	if (std::find(neighbours.begin(), neighbours.end(), start) == neighbours.end() && bestMove != nullptr)			// if end's neighbours has start, change behaviour
@@ -37,7 +44,7 @@ void TargetPlayer::act(std::vector<VertexShape*>& vS, AI* computer)
 		computer->velocity.y = y;
 
 		// blink, run or hide when near the player
-		if (nodeManager->heuristic(start, end) < behaviourNS::range && !randomed)
+		if (nodeManager->heuristic(start, end) < behaviourNS::range)
 		{
 			auto r = randInt(0, behaviourNS::baseRand);
 
@@ -64,16 +71,7 @@ void TargetPlayer::act(std::vector<VertexShape*>& vS, AI* computer)
 			{
 				nextBehaviour = behaviourNS::HIDE;					// hide 25% chance
 			}
-
-
-			randomed = true;
 		}
-	}
-	else if (!randomed)
-	{
-		randBehaviour();
-
-		randomed = true;
 	}
 }
 

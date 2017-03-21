@@ -10,9 +10,9 @@
 //=================================================
 Audio::Audio()
 {
-	// mute = false;
+	mute = false;
 	// remove this line in release (debug purposes)
-	mute = true;
+	// mute = true;
 }
 
 //==================================================

@@ -108,7 +108,6 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 {
 	QLine* qTemp;
 	D3DXVECTOR3 poi;
-	h = 0;
 
 	// detect what's in the node
 	detectedObject = nodeNS::OBJECT_TYPE_NODE;

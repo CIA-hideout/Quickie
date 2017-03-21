@@ -14,7 +14,7 @@ public:
 	std::vector<std::vector<Node>>		nodesOnScreen;
 	std::vector<Node*>					obstacleNodes;
 	std::vector<Node*>					emptyNodes;
-	std::stack<Node*>					previousNodes;
+	std::vector<Node*>					closedSet;			// nodes previously traversed through in one path
 
 	void initialize(Graphics*);
 	void update(std::vector<VertexShape*>& vS, Player* sqr1, AI* computer);
