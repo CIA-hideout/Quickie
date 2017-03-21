@@ -49,11 +49,11 @@ protected:
 	Audio*					audio;
 	float*					deltaTime;
 
-	D3DXMATRIX		worldMatrix;
+	D3DXMATRIX						worldMatrix;
 	std::map<fontsNS::Fonts, Font>	fonts;
-	std::map<Control, int>	controls;
-	stateNS::NextState		nextState;
-	stateNS::NextState*		pNextState = nullptr;
+	std::map<Control, int>			controls;
+	stateNS::NextState				nextState;
+	stateNS::NextState*				pNextState = nullptr;
 
 public:
 	State();

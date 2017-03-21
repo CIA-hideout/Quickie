@@ -108,29 +108,11 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 {
 	QLine* qTemp;
 	D3DXVECTOR3 poi;
+	h = 0;
 
 	// detect what's in the node
 	detectedObject = nodeNS::OBJECT_TYPE_NODE;
 
-	checkObstaclesCollision(vS, true);			// true, check for x-axis
-	checkObstaclesCollision(vS, false);			// false, check for y-axis
-	
-	for (auto i = 0; i < vS.size(); i++)
-	{
-		if (vS[i]->objectType == nodeNS::OBJECT_TYPE_QLINE)
-		{
-			qTemp = (QLine*)vS[i];
-			if (qTemp->parent != this)
-			{
-				if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
-					detectedObject = nodeNS::OBJECT_TYPE_QLINE;
-					break;
-				}
-			}
-		}
-	}
-
-	
 	if (CollisionManager::collideAABB(this, ai))
 	{
 		detectedObject = nodeNS::OBJECT_TYPE_AI;
@@ -141,6 +123,27 @@ void Node::update(std::vector<VertexShape*>& vS, Player* player, AI* ai)
 	{
 		detectedObject = nodeNS::OBJECT_TYPE_PLAYER;
 	}
+	
+	checkObstaclesCollision(vS, true);			// true, check for x-axis
+	checkObstaclesCollision(vS, false);			// false, check for y-axis
+	
+	//for (auto i = 0; i < vS.size(); i++)
+	//{
+	//	if (vS[i]->objectType == nodeNS::OBJECT_TYPE_QLINE)
+	//	{
+	//		qTemp = (QLine*)vS[i];
+	//		if (qTemp->parent != this)
+	//		{
+	//			if (CollisionManager::collidePixelPerfect(poi, this, vS[i])) {
+	//				detectedObject = nodeNS::OBJECT_TYPE_QLINE;
+	//				break;
+	//			}
+	//		}
+	//	}
+	//}
+
+	
+	
 
 	switch (detectedObject)
 	{

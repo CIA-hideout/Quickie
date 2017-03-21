@@ -5,6 +5,8 @@ Gameplay::Gameplay()
 	D3DXMatrixIdentity(&worldMatrix);
 
 	lManager = new LevelManager();
+	behaviour = behaviourNS::TARGET_PLAYER;
+	skipRandom = false;
 
 	o1 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
 	o2 = new Obstacle(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1, 1, 1), COLOR_PURPLE);
@@ -98,7 +100,21 @@ void Gameplay::initialize(Graphics* g, Input* i, Audio* a, rapidjson::Document& 
 		temp->respawn(qEnvironmentObj);
 	}
 
-	AIBehaviour.initialize(g, computer);
+
+	// Initialize behaviours
+	TargetPlayer* targetPlayer = new TargetPlayer();
+	behaviours.push_back(targetPlayer);
+	
+	Run* run = new Run();
+	behaviours.push_back(run);
+
+	Hide* hide = new Hide();
+	behaviours.push_back(hide);
+
+	Stop* stop = new Stop();
+	behaviours.push_back(stop);
+
+	nodeManager.initialize(graphics);
 }
 
 void Gameplay::update()
@@ -108,6 +124,9 @@ void Gameplay::update()
 
 	if (!gameplay)
 	{
+		// =========================================
+		// Gamemode Selection Screen
+		// =========================================
 		switch (gameStack.top())
 		{
 			case gameplayNS::LEVEL_1:
@@ -142,41 +161,46 @@ void Gameplay::update()
 	}
 	else
 	{
-		audio->stopCue(menuBGM);
-		menu->canPlaySound = true;
-
-		for (int i = 0; i < qEnvironmentObj.size(); i++) {
-			if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {
-				QLine* temp = (QLine*)qEnvironmentObj[i];
-				temp->update(*deltaTime, qEnvironmentObj);
-			}
-			else if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
-				Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
-				temp->update(*deltaTime, qPlayer);
-			}
-		}
-
-		for (int i = 0; i < qPlayer.size(); i++) {
-			Player* temp = (Player*)qPlayer[i];
-			temp->update(*deltaTime, qEnvironmentObj);
-		}
-
-		lManager->update(*deltaTime);
-		graphics->camera->update(*deltaTime);
-
-		//if (lManager->getTimer() >= LEVEL_TIME)
-			//AIBehaviour.checkObstacles();
-
-
-		if (input->getKeyState(controls.at(CONTROL_ENTER)))
+		// =========================================
+		// Gameplay Screen
+		// =========================================
+		if (input->getKeyState(controls.at(CONTROL_ENTER)))			// check if player wants to go back
 		{
 			nextState = stateNS::REVERT;
 			pNextState = &nextState;
 		}
 		else
 		{
+			// =========================================
+			// General Updates
+			// =========================================
+			audio->stopCue(menuBGM);
+			menu->canPlaySound = true;
+
+			for (int i = 0; i < qEnvironmentObj.size(); i++) {
+				if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_QLINE) {
+					QLine* temp = (QLine*)qEnvironmentObj[i];
+					temp->update(*deltaTime, qEnvironmentObj);
+				}
+				else if (qEnvironmentObj[i]->objectType == OBJECT_TYPE_OBSTACLE) {
+					Obstacle* temp = (Obstacle*)qEnvironmentObj[i];
+					temp->update(*deltaTime, qPlayer);
+				}
+			}
+
+			for (int i = 0; i < qPlayer.size(); i++) {
+				Player* temp = (Player*)qPlayer[i];
+				temp->update(*deltaTime, qEnvironmentObj);
+			}
+
+			lManager->update(*deltaTime);
+			graphics->camera->update(*deltaTime);
+
 			if (!AIGame)
 			{
+				// =========================================
+				// PvP: Determine win or lose
+				// =========================================
 				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
 				{
 					sqr2->winner = 2;
@@ -190,30 +214,45 @@ void Gameplay::update()
 					pNextState = &nextState;
 				}
 
+				// =========================================
+				// Check for input to switch to AI mode
+				// =========================================
 				if (input->getKeyState(controls.at(CONTROL_SPACEBAR)))
 				{
 
 					if (!input->wasKeyPressed(controls.at(CONTROL_SPACEBAR)))
 					{
 						AIGame = true;
+
 						computer->visible = true;
 						computer->alive = true;
+						computer->respawn(qEnvironmentObj);
+
 						sqr2->visible = false;
 						sqr2->alive = false;
 						sqr2->health = 0;
-						computer->respawn(qEnvironmentObj);
+
+						nodeManager.update(qEnvironmentObj, sqr1, computer);
+						behaviours[behaviour]->initialize(&nodeManager);
 						input->keysPressed[controls.at(CONTROL_SPACEBAR)] = true;
 					}
 				}
 				else
 					input->clearKeyPress(controls.at(CONTROL_SPACEBAR));
 			}
+
+
+			// =========================================
+			// AI Updates
+			// =========================================
 			else
 			{
-				AIBehaviour.update(qEnvironmentObj, sqr1);
+				nodeManager.update(qEnvironmentObj, sqr1, computer);
 				computer->update(*deltaTime, qEnvironmentObj);
 
-				// determine win lose
+				// =========================================
+				// AI: Determine win or lose
+				// =========================================
 				if (sqr1->health <= 0 && sqr1->cooldown.at(SPAWN_TIME) <= 0.5f && sqr1->winner != 1)
 				{
 					sqr1->winner = 3;
@@ -226,9 +265,39 @@ void Gameplay::update()
 					nextState = stateNS::ENDSCREEN;
 					pNextState = &nextState;
 				}
+
+
+				// =========================================
+				// Behaviour Stuff
+				// =========================================
+				if (nodeManager.getStart() != nullptr && nodeManager.getEnd() != nullptr && computer->alive)
+					behaviours[behaviour]->act(qEnvironmentObj, computer);
+
+				if (behaviours[behaviour]->getCurrentBehaviour() != behaviours[behaviour]->getNextBehaviour())			// If behaviour changed, assign new behaviour to AI
+				{
+					if (Behaviour::getRandomed())			// skip next timed random behaviour if behaviour changed by own behaviour
+						skipRandom = true;
+
+					behaviour = behaviours[behaviour]->getNextBehaviour();
+					behaviours[behaviour]->initialize(&nodeManager);
+				}
+				else
+				{
+					if (timeGetTime() % behaviourNS::behaviourRand < behaviourNS::behaviourRand / 300)
+					{
+						if (skipRandom)
+						{
+							printf("FALSE\n");
+							skipRandom = false;
+						}
+						else
+						{
+							printf("Random\n");
+							behaviours[behaviour]->randBehaviour();
+						}
+					}
+				}
 			}
-
-
 		}
 	}
 }
@@ -289,8 +358,8 @@ void Gameplay::render()
 
 		if (AIGame)
 		{
-			AIBehaviour.draw(worldMatrix);
 			computer->draw(worldMatrix);
+			nodeManager.draw(worldMatrix);
 		}
 	}
 }

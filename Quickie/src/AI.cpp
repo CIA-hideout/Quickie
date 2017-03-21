@@ -135,6 +135,7 @@ void AI::update(float deltaTime, std::vector<VertexShape*>& vS) {
 		if (outOfMap()) {
 			die();
 		}
+
 	}
 	else {
 		ps.update(deltaTime, vS);
