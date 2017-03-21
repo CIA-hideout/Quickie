@@ -64,9 +64,6 @@ void NodeManager::update(std::vector<VertexShape*>& vS, Player* sqr1, AI* comput
 			temp->visible = false;
 		}
 	}
-
-	if (end != nullptr)
-		end->visible = true;
 }
 
 void NodeManager::draw(D3DXMATRIX worldMatrix)
@@ -87,38 +84,56 @@ Node* NodeManager::determineBestNode()
 {
 	if (start != nullptr && end != nullptr)
 	{
-		auto best = 0;
+		auto best = 999;
+		auto bestFound = false;
 		auto neighbours = start->getNeighbours();
 
-		//start->visible = true;
 		for (auto i = 0; i < neighbours.size(); ++i)
 		{
 			auto neighbour = neighbours[i];
 
 			if (neighbour->getCurrentObject() != nodeNS::OBJECT_TYPE_OBSTACLE)
 			{
-				if (previousNodes.size() > 0)
+				neighbour->h = heuristic(neighbour, end);
+				if (closedSet.empty())
 				{
-					if (neighbour != previousNodes.top())
+					if (!bestFound)
 					{
-						neighbour->h = heuristic(neighbour, end);
-
+						best = i;
+						bestFound = true;
+					}
+					else
+					{
 						if (neighbour->h <= neighbours[best]->h)
 							best = i;
 					}
 				}
-				else
+				else if (std::find(closedSet.begin(), closedSet.end(), neighbour) == closedSet.end())		// if it's not a previous best node, evaluate it
 				{
-					neighbour->h = heuristic(neighbour, end);
-
-					if (neighbour->h <= neighbours[best]->h)
+					if (!bestFound)
+					{
 						best = i;
+						bestFound = true;
+					}
+					else
+					{
+						if (neighbour->h <= neighbours[best]->h)
+							best = i;
+					}
 				}
 			}
 		}
+		if (best == 999)
+		{
+			closedSet.clear();
+			return nullptr;
+		}
+		else
+		{
+			// neighbours[best]->visible;
+			closedSet.push_back(neighbours[best]);
+		}
 
-		neighbours[best]->visible = true;
-		previousNodes.push(neighbours[best]);
 		return neighbours[best];
 	}
 
@@ -152,6 +167,4 @@ void NodeManager::setTarget(nodeNS::ObjectType target)
 		break;
 
 	}
-
-	previousNodes.empty(); // reset gscore
 }

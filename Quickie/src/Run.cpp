@@ -21,23 +21,28 @@ void Run::initialize(NodeManager* nM)
 
 void Run::act(std::vector<VertexShape*>& vS, AI* computer)
 {
-	Node* bestMove = nodeManager->determineBestNode();
 	Node* end = nodeManager->getEnd();
 	Node* start = nodeManager->getStart();
 
+	if (bestMove != nullptr)
+	{
+		if (nodeManager->getStart() == bestMove)
+			bestMove = nodeManager->determineBestNode();
+	}
+	else
+		bestMove = nodeManager->determineBestNode();
 
 	auto neighbours = end->getNeighbours();
 	if (std::find(neighbours.begin(), neighbours.end(), start) == neighbours.end() && bestMove != nullptr)			// if end's neighbours has start, change behaviour
 	{
 		double x = bestMove->pos.x - start->pos.x;
 		double y = bestMove->pos.y - start->pos.y;
-
 		computer->velocity.x = x;
 		computer->velocity.y = y;
 
 		for (auto i = 0; i < neighbours.size(); i++)			// target player or stop moving when near an obstacle
 		{
-			if (neighbours[i]->getCurrentObject() == nodeNS::OBJECT_TYPE_OBSTACLE && !randomed)
+			if (neighbours[i]->getCurrentObject() == nodeNS::OBJECT_TYPE_OBSTACLE)
 			{
 				auto r = randInt(0, behaviourNS::baseRand);
 
@@ -45,16 +50,8 @@ void Run::act(std::vector<VertexShape*>& vS, AI* computer)
 					nextBehaviour = behaviourNS::TARGET_PLAYER;
 				else			// stop moving 25% chance
 					nextBehaviour = behaviourNS::STOP;
-
-				randomed = true;
 			}
 		}
-	}
-	else if (!randomed)
-	{
-		randBehaviour();
-
-		randomed = true;
 	}
 }
 

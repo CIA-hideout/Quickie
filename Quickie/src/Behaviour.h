@@ -10,7 +10,7 @@ namespace behaviourNS
 	const int behaviourNum = 4;
 	const int behaviourRand = 1000;
 	const int baseRand = 100;
-	const int range = 3;
+	const int range = 5;
 
 	enum Type
 	{
@@ -26,9 +26,9 @@ class Behaviour
 
 protected:
 	NodeManager* nodeManager;
+	Node* bestMove;
 	behaviourNS::Type currentBehaviour;
 	behaviourNS::Type nextBehaviour;
-	static bool randomed;
 
 public:
 
@@ -41,7 +41,4 @@ public:
 
 	behaviourNS::Type getCurrentBehaviour() const { return currentBehaviour; }
 	behaviourNS::Type getNextBehaviour() const { return nextBehaviour; }
-	static bool getRandomed() { return randomed; }
-
-	static void setRandomed(bool r) { randomed = r; }
 };

@@ -1,7 +1,5 @@
 #include "Behaviour.h"
 
-bool Behaviour::randomed = false;
-
 Behaviour::Behaviour()
 {
 	nodeManager = nullptr;
@@ -15,7 +13,7 @@ Behaviour::~Behaviour()
 
 void Behaviour::initialize(NodeManager* nM)
 {
-	randomed = false;
+	bestMove = nullptr;
 	nodeManager = nM;
 }
 

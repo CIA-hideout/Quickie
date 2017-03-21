@@ -270,31 +270,21 @@ void Gameplay::update()
 				// =========================================
 				// Behaviour Stuff
 				// =========================================
-				if (nodeManager.getStart() != nullptr && nodeManager.getEnd() != nullptr && computer->alive)
+				if (nodeManager.getStart() != nullptr && nodeManager.getEnd() != nullptr && computer->alive && computer->cooldown.at(INVULNERABLE) < 1.0)
 					behaviours[behaviour]->act(qEnvironmentObj, computer);
 
 				if (behaviours[behaviour]->getCurrentBehaviour() != behaviours[behaviour]->getNextBehaviour())			// If behaviour changed, assign new behaviour to AI
 				{
-					if (Behaviour::getRandomed())			// skip next timed random behaviour if behaviour changed by own behaviour
-						skipRandom = true;
-
+					nodeManager.closedSet.clear();
 					behaviour = behaviours[behaviour]->getNextBehaviour();
 					behaviours[behaviour]->initialize(&nodeManager);
 				}
 				else
 				{
-					if (timeGetTime() % behaviourNS::behaviourRand < behaviourNS::behaviourRand / 300)
+					if (timeGetTime() % behaviourNS::behaviourRand < behaviourNS::behaviourRand / 100)
 					{
-						if (skipRandom)
-						{
-							printf("FALSE\n");
-							skipRandom = false;
-						}
-						else
-						{
-							printf("Random\n");
+							printf("Random: ");
 							behaviours[behaviour]->randBehaviour();
-						}
 					}
 				}
 			}
