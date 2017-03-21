@@ -25,8 +25,8 @@ protected:
 	std::vector<Node*>					neighbours;
 
 public:
-	int i = 0, j = 0;
-	double h = 0;
+	int i = 0, j = 0;		// x and y axie from the top left corner
+	double h = 0;			// distance between this node and end node
 
 	Node() = default;
 	Node(D3DXVECTOR3& pos, D3DXVECTOR3& dimension, D3DXVECTOR3& scale, D3DXVECTOR3& color);

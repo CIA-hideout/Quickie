@@ -27,6 +27,11 @@
     <ClCompile Include="src\Node.cpp" />
     <ClCompile Include="src\AI.cpp" />
     <ClCompile Include="src\Behaviour.cpp" />
+    <ClCompile Include="src\NodeManager.cpp" />
+    <ClCompile Include="src\TargetPlayer.cpp" />
+    <ClCompile Include="src\Run.cpp" />
+    <ClCompile Include="src\Hide.cpp" />
+    <ClCompile Include="src\Stop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio.h" />
@@ -91,5 +96,10 @@
     <ClInclude Include="src\Node.h" />
     <ClInclude Include="src\AI.h" />
     <ClInclude Include="src\Behaviour.h" />
+    <ClInclude Include="src\TargetPlayer.h" />
+    <ClInclude Include="src\NodeManager.h" />
+    <ClInclude Include="src\Run.h" />
+    <ClInclude Include="src\Hide.h" />
+    <ClInclude Include="src\Stop.h" />
   </ItemGroup>
 </Project>

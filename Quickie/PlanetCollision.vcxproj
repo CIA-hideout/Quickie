@@ -102,11 +102,13 @@
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\Gameplay.cpp" />
     <ClCompile Include="src\GUIBar.cpp" />
+    <ClCompile Include="src\Hide.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\Instructions.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Node.cpp" />
+    <ClCompile Include="src\NodeManager.cpp" />
     <ClCompile Include="src\ParticleSource.cpp" />
     <ClCompile Include="src\Behaviour.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -117,7 +119,10 @@
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\QLine.cpp" />
     <ClCompile Include="src\Random.cpp" />
+    <ClCompile Include="src\Run.cpp" />
     <ClCompile Include="src\State.cpp" />
+    <ClCompile Include="src\Stop.cpp" />
+    <ClCompile Include="src\TargetPlayer.cpp" />
     <ClCompile Include="src\Wall.cpp" />
     <ClCompile Include="src\winmain.cpp" />
     <ClCompile Include="src\VertexShape.cpp" />
@@ -130,11 +135,13 @@
     <ClInclude Include="src\Font.h" />
     <ClInclude Include="src\Gameplay.h" />
     <ClInclude Include="src\GUIBar.h" />
+    <ClInclude Include="src\Hide.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\Instructions.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\Node.h" />
+    <ClInclude Include="src\NodeManager.h" />
     <ClInclude Include="src\ParticleSource.h" />
     <ClInclude Include="src\Behaviour.h" />
     <ClInclude Include="src\Player.h" />
@@ -182,7 +189,10 @@
     <ClInclude Include="src\rapidjson\stream.h" />
     <ClInclude Include="src\rapidjson\stringbuffer.h" />
     <ClInclude Include="src\rapidjson\writer.h" />
+    <ClInclude Include="src\Run.h" />
     <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\Stop.h" />
+    <ClInclude Include="src\TargetPlayer.h" />
     <ClInclude Include="src\VertexShape.h" />
     <ClInclude Include="src\Wall.h" />
   </ItemGroup>

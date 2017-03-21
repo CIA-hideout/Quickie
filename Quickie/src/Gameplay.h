@@ -9,7 +9,10 @@
 #include "Obstacle.h"
 #include "LevelManager.h"
 #include "Menu.h"
-#include "Behaviour.h"
+#include "TargetPlayer.h"
+#include "Run.h"
+#include "Hide.h"
+#include "Stop.h"
 
 namespace gameplayNS
 {
@@ -59,21 +62,24 @@ class Gameplay : public State
 	Player* sqr2;
 	Player* sqr3;
 
-	Behaviour	AIBehaviour;
-	AI*			computer;
+	NodeManager					nodeManager;
+	behaviourNS::Type			behaviour;
+	std::vector<Behaviour*>		behaviours;
+	AI*							computer;
+	bool						skipRandom;
 
 public:
-	Gameplay();
-	virtual ~Gameplay();
 	Menu* menu;
+
+	Gameplay();
+	~Gameplay();
 
 	void initialize(Graphics* graphics, Input* input, Audio* audio, rapidjson::Document& doc, float* deltaTime) override;
 	void update() override;
 	void ai() override;
 	void render() override;
-	void collisions() override{};
-	void releaseAll() override{};
-	void resetAll() override{};
-	void Gameplay::setCurrentSceneByInput(gameplayNS::Mode, int);
-	void Gameplay::selectMode(gameplayNS::Mode, int);
+	void collisions() override {}
+	void releaseAll() override {}
+	void resetAll() override {}
+	void setCurrentSceneByInput(gameplayNS::Mode, int);
 };

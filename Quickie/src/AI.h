@@ -15,10 +15,9 @@ class AI : public VertexShape {
 	
 public:
 
-	
+	ParticleSource					ps;
 	std::map<CooldownType, float>	cooldown;
 	GUIBar*							healthBar;
-	ParticleSource					ps;
 
 	AI() = default;
 	~AI();
