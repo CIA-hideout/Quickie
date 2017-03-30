@@ -10,10 +10,10 @@ void quicky::initialize(HWND hWnd) {
 
 	Game::initialize(hWnd);
 
-	AllocConsole();
-	freopen("conin$", "r", stdin);
-	freopen("conout$", "w", stdout);
-	freopen("conout$", "w", stderr);
+	//AllocConsole();
+	//freopen("conin$", "r", stdin);
+	//freopen("conout$", "w", stdout);
+	//freopen("conout$", "w", stderr);
 
 	// parse player control
 	FILE* controlFile = fopen("resource\\data\\control.json", "rb");
@@ -93,7 +93,7 @@ void quicky::render()
 }
 
 void quicky::releaseAll() {
-	FreeConsole();
+	//FreeConsole();
 }
 
 void quicky::resetAll() {
